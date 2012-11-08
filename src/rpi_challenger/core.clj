@@ -1,12 +1,14 @@
 (ns rpi-challenger.core
-  (:require [ring.adapter.jetty :as jetty])
+  (:use [net.cgrand.moustache :only [app]]
+        [ring.adapter.jetty :only [run-jetty]])
   (:gen-class ))
 
-(defn handler [request]
-  {:status 200
-   :headers {"Content-Type" "text/html"}
-   :body "Hello World"})
+(def my-app
+  (app
+    [""] "welcome"
+    ["hi"] "hello world"
+    ["ho"] "howdy"))
 
 (defn -main
   [& args]
-  (jetty/run-jetty handler {:port 3000}))
+  (run-jetty my-app {:port 3000}))
