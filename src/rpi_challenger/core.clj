@@ -1,13 +1,12 @@
 (ns rpi-challenger.core
+  (:require [ring.adapter.jetty :as jetty])
   (:gen-class ))
 
-(defn foo
-  "I don't do a whole lot."
-  [x]
-  (println x "Hello, World!"))
+(defn handler [request]
+  {:status 200
+   :headers {"Content-Type" "text/html"}
+   :body "Hello World"})
 
 (defn -main
   [& args]
-  (foo "Woot!"))
-
-
+  (jetty/run-jetty handler {:port 3000}))
