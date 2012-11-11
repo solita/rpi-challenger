@@ -8,7 +8,6 @@
 
 (def app-auto-reload
   (-> #'app
-    (wrap-file "src/resources")
     (wrap-reload '(rpi-challenger.core))
     (wrap-stacktrace)))
 

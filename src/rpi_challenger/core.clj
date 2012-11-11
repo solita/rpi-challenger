@@ -4,7 +4,7 @@
         compojure.core)
   (:require [compojure.route :as route]))
 
-(deftemplate layout "resources/layout.html" [body]
+(deftemplate layout "public/layout.html" [body]
   [:#content ] (content body))
 
 (defn using-template [template & args]
@@ -12,4 +12,5 @@
 
 (defroutes app
   (GET "/" [] (using-template layout "Hello world!"))
+  (route/resources "/")
   (route/not-found "Page Not Found"))

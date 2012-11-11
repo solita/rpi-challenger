@@ -1,11 +1,13 @@
 (ns rpi-challenger.core-test
   (:require [clojure.contrib.string :as string])
   (:use clojure.test
-        rpi-challenger.core))
+        rpi-challenger.core
+        ring.middleware.lint))
 
 (defn- request [uri app]
   (app {:request-method :get
-        :uri uri}))
+        :uri uri
+        :headers {}}))
 
 (deftest routes-test
 
@@ -13,6 +15,11 @@
     (let [response (request "/" app)]
       (is (= 200 (:status response)))
       (is (string/substring? "Raspberry Pi Challenger" (:body response)))))
+
+  (testing "Serves static resources"
+    (let [response (request "/layout.html" app)]
+      (is (= 200 (:status response)))
+      (is (= "layout.html" (.getName (:body response))))))
 
   (testing "Shows Error 404 when page not found"
     (let [response (request "/no-such-page" app)]
