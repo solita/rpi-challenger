@@ -1,14 +1,15 @@
 (ns rpi-challenger.core
+  (:require [net.cgrand.enlive-html :as html]
+            [ring.util.response :as response])
   (:use [net.cgrand.moustache :only [app]]
-        [ring.adapter.jetty :only [run-jetty]])
-  (:gen-class ))
+        [ring.adapter.jetty :only [run-jetty]]
+        [ring.middleware.file :only [wrap-file]]
+        [ring.middleware.reload :only [wrap-reload]]
+        [ring.middleware.stacktrace :only [wrap-stacktrace]]))
 
-(def my-app
+(def layout (html/html-resource "resources/layout.html"))
+
+(def routes
   (app
-    [""] "welcome"
-    ["hi"] "hello world"
-    ["ho"] "howdy"))
-
-(defn -main
-  [& args]
-  (run-jetty my-app {:port 3000}))
+    [""] (fn [req] (response/response "the index page"))
+    [&] (fn [req] (response/not-found "Page Not Found"))))
