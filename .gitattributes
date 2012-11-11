@@ -4,4 +4,3 @@
 *.js            eol=lf
 *.html          eol=lf
 *.xml           eol=lf
-*.iml           eol=lf
