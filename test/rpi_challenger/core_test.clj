@@ -3,18 +3,20 @@
   (:use clojure.test
         rpi-challenger.core))
 
+(defn- request [uri app]
+  (app {:request-method :get
+        :uri uri}))
+
 (deftest routes-test
 
   (testing "Shows index page"
-    (let [req {:uri "/"}
-          resp (routes req)]
-      (is (= 200 (:status resp)))
-      (is (string/substring? "index" (:body resp)))))
+    (let [response (request "/" app)]
+      (is (= 200 (:status response)))
+      (is (string/substring? "Raspberry Pi Challenger" (:body response)))))
 
   (testing "Shows Error 404 when page not found"
-    (let [req {:uri "/no-such-page"}
-          resp (routes req)]
-      (is (= 404 (:status resp)))
-      (is (= "Page Not Found" (:body resp)))))
+    (let [response (request "/no-such-page" app)]
+      (is (= 404 (:status response)))
+      (is (= "Page Not Found" (:body response)))))
 
   )

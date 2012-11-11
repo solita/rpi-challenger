@@ -1,21 +1,15 @@
 (ns rpi-challenger.core
   (:use ring.util.response
         net.cgrand.enlive-html
-        [net.cgrand.moustache :only [app]]))
+        compojure.core)
+  (:require [compojure.route :as route]))
 
 (deftemplate layout "resources/layout.html" [body]
   [:#content ] (content body))
 
-(defn html-page [template & args]
-  (->
-    (response (apply str (apply template args)))
-    (content-type "text/html")
-    (charset "UTF-8")))
+(defn using-template [template & args]
+  (response (apply str (apply template args))))
 
-(def routes
-  (app
-    [""] (fn [req] (html-page layout "Hello world!"))
-    [&] (fn [req] (->
-                    (not-found "Page Not Found")
-                    (content-type "text/html")
-                    (charset "UTF-8")))))
+(defroutes app
+  (GET "/" [] (using-template layout "Hello world!"))
+  (route/not-found "Page Not Found"))
