@@ -1,9 +1,5 @@
 (ns rpi-challenger.core
-  (:use ring.util.response
-        compojure.core
-        [ring.middleware.params :only [wrap-params]])
-  (:require [compojure.route :as route]
-            [net.cgrand.enlive-html :as html]))
+  (:require [clojure.string :as string]))
 
 (defn register
   [name url]

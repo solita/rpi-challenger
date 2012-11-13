@@ -4,7 +4,8 @@
         [ring.middleware.params :only [wrap-params]])
   (:require [rpi-challenger.core :as core]
             [compojure.route :as route]
-            [net.cgrand.enlive-html :as html]))
+            [net.cgrand.enlive-html :as html]
+            [clojure.string :as string]))
 
 (defn using-template
   [template & args]
@@ -20,8 +21,13 @@
 
 (defn handle-register-form
   [{name "name" url "url"}]
-  (core/register name url)
-  (redirect "/"))
+  (if (and
+        (not (string/blank? name))
+        (not (string/blank? url)))
+    (do
+      (core/register name url)
+      (redirect "/?message=OK"))
+    (redirect "/?message=Registration failed")))
 
 (defroutes app-routes
   (GET "/" [] (using-template layout {:title "Overview"
