@@ -1,12 +1,12 @@
 (ns rpi-challenger.core
   (:require [clojure.string :as string]))
 
-(def services (ref {"http://foo" {:name "Foo" :url "http://foo"}}))
+; TODO: remove this dummy data
+(def services (ref {"http://foo" {:name "Foo" :url "http://foo" :score 0}}))
 
 (defn add-service
   [services name url]
-  (println "Registering" name "with url" url)
-  (assoc services url {:name name :url url}))
+  (assoc services url {:name name :url url :score 0}))
 
 (defn register
   [name url]
