@@ -17,6 +17,7 @@
 (defn- redirect-location [response]
   (get-in response [:headers "Location"]))
 
+
 (deftest routes-test
 
   (testing "Shows index page"

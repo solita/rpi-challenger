@@ -5,7 +5,7 @@
         [clojure.pprint :only [pprint]])
   (:require [clojure.contrib.string :as string]))
 
-(defn- select-only
+(defn- select1
   [node-or-nodes selector]
   (let [results (select node-or-nodes selector)]
     (assert
@@ -13,7 +13,11 @@
       (str "Expected exactly one result but got " (seq results)))
     (first results)))
 
-(defn- attr-value
+(defn- get-content
+  [node-or-nodes selector]
+  (apply str (select node-or-nodes [selector :> text-node])))
+
+(defn- get-attr
   [attr node]
   (attr (:attrs node)))
 
@@ -22,7 +26,7 @@
 
   (testing "Shows service information"
     (let [service {:name "The One" :url "http://the-url" :score 42}
-          actual-nodes (services-row service)]
-      (is (= "The One" (select-only actual-nodes [:a :> text-node])))
-      (is (= "http://the-url" (attr-value :href (select-only actual-nodes [:a ]))))
-      (is (= "42" (select-only actual-nodes [[:td (nth-of-type 2)] :> text-node]))))))
+          html (services-row service)]
+      (is (= "The One" (get-content html *service-link)))
+      (is (= "http://the-url" (get-attr :href (select1 html *service-link))))
+      (is (= "42" (get-content html *service-score))))))
