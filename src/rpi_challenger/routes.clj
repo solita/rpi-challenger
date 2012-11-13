@@ -23,7 +23,7 @@
     (redirect "/?message=Registration failed")))
 
 (defroutes app-routes
-  (GET "/" [] (using-template views/overview (core/get-services)))
+  (GET "/" [] (using-template views/overview-page (core/get-services)))
   (POST "/register" {params :params} (handle-register-form params))
   (route/resources "/")
   (route/not-found "Page Not Found"))

@@ -1,16 +1,33 @@
 (ns rpi-challenger.views
-  (:require [net.cgrand.enlive-html :as html]))
+  (:use net.cgrand.enlive-html))
 
-(html/deftemplate layout "public/layout.html"
+; layout
+
+(deftemplate layout "public/layout.html"
   [{:keys [title main]}]
-  [:title ] (html/content title)
-  [:#main ] (html/substitute main))
+  [:title ] (content title)
+  [:#main ] (substitute main))
 
-(html/defsnippet overview-body "public/overview.html" [:body ]
-  [{:keys []}])
 
-(defn overview
+; overview
+
+(def *services-row [:#services [:tr (nth-of-type 2)]])
+(def *service-link [[:a (nth-of-type 1)]])
+
+(defsnippet services-row "public/overview.html" *services-row
+  [{:keys [name url]}]
+  *service-link (do->
+                  (content name)
+                  (set-attr :href url)))
+
+(defsnippet services-list "public/overview.html" [:body ]
   [services]
-  (println "Services: " services)
+  *services-row (content (map #(services-row %) services)))
+
+
+; pages
+
+(defn overview-page
+  [services]
   (layout {:title "Overview"
-           :main (overview-body {})}))
+           :main (services-list services)}))

@@ -8,7 +8,10 @@
 
 (def app-auto-reload
   (-> #'app
-    (wrap-reload '(rpi-challenger.routes))
+    (wrap-reload
+      '(rpi-challenger.core)
+      '(rpi-challenger.routes)
+      '(rpi-challenger.views))
     (wrap-stacktrace)))
 
 (defn boot []
