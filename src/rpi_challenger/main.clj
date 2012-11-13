@@ -1,5 +1,5 @@
 (ns rpi-challenger.main
-  (:use [rpi-challenger.core :only [app]]
+  (:use [rpi-challenger.routes :only [app]]
         ring.adapter.jetty
         ring.middleware.file
         ring.middleware.reload
@@ -8,7 +8,7 @@
 
 (def app-auto-reload
   (-> #'app
-    (wrap-reload '(rpi-challenger.core))
+    (wrap-reload '(rpi-challenger.routes))
     (wrap-stacktrace)))
 
 (defn boot []

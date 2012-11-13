@@ -1,7 +1,7 @@
-(ns rpi-challenger.core-test
+(ns rpi-challenger.routes-test
   (:require [clojure.contrib.string :as string])
   (:use clojure.test
-        rpi-challenger.core
+        rpi-challenger.routes
         ring.middleware.lint))
 
 (defn- request [uri app]
