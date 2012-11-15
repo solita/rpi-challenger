@@ -5,7 +5,7 @@ A programming game.
 
 ## Getting Started
 
-First install [Leiningen](https://github.com/technomancy/leiningen). Then start up the server with
+Assuming [Leiningen](https://github.com/technomancy/leiningen) is already installed, start up the server with
 
     lein run
 
@@ -19,7 +19,7 @@ or
     lein repl
     (-main)
 
-Then open <http://localhost/> in a web browser.
+Then open <http://localhost:8080/> in a web browser. For more options use the `--help` command line argument.
 
 
 ## Creating Challenges
