@@ -2,8 +2,7 @@
   (:use clojure.test
         rpi-challenger.views
         net.cgrand.enlive-html
-        [clojure.pprint :only [pprint]])
-  (:require [clojure.contrib.string :as string]))
+        [clojure.pprint :only [pprint]]))
 
 (defn- select1
   [node-or-nodes selector]

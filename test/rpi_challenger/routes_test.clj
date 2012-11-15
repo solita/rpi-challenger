@@ -1,7 +1,6 @@
 (ns rpi-challenger.routes-test
   (:use clojure.test
-        rpi-challenger.routes)
-  (:require [clojure.contrib.string :as string]))
+        rpi-challenger.routes))
 
 (defn- GET [uri app]
   (app {:request-method :get
@@ -23,7 +22,7 @@
   (testing "Shows index page"
     (let [response (GET "/" app)]
       (is (= 200 (:status response)))
-      (is (string/substring? "Raspberry Pi Challenger" (:body response)))))
+      (is (re-find #"Raspberry Pi Challenger" (:body response)))))
 
   (testing "Serves static resources"
     (let [response (GET "/layout.html" app)]

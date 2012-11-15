@@ -1,5 +1,4 @@
-(ns rpi-challenger.core
-  (:require [clojure.string :as string]))
+(ns rpi-challenger.core)
 
 ; TODO: remove this dummy data
 (def services (ref {"http://foo" {:name "Foo" :url "http://foo" :score 0}}))
