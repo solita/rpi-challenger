@@ -22,9 +22,19 @@
       (redirect "/?message=OK"))
     (redirect "/?message=Registration failed")))
 
+(defn handle-hello-world
+  [challenge]
+  (if (= challenge "Say hello to World")
+    "Hello World"
+    (str "Wut iz '" challenge "'?")))
+
 (defroutes app-routes
   (GET "/" [] (using-template views/overview-page (core/get-services)))
   (POST "/register" {params :params} (handle-register-form params))
+  (GET "/poll" [] (str (core/poll-services)))
+  (POST "/hello-world" {body :body, :as request}
+    (println request)
+    (handle-hello-world (slurp body)))
   (route/resources "/")
   (route/not-found "Page Not Found"))
 

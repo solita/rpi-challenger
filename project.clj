@@ -6,6 +6,7 @@
 
   :dependencies [[org.clojure/clojure "1.4.0"]
                  [org.clojure/tools.cli "0.2.2"]
+                 [http.async.client "0.5.0-SNAPSHOT"]
                  [ring/ring-core "1.1.6"]
                  [ring/ring-devel "1.1.6"]
                  [ring/ring-jetty-adapter "1.1.6"]
