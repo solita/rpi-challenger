@@ -1,7 +1,7 @@
 (ns rpi-challenger.core)
 
 ; TODO: remove this dummy data
-(def services (ref {"http://foo" {:name "Foo" :url "http://foo" :score 0}}))
+(defonce services (ref {"http://foo" {:name "Foo" :url "http://foo" :score 0}}))
 
 (defn add-service
   [services name url]
