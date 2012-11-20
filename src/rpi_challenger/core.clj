@@ -19,16 +19,30 @@
   []
   (vals (deref services)))
 
+(defn simple-http-response
+  [response]
+  {:body (http/string response)
+   :status (http/status response)
+   :error (http/error response)})
+
 (defn post-request
   [url body]
   (with-open [client (http/create-client)]
     (-> (http/POST client url :body body)
-      http/await)))
+      http/await
+      simple-http-response)))
+
+(defn correct?
+  [response challenge]
+  (and
+    (nil? (:error response))
+    (= 200 (:code (:status response)))
+    (= (:body response) (:answer challenge))))
 
 (defn record-reponse
-  [url challenge response-body]
-  (println "Record response:" url challenge response-body)
-  (if (= (:answer challenge) response-body)
+  [url challenge response]
+  (println "Record response:" url challenge response)
+  (if (correct? response challenge)
     (dosync
       (alter services update-in [url :score ] #(+ % 1)))
     (dosync
@@ -40,10 +54,8 @@
   (with-open [client (http/create-client)]
     (let [challenge (challenges/hello-world)
           response (post-request (:url service) (:challenge challenge))]
-      (println "status" (http/status response))
-      (println "error" (http/error response))
-      (println "body" (http/string response))
-      (record-reponse (:url service) challenge (http/string response)))))
+      (println "Got response" response)
+      (record-reponse (:url service) challenge response))))
 
 (defn poll-services
   []
