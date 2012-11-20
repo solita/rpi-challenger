@@ -27,5 +27,5 @@
     (testing "connection error"
       (let [response {:body nil
                       :status nil
-                      :error (java.net.ConnectException. "http://foo/")}]
+                      :error "java.net.ConnectException: http://foo/"}]
         (is (not (correct? response challenge)))))))

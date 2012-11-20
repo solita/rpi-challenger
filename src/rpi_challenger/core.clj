@@ -1,6 +1,7 @@
 (ns rpi-challenger.core
   (:require [http.async.client :as http]
-            [rpi-challenger.challenges :as challenges]))
+            [rpi-challenger.challenges :as challenges]
+            [rpi-challenger.io :as io]))
 
 ;(defonce thread-pool (java.util.concurrent.Executors/newCachedThreadPool))
 
@@ -8,7 +9,7 @@
 
 (defn- add-service
   [services name url]
-  (assoc services url {:name name :url url :score 0}))
+  (assoc services url {:name name, :url url, :score 0, :responses []}))
 
 (defn register
   [name url]
@@ -19,11 +20,17 @@
   []
   (vals (deref services)))
 
+(defn nil-or-str
+  [object]
+  (if (nil? object)
+    nil
+    (str object)))
+
 (defn simple-http-response
   [response]
   {:body (http/string response)
    :status (http/status response)
-   :error (http/error response)})
+   :error (nil-or-str (http/error response))})
 
 (defn post-request
   [url body]
@@ -43,9 +50,16 @@
   [url response challenge]
   (println "Record response:" url response challenge)
   (dosync
+    (alter services update-in [url :responses ] #(conj % {:timestamp (System/currentTimeMillis),
+                                                          :response response,
+                                                          :challenge challenge}))
     (if (correct? response challenge)
       (alter services update-in [url :score ] #(+ % 1))
-      (alter services update-in [url :score ] #(- % 1)))))
+      (alter services update-in [url :score ] #(- % 1))))
+  ; TODO: load state on restart
+  ; TODO: save state less often
+  (io/object-to-file "rpi-challenger-state.clj" (deref services)))
+
 
 (defn poll-service
   [service]
