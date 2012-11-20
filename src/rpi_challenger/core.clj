@@ -1,6 +1,8 @@
 (ns rpi-challenger.core
+  (:use [clojure.algo.generic.functor :only [fmap]])
   (:require [http.async.client :as http]
             [rpi-challenger.challenges :as challenges]
+            [rpi-challenger.rating :as rating]
             [rpi-challenger.io :as io]))
 
 ;(defonce thread-pool (java.util.concurrent.Executors/newCachedThreadPool))
@@ -9,7 +11,7 @@
 
 (defn- add-service
   [services name url]
-  (assoc services url {:name name, :url url, :score 0, :responses []}))
+  (assoc services url {:name name, :url url, :score 0, :new-events []}))
 
 (defn register
   [name url]
@@ -39,27 +41,16 @@
       http/await
       simple-http-response)))
 
-(defn correct?
-  [response challenge]
-  (and
-    (nil? (:error response))
-    (= 200 (:code (:status response)))
-    (= (:body response) (:answer challenge))))
-
 (defn record-reponse
   [url response challenge]
   (println "Record response:" url response challenge)
   (dosync
-    (alter services update-in [url :responses ] #(conj % {:timestamp (System/currentTimeMillis),
-                                                          :response response,
-                                                          :challenge challenge}))
-    (if (correct? response challenge)
-      (alter services update-in [url :score ] #(+ % 1))
-      (alter services update-in [url :score ] #(- % 1))))
+    (alter services update-in [url :new-events ] #(conj % {:timestamp (System/currentTimeMillis),
+                                                           :response response,
+                                                           :challenge challenge})))
   ; TODO: load state on restart
   ; TODO: save state less often
   (io/object-to-file "rpi-challenger-state.clj" (deref services)))
-
 
 (defn poll-service
   [service]
@@ -73,6 +64,11 @@
   []
   (doseq [service (get-services)]
     (poll-service service)))
+
+(defn calculate-score
+  []
+  (dosync
+    (alter services #(fmap rating/score-tick %))))
 
 ; TODO: remove this dummy data
 (register "Hello World Dummy", "http://localhost:8080/hello-world")

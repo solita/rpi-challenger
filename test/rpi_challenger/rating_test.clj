@@ -1,6 +1,6 @@
-(ns rpi-challenger.core-test
+(ns rpi-challenger.rating-test
   (:use clojure.test
-        rpi-challenger.core))
+        rpi-challenger.rating))
 
 (deftest correct?-test
   (let [challenge {:challenge "the challenge"
@@ -29,3 +29,18 @@
                       :status nil
                       :error "java.net.ConnectException: http://foo/"}]
         (is (not (correct? response challenge)))))))
+
+(deftest score-tick-test
+  (binding [correct? (fn [response challenge] (= response "correct"))]
+    (let [service {:score 100
+                   :new-events [{:response "correct"}
+                                {:response "correct"}
+                                {:response "fail"}
+                                {:response "correct"}]}
+
+          service (score-tick service)]
+
+      (testing "adds the score for the current tick to the total score"
+        (is (= 103 (:score service))))
+      (testing "removes the processed events"
+        (is (empty? (:new-events service)))))))

@@ -32,8 +32,9 @@
   (GET "/" [] (using-template views/overview-page (core/get-services)))
   (POST "/register" {params :params} (handle-register-form params))
   (GET "/poll" [] (str (core/poll-services)))
+  (GET "/calculate-score" [] (str (core/calculate-score)))
   (POST "/hello-world" {body :body, :as request}
-    (println request)
+    ;(println request)
     (handle-hello-world (slurp body)))
   (route/resources "/")
   (route/not-found "Page Not Found"))
