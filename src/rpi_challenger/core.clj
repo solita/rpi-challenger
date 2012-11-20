@@ -40,12 +40,11 @@
     (= (:body response) (:answer challenge))))
 
 (defn record-reponse
-  [url challenge response]
-  (println "Record response:" url challenge response)
-  (if (correct? response challenge)
-    (dosync
-      (alter services update-in [url :score ] #(+ % 1)))
-    (dosync
+  [url response challenge]
+  (println "Record response:" url response challenge)
+  (dosync
+    (if (correct? response challenge)
+      (alter services update-in [url :score ] #(+ % 1))
       (alter services update-in [url :score ] #(- % 1)))))
 
 (defn poll-service
@@ -54,8 +53,7 @@
   (with-open [client (http/create-client)]
     (let [challenge (challenges/hello-world)
           response (post-request (:url service) (:challenge challenge))]
-      (println "Got response" response)
-      (record-reponse (:url service) challenge response))))
+      (record-reponse (:url service) response challenge))))
 
 (defn poll-services
   []
