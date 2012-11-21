@@ -2,6 +2,8 @@
   (:use [clojure.algo.generic.functor :only [fmap]])
   (:require [http.async.client :as http]
             [rpi-challenger.core.tournament :as t]
+            [rpi-challenger.core.participant :as p]
+            [rpi-challenger.core.strike :as s]
             [rpi-challenger.challenges :as challenges]
             [rpi-challenger.rating :as rating]
             [rpi-challenger.io :as io]))
@@ -13,7 +15,7 @@
 (defn register
   [name url]
   (dosync
-    (alter tournament t/register-participant {:name name, :url url})))
+    (alter tournament t/register-participant (p/make-participant name url))))
 
 (defn get-participants
   []
@@ -42,7 +44,7 @@
   [participant response challenge]
   (println "Record strike:" participant response challenge)
   (dosync
-    (alter tournament t/record-strike participant response challenge))
+    (alter tournament t/record-strike participant (s/make-strike response challenge)))
   ; TODO: load state on restart
   ; TODO: save state less often
   (io/object-to-file "rpi-challenger-state.clj" (deref tournament)))

@@ -1,5 +1,8 @@
 OK - new terminology: participant, tournament, round, strike, challenge, question-answer
-- show a log of failed challenges
+!! - show a log of failed challenges
+- load challenges from a directory
+	- find out how to do it - eval or something?
+	- reload automatically every minute?
 - poll servers automatically, many times per second
 	- one thread per server
 - calculate the score automatically, in 1 minute ticks
@@ -9,6 +12,3 @@ OK - new terminology: participant, tournament, round, strike, challenge, questio
 	- calculate total score from the history
 	- print the history as text
 	- visualize the history as graph (find a JS graph library)
-- load challenges from a directory
-	- find out how to do it - eval or something?
-	- reload automatically every minute?

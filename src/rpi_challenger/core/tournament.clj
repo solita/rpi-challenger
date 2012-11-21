@@ -1,6 +1,8 @@
 (ns rpi-challenger.core.tournament
   (:use [clojure.algo.generic.functor :only [fmap]])
-  (:require [rpi-challenger.rating :as rating]))
+  (:require [rpi-challenger.core.participant :as p]
+            [rpi-challenger.core.strike :as s]
+            [rpi-challenger.rating :as rating]))
 
 (defn make-tournament
   []
@@ -11,21 +13,16 @@
   (vals (:participants tournament)))
 
 (defn register-participant
-  [tournament {:keys [name url] :as participant}]
-  (assoc-in tournament [:participants url] {:name name, :url url, :score 0, :current-round []}))
+  [tournament participant]
+  (assoc-in tournament [:participants (:url participant)] participant))
 
 (defn strikes
   [tournament participant]
-  (get-in tournament [:participants (:url participant) :current-round ]))
+  (p/strikes (get-in tournament [:participants (:url participant)])))
 
 (defn record-strike
-  [tournament participant response challenge]
-  (update-in
-    tournament
-    [:participants (:url participant) :current-round ]
-    #(conj % {:timestamp (System/currentTimeMillis),
-              :response response,
-              :challenge challenge})))
+  [tournament participant strike]
+  (update-in tournament [:participants (:url participant)] p/record-strike strike))
 
 (defn finish-current-round
   [tournament]
