@@ -1,7 +1,7 @@
 (ns rpi-challenger.core.participant
   (:require [rpi-challenger.core.strike :as s]))
 
-(def ^:dynamic *recent-failures-limit* 100)
+(def ^:dynamic *recent-failures-limit* 10)
 
 (defn make-participant
   [name url]

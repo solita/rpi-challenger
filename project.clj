@@ -23,8 +23,13 @@
                  ; Logging
                  [ch.qos.logback/logback-classic "1.0.7"]
 
-                 ; Utils
+                 ; Date & Time
+                 [clj-time "0.4.4"]
+
+                 ; Command Line Interface
                  [org.clojure/tools.cli "0.2.2"]
+
+                 ; Utils
                  [org.clojure/algo.generic "0.1.0"]]
 
   :main rpi-challenger.main)

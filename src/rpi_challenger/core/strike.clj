@@ -14,3 +14,7 @@
 (defn miss?
   [strike]
   (not (hit? strike)))
+
+(defn error?
+  [strike]
+  (not (nil? (:error (:response strike)))))

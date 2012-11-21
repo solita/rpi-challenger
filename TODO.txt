@@ -1,5 +1,9 @@
 OK - new terminology: participant, tournament, round, strike, challenge, question-answer
 !! - show a log of failed challenges
+	OK - save in domain model
+	OK - layout
+	!! - give unique ID for participants
+	- use the ID in showing that participant's details
 - load challenges from a directory
 	- find out how to do it - eval or something?
 	- reload automatically every minute?

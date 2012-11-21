@@ -30,6 +30,10 @@
 
 (defroutes app-routes
   (GET "/" [] (using-template views/overview-page (core/get-participants)))
+  (GET "/detail-:id" [id] (using-template views/detail-page
+                            (first (core/get-participants)))) ; TODO: pass in the participant identified by the ID
+  (GET "/recent-failures-:id" [id] (using-template views/recent-failures-page
+                                     (first (core/get-participants)))) ; TODO: pass in the participant identified by the ID
   (POST "/register" {params :params} (handle-register-form params))
   (GET "/poll" [] (str (core/poll-participants)))
   (GET "/calculate-score" [] (str (core/calculate-score)))
