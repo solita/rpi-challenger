@@ -3,7 +3,7 @@
         rpi-challenger.rating))
 
 (deftest correct?-test
-  (let [challenge {:challenge "the challenge"
+  (let [challenge {:question "the question"
                    :answer "correct answer"}]
 
     (testing "correct response"
@@ -30,17 +30,17 @@
                       :error "java.net.ConnectException: http://foo/"}]
         (is (not (correct? response challenge)))))))
 
-(deftest score-tick-test
+(deftest score-current-round-test
   (binding [correct? (fn [response challenge] (= response "correct"))]
-    (let [service {:score 100
-                   :new-events [{:response "correct"}
-                                {:response "correct"}
-                                {:response "fail"}
-                                {:response "correct"}]}
+    (let [participant {:score 100
+                       :current-round [{:response "correct"}
+                                       {:response "correct"}
+                                       {:response "fail"}
+                                       {:response "correct"}]}
 
-          service (score-tick service)]
+          participant (score-current-round participant)]
 
-      (testing "adds the score for the current tick to the total score"
-        (is (= 103 (:score service))))
-      (testing "removes the processed events"
-        (is (empty? (:new-events service)))))))
+      (testing "adds the score for the current round to the total score"
+        (is (= 103 (:score participant))))
+      (testing "resets the current round"
+        (is (empty? (:current-round participant)))))))

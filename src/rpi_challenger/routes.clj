@@ -23,15 +23,15 @@
     (redirect "/?message=Registration failed")))
 
 (defn handle-hello-world
-  [challenge]
-  (if (= challenge "Say hello to World")
+  [question]
+  (if (= question "Say hello to World")
     "Hello World"
-    (str "Wut iz '" challenge "'?")))
+    (str "Wut iz '" question "'?")))
 
 (defroutes app-routes
-  (GET "/" [] (using-template views/overview-page (core/get-services)))
+  (GET "/" [] (using-template views/overview-page (core/get-participants)))
   (POST "/register" {params :params} (handle-register-form params))
-  (GET "/poll" [] (str (core/poll-services)))
+  (GET "/poll" [] (str (core/poll-participants)))
   (GET "/calculate-score" [] (str (core/calculate-score)))
   (POST "/hello-world" {body :body, :as request}
     ;(println request)

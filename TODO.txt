@@ -1,4 +1,4 @@
-- new terminology: participant, tournament, round, strike, challenge, question-answer
+OK - new terminology: participant, tournament, round, strike, challenge, question-answer
 - show a log of failed challenges
 - poll servers automatically, many times per second
 	- one thread per server

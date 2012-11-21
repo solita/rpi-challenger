@@ -11,25 +11,25 @@
 
 ; overview
 
-(def *services-row [:#services [:tr (nth-of-type 2)]])
-(def *service-link [[:a (nth-of-type 1)]])
-(def *service-score [[:td (nth-of-type 2)]])
+(def *participants-row [:#participants [:tr (nth-of-type 2)]])
+(def *participant-link [[:a (nth-of-type 1)]])
+(def *participant-score [[:td (nth-of-type 2)]])
 
-(defsnippet services-row "public/overview.html" *services-row
+(defsnippet participants-row "public/overview.html" *participants-row
   [{:keys [name url score]}]
-  *service-link (do->
-                  (content name)
-                  (set-attr :href url))
-  *service-score (content (str score)))
+  *participant-link (do->
+                      (content name)
+                      (set-attr :href url))
+  *participant-score (content (str score)))
 
-(defsnippet services-list "public/overview.html" [:body ]
-  [services]
-  *services-row (content (map #(services-row %) services)))
+(defsnippet participants-list "public/overview.html" [:body ]
+  [participants]
+  *participants-row (content (map #(participants-row %) participants)))
 
 
 ; pages
 
 (defn overview-page
-  [services]
+  [participants]
   (layout {:title "Overview"
-           :main (services-list services)}))
+           :main (participants-list participants)}))

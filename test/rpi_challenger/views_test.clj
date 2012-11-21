@@ -23,9 +23,9 @@
 
 (deftest overview-test
 
-  (testing "Shows service information"
-    (let [service {:name "The One" :url "http://the-url" :score 42}
-          html (services-row service)]
-      (is (= "The One" (get-content html *service-link)))
-      (is (= "http://the-url" (get-attr :href (select1 html *service-link))))
-      (is (= "42" (get-content html *service-score))))))
+  (testing "Shows participant information"
+    (let [participant {:name "The One" :url "http://the-url" :score 42}
+          html (participants-row participant)]
+      (is (= "The One" (get-content html *participant-link)))
+      (is (= "http://the-url" (get-attr :href (select1 html *participant-link))))
+      (is (= "42" (get-content html *participant-score))))))

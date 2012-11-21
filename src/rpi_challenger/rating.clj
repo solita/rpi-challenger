@@ -8,18 +8,18 @@
     (= (:body response) (:answer challenge))))
 
 ; TODO: score based on challenge level, then reduce using `min`
-(defn score-event
-  [event]
-  (if (correct? (:response event) (:challenge event))
+(defn score-strike
+  [strike]
+  (if (correct? (:response strike) (:challenge strike))
     1
     0))
 
-(defn score-events
-  [events]
-  (apply + (map score-event events)))
+(defn score-strikes
+  [strikes]
+  (apply + (map score-strike strikes)))
 
-(defn score-tick
-  [service]
-  (-> service
-    (update-in [:score ] #(+ % (score-events (:new-events service))))
-    (assoc :new-events [])))
+(defn score-current-round
+  [participant]
+  (-> participant
+    (update-in [:score ] #(+ % (score-strikes (:current-round participant))))
+    (assoc :current-round [])))

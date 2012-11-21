@@ -10,5 +10,5 @@
   ([]
     (hello-world (rand-nth ["World", "Raspberry Pi", "Solita"])))
   ([name]
-    {:challenge (str "Say hello to " name)
+    {:question (str "Say hello to " name)
      :answer (say-hello name)}))

@@ -7,20 +7,20 @@
 
 ;(defonce thread-pool (java.util.concurrent.Executors/newCachedThreadPool))
 
-(defonce services (ref {}))
+(defonce participants (ref {}))
 
-(defn- add-service
-  [services name url]
-  (assoc services url {:name name, :url url, :score 0, :new-events []}))
+(defn- add-participant
+  [participants name url]
+  (assoc participants url {:name name, :url url, :score 0, :current-round []}))
 
 (defn register
   [name url]
   (dosync
-    (alter services add-service name url)))
+    (alter participants add-participant name url)))
 
-(defn get-services
+(defn get-participants
   []
-  (vals (deref services)))
+  (vals (deref participants)))
 
 (defn nil-or-str
   [object]
@@ -45,30 +45,30 @@
   [url response challenge]
   (println "Record response:" url response challenge)
   (dosync
-    (alter services update-in [url :new-events ] #(conj % {:timestamp (System/currentTimeMillis),
-                                                           :response response,
-                                                           :challenge challenge})))
+    (alter participants update-in [url :current-round ] #(conj % {:timestamp (System/currentTimeMillis),
+                                                                  :response response,
+                                                                  :challenge challenge})))
   ; TODO: load state on restart
   ; TODO: save state less often
-  (io/object-to-file "rpi-challenger-state.clj" (deref services)))
+  (io/object-to-file "rpi-challenger-state.clj" (deref participants)))
 
-(defn poll-service
-  [service]
-  (println "Polling" service)
+(defn poll-participant
+  [participant]
+  (println "Polling" participant)
   (with-open [client (http/create-client)]
     (let [challenge (challenges/hello-world)
-          response (post-request (:url service) (:challenge challenge))]
-      (record-reponse (:url service) response challenge))))
+          response (post-request (:url participant) (:question challenge))]
+      (record-reponse (:url participant) response challenge))))
 
-(defn poll-services
+(defn poll-participants
   []
-  (doseq [service (get-services)]
-    (poll-service service)))
+  (doseq [participant (get-participants)]
+    (poll-participant participant)))
 
 (defn calculate-score
   []
   (dosync
-    (alter services #(fmap rating/score-tick %))))
+    (alter participants #(fmap rating/score-current-round %))))
 
 ; TODO: remove this dummy data
 (register "Hello World Dummy", "http://localhost:8080/hello-world")
