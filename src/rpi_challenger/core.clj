@@ -1,26 +1,23 @@
 (ns rpi-challenger.core
   (:use [clojure.algo.generic.functor :only [fmap]])
   (:require [http.async.client :as http]
+            [rpi-challenger.core.tournament :as t]
             [rpi-challenger.challenges :as challenges]
             [rpi-challenger.rating :as rating]
             [rpi-challenger.io :as io]))
 
 ;(defonce thread-pool (java.util.concurrent.Executors/newCachedThreadPool))
 
-(defonce participants (ref {}))
-
-(defn- add-participant
-  [participants name url]
-  (assoc participants url {:name name, :url url, :score 0, :current-round []}))
+(defonce tournament (ref (t/make-tournament)))
 
 (defn register
   [name url]
   (dosync
-    (alter participants add-participant name url)))
+    (alter tournament t/register-participant {:name name, :url url})))
 
 (defn get-participants
   []
-  (vals (deref participants)))
+  (t/participants (deref tournament)))
 
 (defn nil-or-str
   [object]
@@ -42,23 +39,20 @@
       simple-http-response)))
 
 (defn record-reponse
-  [url response challenge]
-  (println "Record response:" url response challenge)
+  [participant response challenge]
+  (println "Record strike:" participant response challenge)
   (dosync
-    (alter participants update-in [url :current-round ] #(conj % {:timestamp (System/currentTimeMillis),
-                                                                  :response response,
-                                                                  :challenge challenge})))
+    (alter tournament t/record-strike participant response challenge))
   ; TODO: load state on restart
   ; TODO: save state less often
-  (io/object-to-file "rpi-challenger-state.clj" (deref participants)))
+  (io/object-to-file "rpi-challenger-state.clj" (deref tournament)))
 
 (defn poll-participant
   [participant]
-  (println "Polling" participant)
   (with-open [client (http/create-client)]
     (let [challenge (challenges/hello-world)
           response (post-request (:url participant) (:question challenge))]
-      (record-reponse (:url participant) response challenge))))
+      (record-reponse participant response challenge))))
 
 (defn poll-participants
   []
@@ -68,7 +62,7 @@
 (defn calculate-score
   []
   (dosync
-    (alter participants #(fmap rating/score-current-round %))))
+    (alter tournament t/finish-current-round)))
 
 ; TODO: remove this dummy data
 (register "Hello World Dummy", "http://localhost:8080/hello-world")

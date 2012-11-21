@@ -14,7 +14,7 @@
     1
     0))
 
-(defn score-strikes
+(defn ^:dynamic score-strikes
   [strikes]
   (apply + (map score-strike strikes)))
 
