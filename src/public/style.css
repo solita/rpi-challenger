@@ -1,0 +1,25 @@
+table.strikes {
+    white-space: pre;
+    border-collapse: collapse;
+}
+
+table.strikes th {
+    padding-left: 1ex;
+    padding-right: 1ex;
+}
+
+table.strikes td {
+    border: 1px solid #cccccc;
+}
+
+table.strikes tr.hit {
+    background-color: #ccffcc;
+}
+
+table.strikes tr.miss {
+    background-color: #ffeecc;
+}
+
+table.strikes tr.error {
+    background-color: #ffcccc;
+}

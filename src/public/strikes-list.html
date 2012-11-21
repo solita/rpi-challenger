@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Strikes</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+
+<table class="strikes">
+    <tr>
+        <th>Time</th>
+        <th>Input</th>
+        <th>Expected</th>
+        <th>Actual</th>
+        <th>Status</th>
+    </tr>
+    <tr class="hit">
+        <td>2012-11-21 22:58:14.605</td>
+        <td>1 + 2</td>
+        <td>3</td>
+        <td>3</td>
+        <td>200 OK</td>
+    </tr>
+    <tr class="miss">
+        <td>2012-11-21 22:58:14.586</td>
+        <td>1 + 2</td>
+        <td>3</td>
+        <td>4</td>
+        <td>200 OK</td>
+    </tr>
+    <tr class="error">
+        <td>2012-11-21 22:58:14.571</td>
+        <td>1 + 2</td>
+        <td>3</td>
+        <td></td>
+        <td>404 Not Found</td>
+    </tr>
+</table>
+
+</body>
+</html>
