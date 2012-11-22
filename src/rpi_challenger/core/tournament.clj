@@ -12,13 +12,13 @@
   [tournament]
   (vals (:participants tournament)))
 
+(defn participant-by-id
+  [tournament id]
+  (get (:participants tournament) id))
+
 (defn register-participant
   [tournament participant]
   (assoc-in tournament [:participants (:id participant)] participant))
-
-(defn strikes
-  [tournament participant]
-  (p/strikes (get-in tournament [:participants (:id participant)])))
 
 (defn record-strike
   [tournament participant strike]

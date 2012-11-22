@@ -27,10 +27,13 @@
         (is (= "Somebody" (:name participant)))
         (is (= "http://somewhere" (:url participant)))
 
+        (testing "Can query participants by id"
+          (is (= participant (t/participant-by-id tournament (:id participant)))))
+
         (testing "Strikes can be recorded to a participant"
           (let [tournament (t/record-strike tournament participant hit)
                 tournament (t/record-strike tournament participant miss)]
-            (is (= [hit miss] (t/strikes tournament participant)))))
+            (is (= [hit miss] (p/current-round (t/participant-by-id tournament (:id participant)))))))
 
         (testing "When the current round is finished,"
           (binding [rating/score-strikes (fn [strikes] (assert (= 3 (count strikes))) 42)]
@@ -42,4 +45,4 @@
               (testing "adds the score for the current round to the total score"
                 (is (= 42 (:score (first (t/participants tournament))))))
               (testing "starts a new round"
-                (is (empty? (t/strikes tournament participant)))))))))))
+                (is (empty? (p/current-round (t/participant-by-id tournament (:id participant)))))))))))))

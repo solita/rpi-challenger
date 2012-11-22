@@ -10,10 +10,15 @@
 (def app-auto-reload
   (-> #'app
     (wrap-reload
-      '(rpi-challenger.challenges)
-      '(rpi-challenger.core)
-      '(rpi-challenger.routes)
-      '(rpi-challenger.views))
+      '[rpi-challenger.io
+        rpi-challenger.challenges
+        rpi-challenger.rating
+        rpi-challenger.core.participant
+        rpi-challenger.core.tournament
+        rpi-challenger.core.strike
+        rpi-challenger.core
+        rpi-challenger.views
+        rpi-challenger.routes])
     (wrap-stacktrace)))
 
 (defn run [options]

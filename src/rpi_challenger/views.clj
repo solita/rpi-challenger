@@ -10,6 +10,7 @@
 (deftemplate layout "public/layout.html"
   [{:keys [title main]}]
   [:title ] (content title)
+  [:h2 ] (content title)
   [:#main ] (substitute main))
 
 
@@ -19,14 +20,14 @@
 (def *participant-link [[:a (nth-of-type 1)]])
 (def *participant-score [[:td (nth-of-type 2)]])
 
-(defsnippet participants-row "public/overview.html" *participants-row
-  [{:keys [name url score]}]
+(defsnippet participants-row "public/tournament.html" *participants-row
+  [participant]
   *participant-link (do->
-                      (content name)
-                      (set-attr :href url))
-  *participant-score (content (str score)))
+                      (content (:name participant))
+                      (set-attr :href (str "/participant-" (:id participant))))
+  *participant-score (content (str (:score participant))))
 
-(defsnippet participants-list "public/overview.html" [:body ]
+(defsnippet tournament-overview "public/tournament.html" [:body :> any-node]
   [participants]
   *participants-row (content (map #(participants-row %) participants)))
 
@@ -65,19 +66,26 @@
   [[:tr (nth-of-type 3)]] (substitute)
   [[:tr (nth-of-type 2)]] (substitute (map #(strikes-row %) strikes)))
 
+
+; detail page
+
+(defsnippet participant-details "public/participant.html" [:body :> any-node]
+  [participant]
+  [:#name ] (content (:name participant))
+  [:#url ] (content (:url participant))
+  [:#score ] (content (str (:score participant)))
+  [:#recent-failures ] (substitute (strikes-list (reverse (p/recent-failures participant))))
+  [:#current-round ] (substitute (strikes-list (reverse (p/current-round participant)))))
+
+
 ; pages
 
-(defn overview-page
+(defn tournament-overview-page
   [participants]
-  (layout {:title "Overview"
-           :main (participants-list participants)}))
+  (layout {:title "Tournament Overview"
+           :main (tournament-overview participants)}))
 
-(defn detail-page
+(defn participant-details-page
   [participant]
-  (layout {:title "Detail"
-           :main (strikes-list (reverse (p/strikes participant)))}))
-
-(defn recent-failures-page
-  [participant]
-  (layout {:title "Recent Failures"
-           :main (strikes-list (reverse (p/recent-failures participant)))}))
+  (layout {:title "Participant Details"
+           :main (participant-details participant)}))

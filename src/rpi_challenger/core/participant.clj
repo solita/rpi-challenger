@@ -15,7 +15,7 @@
    :recent-failures []
    :current-round []})
 
-(defn strikes
+(defn current-round
   [participant]
   (:current-round participant))
 

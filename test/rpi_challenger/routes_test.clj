@@ -49,4 +49,4 @@
     (testing "Succeeds if all parameters are non-empty"
       (let [response (POST "/register" {"name" "the-name" "url" "the-url"} app)]
         (is (= 302 (:status response)))
-        (is (= "/?message=OK" (redirect-location response)))))))
+        (is (= "/" (redirect-location response)))))))

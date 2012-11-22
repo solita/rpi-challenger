@@ -3,9 +3,9 @@ table.strikes {
     border-collapse: collapse;
 }
 
-table.strikes th {
-    padding-left: 1ex;
-    padding-right: 1ex;
+table.strikes th, td {
+    padding-left: 0.7ex;
+    padding-right: 0.7ex;
 }
 
 table.strikes td {

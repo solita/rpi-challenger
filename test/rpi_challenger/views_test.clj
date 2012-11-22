@@ -25,10 +25,10 @@
 
 
 (deftest participants-row-test
-  (let [participant {:name "The One" :url "http://the-url" :score 42}
+  (let [participant {:id 100, :name "The Name", :url "http://the-url", :score 42}
         html (participants-row participant)]
-    (is (= "The One" (get-content html *participant-link)))
-    (is (= "http://the-url" (get-attr :href (select1 html *participant-link))))
+    (is (= "The Name" (get-content html *participant-link)))
+    (is (= "/participant-100" (get-attr :href (select1 html *participant-link))))
     (is (= "42" (get-content html *participant-score)))))
 
 (deftest strikes-row-test

@@ -21,6 +21,10 @@
   []
   (t/participants (deref tournament)))
 
+(defn get-participant-by-id
+  [id]
+  (t/participant-by-id (deref tournament) id))
+
 (defn nil-or-str
   [object]
   (if (nil? object)
