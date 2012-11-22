@@ -1,11 +1,19 @@
 (ns rpi-challenger.core.participant
-  (:require [rpi-challenger.core.strike :as s]))
+  (:require [rpi-challenger.core.strike :as s])
+  (:import [java.util.concurrent.atomic AtomicInteger]))
 
 (def ^:dynamic *recent-failures-limit* 10)
 
+(defonce ^:private id-sequence (AtomicInteger. 0))
+
 (defn make-participant
   [name url]
-  {:name name, :url url, :score 0, :recent-failures [], :current-round []})
+  {:id (.incrementAndGet id-sequence)
+   :name name
+   :url url
+   :score 0
+   :recent-failures []
+   :current-round []})
 
 (defn strikes
   [participant]

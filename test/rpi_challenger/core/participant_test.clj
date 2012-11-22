@@ -8,6 +8,11 @@
   (binding [p/*recent-failures-limit* 3
             s/hit? #(= % :hit )]
 
+    (testing "Each participant gets a unique ID"
+      (let [participant-1 (p/make-participant "" "")
+            participant-2 (p/make-participant "" "")]
+        (is (not= (:id participant-1) (:id participant-2)))))
+
     (let [participant (p/make-participant "Somebody" "http://somewhere")]
 
       (testing "Recent failures list shows only failures"
