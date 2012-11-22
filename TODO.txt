@@ -7,13 +7,16 @@ OK - show a log of failed challenges
 OK - load challenges from a directory
 	OK - find out how to do it - eval or something?
 	OK - reload before polling
+- fix: doesn't reload changes to a challenge file (e.g. challenge function added), only loads new files
+- trim reponses from participants to ignore trailing newlines
 - handle failures form poller
-	- fix: polling crashes if malformed URL
+	- fix: polling crashes if malformed URL, or if service respondes with garbage
 - poll servers automatically, many times per second, infinite loop
 	- one poller thread per server
 - calculate the score automatically, in 1 minute ticks
 	- start a timer
 	- reload challenges in the beginning of a round
+- make parsing easier; separate operator and operands by newline?
 - better score calculation rules
 	- take challenge points into consideration
 	- use the points of the highest hit below the lowest miss
