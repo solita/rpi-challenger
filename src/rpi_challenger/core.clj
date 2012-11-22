@@ -46,7 +46,7 @@
 
 (defn record-reponse
   [participant response challenge]
-  (println "Record strike:" participant response challenge)
+  ;(println "Record strike:" participant response challenge)
   (dosync
     (alter tournament t/record-strike participant (s/make-strike response challenge)))
   ; TODO: load state on restart
