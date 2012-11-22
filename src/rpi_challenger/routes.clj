@@ -27,7 +27,7 @@
   (cond
     (= question "ping") "pong"
     (= question "Say hello to World") "Hello World"
-    :else (str "Don't understand " question)))
+    :else (str "Don't understand: " question)))
 
 (defroutes app-routes
   (GET "/" [] (using-template views/tournament-overview-page (core/get-participants)))
@@ -35,7 +35,7 @@
   (POST "/register" {params :params} (handle-register-form params))
   (GET "/poll" [] (str (core/poll-participants)))
   (GET "/calculate-score" [] (str (core/calculate-score)))
-  (POST "/hello-world" {body :body, :as request} (handle-hello-world (slurp body)))
+  (POST "/hello-world" {body :body} (handle-hello-world (slurp body)))
   (route/resources "/")
   (route/not-found "Page Not Found"))
 
