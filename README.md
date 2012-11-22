@@ -22,13 +22,6 @@ or
 Then open <http://localhost:8080/> in a web browser. For more options use the `--help` command line argument.
 
 
-## Creating Challenges
-
-Have a look at the sample in `src/rpi_challenger/challenges.clj` and `test/rpi_challenger/challenges_test.clj`. Challenges will be generated using functions such as the `hello-world` in there.
-
-The details of deployment are TBD, but you can start creating challenges now. Just store them in a different Git repository than this one - you wouldn't want to make them public too early.
-
-
 ## License
 
 Copyright © 2012 Solita Oy
