@@ -56,7 +56,7 @@
 (defn poll-participant
   [participant]
   (with-open [client (http/create-client)]
-    (let [challenge (challenges/hello-world)
+    (let [challenge (challenges/ping)
           response (post-request (:url participant) (:question challenge))]
       (record-reponse participant response challenge))))
 

@@ -1,14 +1,9 @@
 (ns rpi-challenger.challenges)
 
-; Hello World reference implementation
-(defn- say-hello
-  [name]
-  (str "Hello " name))
+(defn ^{:challenge 0} ping
+  []
+  {:question "ping"
+   :answer "pong"})
 
-; Hello World challenge generator
-(defn hello-world
-  ([]
-    (hello-world (rand-nth ["World", "Raspberry Pi", "Solita"])))
-  ([name]
-    {:question (str "Say hello to " name)
-     :answer (say-hello name)}))
+; TODO: read the points of a challenge from metadata
+;(println (meta (var ping)))
