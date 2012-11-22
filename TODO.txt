@@ -4,13 +4,14 @@ OK - show a log of failed challenges
 	OK - layout
 	OK - give unique ID for participants
 	OK - use the ID in showing that participant's details
-!! - load challenges from a directory
-	- find out how to do it - eval or something?
-	- reload automatically every minute?
-- poll servers automatically, many times per second
-	- one thread per server
+OK - load challenges from a directory
+	OK - find out how to do it - eval or something?
+	OK - reload before polling
+!! - poll servers automatically, many times per second, infinite loop
+	!! - one poller thread per server
 - calculate the score automatically, in 1 minute ticks
 	- start a timer
+	- reload challenges in the beginning of a round
 - show score accumulation history
 	- save score for each tick as [timestamp score]
 	- calculate total score from the history
