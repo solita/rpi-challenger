@@ -30,6 +30,7 @@
                  [org.clojure/tools.cli "0.2.2"]
 
                  ; Utils
-                 [org.clojure/algo.generic "0.1.0"]]
+                 [org.clojure/algo.generic "0.1.0"]
+                 [org.clojure/tools.namespace "0.2.1"]]
 
   :main rpi-challenger.main)

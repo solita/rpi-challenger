@@ -4,7 +4,7 @@
             [rpi-challenger.core.tournament :as t]
             [rpi-challenger.core.participant :as p]
             [rpi-challenger.core.strike :as s]
-            [rpi-challenger.challenges :as challenges]
+            [rpi-challenger.challenges :as c]
             [rpi-challenger.rating :as rating]
             [rpi-challenger.io :as io]))
 
@@ -54,16 +54,18 @@
   (io/object-to-file "rpi-challenger-state.clj" (deref tournament)))
 
 (defn poll-participant
-  [participant]
+  [participant challenges]
   (with-open [client (http/create-client)]
-    (let [challenge (challenges/ping)
-          response (post-request (:url participant) (:question challenge))]
-      (record-reponse participant response challenge))))
+    (doseq [challenge challenges]
+      (let [response (post-request (:url participant) (:question challenge))]
+        (record-reponse participant response challenge)))))
 
 (defn poll-participants
   []
-  (doseq [participant (get-participants)]
-    (poll-participant participant)))
+  (c/load-challenge-functions)
+  (let [challenges (c/generate-challenges)]
+    (doseq [participant (get-participants)]
+      (poll-participant participant challenges))))
 
 (defn calculate-score
   []
