@@ -40,7 +40,7 @@
 (defn post-request
   [url body]
   (with-open [client (http/create-client)]
-    (-> (http/POST client url :body body)
+    (-> (http/POST client url :body body :timeout 1000)
       http/await
       simple-http-response)))
 
