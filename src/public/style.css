@@ -1,6 +1,6 @@
 body {
   background: black;
-  font-family: courier;
+  font-family: "Courier New", Courier, monospace;
   color: white;
 }
 
@@ -11,7 +11,7 @@ a {
 a:link    {color: #66F;}
 a:visited {color: #66F;}
 a:hover   {color: #FF6;}
-a:active  {color: #66F;} 
+a:active  {color: #66F;}
 
 h1, h2, h3, h4, h5, h6 {
   color: #00ff00;
@@ -19,12 +19,13 @@ h1, h2, h3, h4, h5, h6 {
 
 
 table.strikes {
-    white-space: pre-line;
+    white-space: pre;
     border-collapse: collapse;
       color: black;
 }
 
 table.strikes th, td {
+    vertical-align: top;
     padding-left: 0.7ex;
     padding-right: 0.7ex;
 }
