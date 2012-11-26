@@ -6,9 +6,12 @@
             [rpi-challenger.core.strike :as s]
             [rpi-challenger.challenges :as c]
             [rpi-challenger.rating :as rating]
-            [rpi-challenger.io :as io]))
+            [rpi-challenger.io :as io])
+  (:import [org.slf4j LoggerFactory]))
 
 ;(defonce thread-pool (java.util.concurrent.Executors/newCachedThreadPool))
+
+(def ^:dynamic logger (LoggerFactory/getLogger (str (ns-name *ns*))))
 
 (defonce tournament (ref (t/make-tournament)))
 
@@ -37,16 +40,21 @@
    :status (http/status response)
    :error (nil-or-str (http/error response))})
 
-(defn post-request
+(defn ^:dynamic post-request
   [url body]
-  (with-open [client (http/create-client)]
-    (-> (http/POST client url :body body :timeout 1000)
-      http/await
-      simple-http-response)))
+  (try
+    (with-open [client (http/create-client)]
+      (-> (http/POST client url :body body :timeout 1000)
+        http/await
+        simple-http-response))
+    (catch Throwable t
+      (.warn logger (str "Failed to POST to " url) t)
+      {:body nil
+       :status nil
+       :error (.toString t)})))
 
-(defn record-reponse
+(defn ^:dynamic record-response
   [participant response challenge]
-  ;(println "Record strike:" participant response challenge)
   (dosync
     (alter tournament t/record-strike participant (s/make-strike response challenge)))
   ; TODO: load state on restart
@@ -55,10 +63,9 @@
 
 (defn poll-participant
   [participant challenges]
-  (with-open [client (http/create-client)]
-    (doseq [challenge challenges]
-      (let [response (post-request (:url participant) (:question challenge))]
-        (record-reponse participant response challenge)))))
+  (doseq [challenge challenges]
+    (let [response (post-request (:url participant) (:question challenge))]
+      (record-response participant response challenge))))
 
 (defn poll-participants
   []
