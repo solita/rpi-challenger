@@ -43,10 +43,12 @@ table.strikes tr.hit {
 
 table.strikes tr.miss {
     background-color: #ffeecc;
+    color: red;
 }
 
 table.strikes tr.error {
     background-color: #ffcccc;
+    color: red;
 }
 
 .bread-crumb {
