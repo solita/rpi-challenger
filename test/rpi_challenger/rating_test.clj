@@ -28,6 +28,18 @@
       (let [response {:body nil
                       :status nil
                       :error "java.net.ConnectException: http://foo/"}]
+        (is (not (correct? response challenge)))))
+
+    (testing "ignores trailing newline in the answer"
+      (let [response {:body "correct answer\r\n"
+                      :status {:code 200, :msg "OK"}
+                      :error nil}]
+        (is (correct? response challenge))))
+
+    (testing "doesn't ignore other whitespace in the answer"
+      (let [response {:body "correct answer "
+                      :status {:code 200, :msg "OK"}
+                      :error nil}]
         (is (not (correct? response challenge)))))))
 
 (deftest score-current-round-test

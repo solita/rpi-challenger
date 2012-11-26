@@ -7,8 +7,7 @@ OK - show a log of failed challenges
 OK - load challenges from a directory
 	OK - find out how to do it - eval or something?
 	OK - reload before polling
-- fix: doesn't reload changes to a challenge file (e.g. challenge function added), only loads new files
-- trim reponses from participants to ignore trailing newlines
+OK - trim reponses from participants to ignore trailing newlines
 - handle failures form poller
 	- fix: polling crashes if malformed URL, or if service respondes with garbage
 - poll servers automatically, many times per second, infinite loop

@@ -1,11 +1,12 @@
-(ns rpi-challenger.rating)
+(ns rpi-challenger.rating
+  (:require [clojure.string :as string]))
 
 (defn ^:dynamic correct?
   [response challenge]
   (and
     (nil? (:error response))
     (= 200 (:code (:status response)))
-    (= (:body response) (:answer challenge))))
+    (= (string/trim-newline (:body response)) (:answer challenge))))
 
 ; TODO: score based on challenge level, then reduce using `min`
 (defn score-strike
