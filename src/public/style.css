@@ -1,11 +1,36 @@
+body {
+  background: black;
+  font-family: courier;
+  color: white;
+}
+
+a {
+ color: #66F;
+}
+
+a:link    {color: #66F;}
+a:visited {color: #66F;}
+a:hover   {color: #FF6;}
+a:active  {color: #66F;} 
+
+h1, h2, h3, h4, h5, h6 {
+  color: #00ff00;
+}
+
+
 table.strikes {
-    white-space: pre;
+    white-space: pre-line;
     border-collapse: collapse;
+      color: black;
 }
 
 table.strikes th, td {
     padding-left: 0.7ex;
     padding-right: 0.7ex;
+}
+
+table.strikes th {
+    color: white;
 }
 
 table.strikes td {
@@ -22,4 +47,19 @@ table.strikes tr.miss {
 
 table.strikes tr.error {
     background-color: #ffcccc;
+}
+
+.bread-crumb {
+	position: absolute;
+	top: 80px;
+}
+
+.start-polling {
+  font-size: 12px;
+}
+
+
+.bread-crumb-placeholder {
+  height: 50px;
+  visibility: hidden;
 }
