@@ -1,27 +1,37 @@
 body {
-  background: black;
-  font-family: "Courier New", Courier, monospace;
-  color: white;
+    background: black;
+    font-family: "Courier New", Courier, monospace;
+    color: white;
 }
 
 a {
- color: #66F;
+    color: #6666ff;
 }
 
-a:link    {color: #66F;}
-a:visited {color: #66F;}
-a:hover   {color: #FF6;}
-a:active  {color: #66F;}
+a:link {
+    color: #6666ff;
+}
+
+a:visited {
+    color: #6666ff;
+}
+
+a:hover {
+    color: #ffff66;
+}
+
+a:active {
+    color: #6666ff;
+}
 
 h1, h2, h3, h4, h5, h6 {
-  color: #00ff00;
+    color: #00ff00;
 }
-
 
 table.strikes {
     white-space: pre;
     border-collapse: collapse;
-      color: black;
+    color: black;
 }
 
 table.strikes th, td {
@@ -53,16 +63,15 @@ table.strikes tr.error {
 }
 
 .bread-crumb {
-	position: absolute;
-	top: 80px;
+    position: absolute;
+    top: 80px;
 }
 
 .start-polling {
-  font-size: 12px;
+    font-size: 12px;
 }
 
-
 .bread-crumb-placeholder {
-  height: 50px;
-  visibility: hidden;
+    height: 50px;
+    visibility: hidden;
 }
