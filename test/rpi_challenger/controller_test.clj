@@ -1,6 +1,6 @@
-(ns rpi-challenger.core-test
+(ns rpi-challenger.controller-test
   (:use clojure.test
-        rpi-challenger.core))
+        rpi-challenger.controller))
 
 (defn append [var item]
   (var-set var (conj @var item)))

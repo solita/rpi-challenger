@@ -1,6 +1,6 @@
-(ns rpi-challenger.rating-test
+(ns rpi-challenger.core.rating-test
   (:use clojure.test
-        rpi-challenger.rating))
+        rpi-challenger.core.rating))
 
 (deftest correct?-test
   (let [challenge {:question "the question"

@@ -1,4 +1,4 @@
-(ns rpi-challenger.challenges
+(ns rpi-challenger.core.challenges
   (:require [clojure.tools.namespace.find :as ns-find])
   (:import [java.io File]))
 

@@ -1,12 +1,12 @@
-(ns rpi-challenger.core
+(ns rpi-challenger.controller
   (:use [clojure.algo.generic.functor :only [fmap]])
   (:require [http.async.client :as http]
             [rpi-challenger.core.tournament :as t]
             [rpi-challenger.core.participant :as p]
             [rpi-challenger.core.strike :as s]
-            [rpi-challenger.challenges :as c]
-            [rpi-challenger.rating :as rating]
-            [rpi-challenger.io :as io])
+            [rpi-challenger.core.challenges :as c]
+            [rpi-challenger.core.rating :as rating]
+            [rpi-challenger.util.io :as io])
   (:import [org.slf4j LoggerFactory]
            [java.util.concurrent Executors]))
 

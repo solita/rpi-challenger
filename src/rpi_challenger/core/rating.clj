@@ -1,4 +1,4 @@
-(ns rpi-challenger.rating
+(ns rpi-challenger.core.rating
   (:require [clojure.string :as string]))
 
 (defn ^:dynamic correct?

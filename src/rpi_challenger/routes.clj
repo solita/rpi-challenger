@@ -2,7 +2,7 @@
   (:use ring.util.response
         compojure.core
         [ring.middleware.params :only [wrap-params]])
-  (:require [rpi-challenger.core :as core]
+  (:require [rpi-challenger.controller :as ctrl]
             [rpi-challenger.views :as views]
             [compojure.route :as route]
             [net.cgrand.enlive-html :as html]
@@ -18,7 +18,7 @@
         (not (string/blank? name))
         (not (string/blank? url)))
     (do
-      (core/register name url)
+      (ctrl/register name url)
       (redirect "/"))
     (redirect "/?message=Registration failed")))
 
@@ -30,11 +30,11 @@
     :else (str "Don't understand: " question)))
 
 (defroutes app-routes
-  (GET "/" [] (using-template views/tournament-overview-page (core/get-participants)))
-  (GET "/participant-:id" [id] (using-template views/participant-details-page (core/get-participant-by-id (Integer/parseInt id))))
+  (GET "/" [] (using-template views/tournament-overview-page (ctrl/get-participants)))
+  (GET "/participant-:id" [id] (using-template views/participant-details-page (ctrl/get-participant-by-id (Integer/parseInt id))))
   (POST "/register" {params :params} (handle-register-form params))
-  (GET "/poll" [] (str (core/poll-participants)))
-  (GET "/calculate-score" [] (str (core/calculate-score)))
+  (GET "/poll" [] (str (ctrl/poll-participants)))
+  (GET "/calculate-score" [] (str (ctrl/calculate-score)))
   (POST "/hello-world" {body :body} (handle-hello-world (slurp body)))
   (route/resources "/")
   (route/not-found "Page Not Found"))

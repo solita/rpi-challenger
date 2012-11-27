@@ -1,6 +1,6 @@
-(ns rpi-challenger.challenges-test
+(ns rpi-challenger.core.challenges-test
   (:use clojure.test)
-  (:require [rpi-challenger.challenges :as c]))
+  (:require [rpi-challenger.core.challenges :as c]))
 
 (defn not-challenge [])
 (defn ^{:challenge 42} challenge-42 [] {:question "Answer to life, universe and everything?"

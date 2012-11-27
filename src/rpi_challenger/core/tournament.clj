@@ -2,7 +2,7 @@
   (:use [clojure.algo.generic.functor :only [fmap]])
   (:require [rpi-challenger.core.participant :as p]
             [rpi-challenger.core.strike :as s]
-            [rpi-challenger.rating :as rating]))
+            [rpi-challenger.core.rating :as rating]))
 
 (defn make-tournament
   []

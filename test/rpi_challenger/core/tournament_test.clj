@@ -3,7 +3,7 @@
   (:require [rpi-challenger.core.tournament :as t]
             [rpi-challenger.core.participant :as p]
             [rpi-challenger.core.strike :as s]
-            [rpi-challenger.rating :as rating]))
+            [rpi-challenger.core.rating :as rating]))
 
 (deftest tournament-test
   (let [any-participant (p/make-participant "Somebody" "http://somewhere")

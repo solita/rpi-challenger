@@ -2,7 +2,7 @@
   (:use clojure.test)
   (:require [rpi-challenger.core.participant :as p]
             [rpi-challenger.core.strike :as s]
-            [rpi-challenger.rating :as rating]))
+            [rpi-challenger.core.rating :as rating]))
 
 (deftest participant-test
   (binding [p/*recent-failures-limit* 3

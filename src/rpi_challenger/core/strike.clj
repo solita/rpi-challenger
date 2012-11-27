@@ -1,5 +1,5 @@
 (ns rpi-challenger.core.strike
-  (:require [rpi-challenger.rating :as rating]))
+  (:require [rpi-challenger.core.rating :as rating]))
 
 (defn make-strike
   [response challenge]
