@@ -2,9 +2,6 @@
   (:require [clojure.tools.namespace.find :as ns-find])
   (:import [java.io File]))
 
-; TODO: parameterize on command line or create an admin screen
-(def ^:dynamic *challenges-dir* "../rpi-challenges/src/")
-
 (defn challenge?
   [f]
   (contains? (meta f) :challenge ))
@@ -18,8 +15,8 @@
   (assoc (challenge-f) :points (points challenge-f)))
 
 (defn load-challenge-functions
-  []
-  (doseq [source-file (ns-find/find-clojure-sources-in-dir (File. *challenges-dir*))]
+  [^File dir]
+  (doseq [source-file (ns-find/find-clojure-sources-in-dir dir)]
     (load-file (.getPath source-file))))
 
 (defn find-challenge-functions

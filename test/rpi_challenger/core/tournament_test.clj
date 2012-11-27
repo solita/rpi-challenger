@@ -46,3 +46,17 @@
                 (is (= 42 (:score (first (t/participants tournament))))))
               (testing "starts a new round"
                 (is (empty? (p/current-round (t/participant-by-id tournament (:id participant)))))))))))))
+
+(deftest challenges-test
+  (require 'rpi-challenger.core.dummy) ; making sure that we have at least two challenges loaded)
+  (let [tournament (t/make-tournament)
+        tournament (t/update-challenge-functions tournament)
+        challenges (t/generate-challenges tournament)]
+    (is (< 1 (count challenges)))
+
+    (testing "Challenges start with the ping challenge"
+      (is (= "ping" (:question (first challenges)))))
+
+    (testing "Challenges are in increasing difficulty order"
+      (let [points (map :points challenges)]
+        (is (= (sort points) points))))))

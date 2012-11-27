@@ -6,5 +6,9 @@
 (deftest object-serialization-test
   (let [file (File/createTempFile "io-test" nil)
         original {:foo "asdf", :bar [1 2 3]}]
-    (object-to-file file original)
-    (is (= original (file-to-object file)))))
+    (try
+      (do
+        (object-to-file file original)
+        (is (= original (file-to-object file))))
+      (finally
+        (.delete file)))))

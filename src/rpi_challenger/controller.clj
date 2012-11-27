@@ -8,6 +8,7 @@
             [rpi-challenger.core.rating :as rating]
             [rpi-challenger.util.io :as io])
   (:import [org.slf4j LoggerFactory]
+           [java.io File]
            [java.util.concurrent Executors]))
 
 (defonce thread-pool (Executors/newCachedThreadPool))
@@ -65,7 +66,8 @@
 
 (defn poll-participants
   []
-  (c/load-challenge-functions)
+  ; TODO: parameterize the dir on command line or create an admin screen
+  (c/load-challenge-functions (File. "../rpi-challenges/src/"))
   (let [challenges (c/generate-challenges)]
     (doseq [participant (get-participants)]
       (poll-participant participant challenges))))
