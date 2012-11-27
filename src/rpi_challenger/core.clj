@@ -7,18 +7,14 @@
             [rpi-challenger.challenges :as c]
             [rpi-challenger.rating :as rating]
             [rpi-challenger.io :as io])
-  (:import [org.slf4j LoggerFactory]))
+  (:import [org.slf4j LoggerFactory]
+           [java.util.concurrent Executors]))
 
-;(defonce thread-pool (java.util.concurrent.Executors/newCachedThreadPool))
+(defonce thread-pool (Executors/newCachedThreadPool))
 
 (def ^:dynamic logger (LoggerFactory/getLogger (str (ns-name *ns*))))
 
 (defonce tournament (ref (t/make-tournament)))
-
-(defn register
-  [name url]
-  (dosync
-    (alter tournament t/register-participant (p/make-participant name url))))
 
 (defn get-participants
   []
@@ -78,6 +74,19 @@
   []
   (dosync
     (alter tournament t/finish-current-round)))
+
+(defn make-poller
+  [participant]
+  #(while (not (Thread/interrupted))
+     ;(println "poll" participant) ; TODO
+     (Thread/sleep 1000)))
+
+(defn register
+  [name url]
+  (let [participant (p/make-participant name url)]
+    (dosync
+      (alter tournament t/register-participant participant))
+    (.execute thread-pool (make-poller participant))))
 
 ; TODO: remove this dummy data
 (register "Hello World Dummy", "http://localhost:8080/hello-world")
