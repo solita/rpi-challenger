@@ -7,9 +7,9 @@
             [rpi-challenger.core.challenges :as c]
             [rpi-challenger.core.rating :as rating]
             [rpi-challenger.util.io :as io])
-  (:import [org.slf4j LoggerFactory]
+  (:import [org.slf4j LoggerFactory Logger]
            [java.io File]
-           [java.util.concurrent Executors]))
+           [java.util.concurrent Executors ScheduledExecutorService TimeUnit]))
 
 (defonce thread-pool (Executors/newCachedThreadPool))
 
@@ -71,17 +71,24 @@
 
 (defn register
   [name url]
+  (.info logger "Registering participant \"{}\" at {}" name url)
   (let [participant (p/make-participant name url)]
     (dosync
       (alter tournament t/register-participant participant))
     (.execute thread-pool (make-poller participant))))
 
-(defn calculate-score
+(defn start-new-round
   []
   (dosync (alter tournament t/finish-current-round))
+  (.info logger "Starting a new round")
   ; TODO: parameterize the dir on command line or create an admin screen
   (c/load-challenge-functions (File. "../rpi-challenges/src/"))
   (dosync (alter tournament t/update-challenge-functions)))
+
+(defonce round-scheduler
+  (let [scheduler (Executors/newScheduledThreadPool 1)]
+    (.scheduleAtFixedRate scheduler start-new-round 0 60 TimeUnit/SECONDS)
+    scheduler))
 
 ; TODO: remove this dummy data
 (register "Hello World Dummy", "http://localhost:8080/hello-world")
