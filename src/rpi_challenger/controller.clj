@@ -9,13 +9,27 @@
             [rpi-challenger.util.io :as io])
   (:import [org.slf4j LoggerFactory Logger]
            [java.io File]
-           [java.util.concurrent Executors ScheduledExecutorService TimeUnit]))
+           [java.util.concurrent Executors Future ScheduledExecutorService TimeUnit]))
+
+(def tournament-file (File. "rpi-challenger-state.clj"))
+
+(defn save-tournament
+  [tournament]
+  (io/object-to-file tournament-file (:participants tournament)))
+
+(defn load-tournament
+  []
+  (if (.exists tournament-file)
+    (assoc (t/make-tournament) :participants (io/file-to-object tournament-file))
+    (t/make-tournament)))
 
 (defonce thread-pool (Executors/newCachedThreadPool))
 
+(defonce participant-pollers (ref []))
+
 (def ^:dynamic logger (LoggerFactory/getLogger (str (ns-name *ns*))))
 
-(defonce tournament (ref (t/make-tournament)))
+(defonce tournament (ref (load-tournament)))
 
 (defn get-participants
   []
@@ -44,6 +58,8 @@
       (-> (http/POST client url :body body :timeout 1000)
         http/await
         simple-http-response))
+    (catch InterruptedException e
+      (throw e))
     (catch Throwable t
       (.warn logger (str "Failed to POST to " url) t)
       {:body nil
@@ -66,28 +82,37 @@
   #(while (not (Thread/interrupted))
      (poll-participant participant (t/generate-challenges @tournament))))
 
+(defn start-polling
+  [participant]
+  (let [future (.submit thread-pool (make-poller participant))]
+    (dosync
+      (alter participant-pollers conj future))))
+
 (defn ^:dynamic register
   [name url]
   (.info logger "Registering participant \"{}\" at {}" name url)
   (let [participant (p/make-participant name url)]
     (dosync
-      (alter tournament t/register-participant participant))
-    (.execute thread-pool (make-poller participant))))
+      (alter tournament t/register-participant participant))))
 
 (defn start-new-round
   []
-  (dosync (alter tournament t/finish-current-round))
   (.info logger "Starting a new round")
-  ; TODO: load state on restart
-  (io/object-to-file "rpi-challenger-state.clj" @tournament)
-  ; TODO: parameterize the dir on command line or create an admin screen
-  (c/load-challenge-functions (File. "../rpi-challenges/src/"))
-  (dosync (alter tournament t/update-challenge-functions)))
+
+  (dosync
+    (alter tournament t/finish-current-round)
+    (doseq [poller @participant-pollers]
+      (.cancel poller true)) ; XXX: interrupting the pollers produces randomly exceptions in NIO/Netty; use a better way of starting pollers on load
+    (alter participant-pollers empty))
+  (save-tournament @tournament)
+
+  (c/load-challenge-functions (File. "../rpi-challenges/src/")) ; TODO: parameterize the dir on command line or create an admin screen
+  (dosync
+    (alter tournament t/update-challenge-functions))
+  (doseq [participant (t/participants @tournament)]
+    (start-polling participant)))
 
 (defonce round-scheduler
   (let [scheduler (Executors/newScheduledThreadPool 1)]
     (.scheduleAtFixedRate scheduler start-new-round 0 60 TimeUnit/SECONDS)
     scheduler))
-
-; TODO: remove this dummy data
-(register "Hello World Dummy", "http://localhost:8080/hello-world")
