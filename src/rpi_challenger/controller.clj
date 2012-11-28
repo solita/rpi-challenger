@@ -19,11 +19,11 @@
 
 (defn get-participants
   []
-  (t/participants (deref tournament)))
+  (t/participants @tournament))
 
 (defn get-participant-by-id
   [id]
-  (t/participant-by-id (deref tournament) id))
+  (t/participant-by-id @tournament id))
 
 (defn nil-or-str
   [object]
@@ -56,7 +56,7 @@
     (alter tournament t/record-strike participant (s/make-strike response challenge)))
   ; TODO: load state on restart
   ; TODO: save state less often
-  (io/object-to-file "rpi-challenger-state.clj" (deref tournament)))
+  (io/object-to-file "rpi-challenger-state.clj" @tournament))
 
 (defn poll-participant
   [participant challenges]
