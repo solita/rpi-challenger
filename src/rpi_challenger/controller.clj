@@ -69,7 +69,7 @@
   #(while (not (Thread/interrupted))
      (poll-participant participant (t/generate-challenges @tournament))))
 
-(defn register
+(defn ^:dynamic register
   [name url]
   (.info logger "Registering participant \"{}\" at {}" name url)
   (let [participant (p/make-participant name url)]
