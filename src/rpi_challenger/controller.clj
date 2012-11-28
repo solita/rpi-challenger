@@ -64,24 +64,10 @@
     (let [response (post-request (:url participant) (:question challenge))]
       (record-response participant response challenge))))
 
-(defn poll-participants
-  []
-  ; TODO: parameterize the dir on command line or create an admin screen
-  (c/load-challenge-functions (File. "../rpi-challenges/src/"))
-  (let [challenges (c/generate-challenges)]
-    (doseq [participant (get-participants)]
-      (poll-participant participant challenges))))
-
-(defn calculate-score
-  []
-  (dosync
-    (alter tournament t/finish-current-round)))
-
 (defn make-poller
   [participant]
   #(while (not (Thread/interrupted))
-     ;(println "poll" participant) ; TODO
-     (Thread/sleep 1000)))
+     (poll-participant participant (t/generate-challenges @tournament))))
 
 (defn register
   [name url]
@@ -89,6 +75,13 @@
     (dosync
       (alter tournament t/register-participant participant))
     (.execute thread-pool (make-poller participant))))
+
+(defn calculate-score
+  []
+  (dosync (alter tournament t/finish-current-round))
+  ; TODO: parameterize the dir on command line or create an admin screen
+  (c/load-challenge-functions (File. "../rpi-challenges/src/"))
+  (dosync (alter tournament t/update-challenge-functions)))
 
 ; TODO: remove this dummy data
 (register "Hello World Dummy", "http://localhost:8080/hello-world")

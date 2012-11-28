@@ -67,10 +67,6 @@ table.strikes tr.error {
     top: 80px;
 }
 
-.start-polling {
-    font-size: 12px;
-}
-
 .bread-crumb-placeholder {
     height: 50px;
     visibility: hidden;

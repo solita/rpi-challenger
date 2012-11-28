@@ -33,7 +33,6 @@
   (GET "/" [] (using-template views/tournament-overview-page (ctrl/get-participants)))
   (GET "/participant-:id" [id] (using-template views/participant-details-page (ctrl/get-participant-by-id (Integer/parseInt id))))
   (POST "/register" {params :params} (handle-register-form params))
-  (GET "/poll" [] (str (ctrl/poll-participants)))
   (GET "/calculate-score" [] (str (ctrl/calculate-score)))
   (POST "/hello-world" {body :body} (handle-hello-world (slurp body)))
   (route/resources "/")
