@@ -53,10 +53,7 @@
 (defn ^:dynamic record-response
   [participant response challenge]
   (dosync
-    (alter tournament t/record-strike participant (s/make-strike response challenge)))
-  ; TODO: load state on restart
-  ; TODO: save state less often
-  (io/object-to-file "rpi-challenger-state.clj" @tournament))
+    (alter tournament t/record-strike participant (s/make-strike response challenge))))
 
 (defn poll-participant
   [participant challenges]
@@ -81,6 +78,8 @@
   []
   (dosync (alter tournament t/finish-current-round))
   (.info logger "Starting a new round")
+  ; TODO: load state on restart
+  (io/object-to-file "rpi-challenger-state.clj" @tournament)
   ; TODO: parameterize the dir on command line or create an admin screen
   (c/load-challenge-functions (File. "../rpi-challenges/src/"))
   (dosync (alter tournament t/update-challenge-functions)))
