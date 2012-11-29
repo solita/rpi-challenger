@@ -17,7 +17,14 @@ OK - calculate the score automatically, in 1 minute ticks
 	OK - start a timer
 	OK - reload challenges in the beginning of a round
 - start the application explicitly in main instead of on loading
-	- wrap all the refs into an object
+	!!- replacement logic in app
+		OK - wrap all the refs into an object
+		OK - registering participants
+		OK - scheduling the starting of new rounds
+		!! - starting new rounds
+		- scheduling the polling of participants
+		- polling participants
+		- replace controller with app
 	- do a controlled start of the pollers after loading from file
 - optimize memory usage, keep only the last N events in memory (else would have to poll less often)
 - challenges: lorem ipsum: trim dot and comma
