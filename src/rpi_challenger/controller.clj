@@ -7,7 +7,8 @@
             [rpi-challenger.core.strike :as s]
             [rpi-challenger.core.challenges :as c]
             [rpi-challenger.core.rating :as rating]
-            [rpi-challenger.util.io :as io])
+            [rpi-challenger.util.io :as io]
+            [rpi-challenger.util.threads :as threads])
   (:import [org.slf4j LoggerFactory Logger]
            [java.io File]
            [java.util.concurrent Executors Future ScheduledExecutorService TimeUnit]))
@@ -24,7 +25,7 @@
     (assoc (t/make-tournament) :participants (io/file-to-object tournament-file))
     (t/make-tournament)))
 
-(defonce thread-pool (Executors/newCachedThreadPool (app/daemon-thread-factory "participant-poller")))
+(defonce thread-pool (Executors/newCachedThreadPool (threads/daemon-thread-factory "participant-poller")))
 
 (defonce participant-pollers (ref []))
 
@@ -114,6 +115,6 @@
     (start-polling participant)))
 
 (defonce round-scheduler
-  (let [scheduler (Executors/newScheduledThreadPool 1 (app/daemon-thread-factory "round-scheduler"))]
+  (let [scheduler (Executors/newScheduledThreadPool 1 (threads/daemon-thread-factory "round-scheduler"))]
     (.scheduleAtFixedRate scheduler start-new-round 0 60 TimeUnit/SECONDS)
     scheduler))
