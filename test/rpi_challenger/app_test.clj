@@ -1,5 +1,6 @@
 (ns rpi-challenger.app-test
-  (:use clojure.test)
+  (:use clojure.test
+        rpi-challenger.util.testing)
   (:require [rpi-challenger.app :as app]
             [rpi-challenger.util.threads :as threads]))
 
@@ -17,13 +18,8 @@
     (testing "Starts a new round at regular intervals"
       (let [app (app/make-app)
             scheduled-function (ref nil)
-            scheduled-delay (ref nil)
-            start-new-round-called (ref false)]
-        (binding [app/start-new-round
-                  (fn [app]
-                    (dosync (ref-set start-new-round-called true)))
-
-                  threads/schedule-with-fixed-delay
+            scheduled-delay (ref nil)]
+        (binding [threads/schedule-with-fixed-delay
                   (fn [scheduler f delay]
                     (dosync
                       (ref-set scheduled-function f)
@@ -31,10 +27,8 @@
 
           (app/start app)
 
-          (is (= app/round-duration-in-seconds @scheduled-delay))
-          (is (= false @start-new-round-called)) ; TODO: extract helper method
-          (@scheduled-function)
-          (is (= true @start-new-round-called)))))))
+          (is (calls? app/start-new-round (@scheduled-function)))
+          (is (= app/round-duration-in-seconds @scheduled-delay)))))))
 
 ; TODO: start-new-round
 ; TODO: poll-participant
