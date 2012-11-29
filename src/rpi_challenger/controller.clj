@@ -34,11 +34,11 @@
 (defonce tournament (ref (load-tournament)))
 
 (defn get-participants
-  []
+  [app]
   (t/participants @tournament))
 
 (defn get-participant-by-id
-  [id]
+  [app id]
   (t/participant-by-id @tournament id))
 
 (defn nil-or-str
@@ -116,5 +116,5 @@
 
 (defonce round-scheduler
   (let [scheduler (Executors/newScheduledThreadPool 1 (threads/daemon-thread-factory "round-scheduler"))]
-    (.scheduleAtFixedRate scheduler start-new-round 0 60 TimeUnit/SECONDS)
+    (.scheduleWithFixedDelay scheduler start-new-round 0 60 TimeUnit/SECONDS)
     scheduler))

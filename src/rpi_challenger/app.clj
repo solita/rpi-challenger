@@ -14,6 +14,8 @@
 
 (def ^:dynamic logger (LoggerFactory/getLogger (str (ns-name *ns*))))
 
+(def round-duration-in-seconds 60)
+
 (defn make-app []
   (ref {:tournament (t/make-tournament)
         :scheduler (Executors/newScheduledThreadPool 1 (threads/daemon-thread-factory "round-scheduler"))
@@ -22,6 +24,9 @@
 
 (defn- alter-tournament [app f & args]
   (apply alter (concat [app update-in [:tournament ] f] args)))
+
+
+; participants
 
 (defn register-participant [app name url]
   (.info logger "Registering participant \"{}\" at {}" name url)
@@ -35,3 +40,11 @@
 
 (defn get-participant-by-id [app id]
   (t/participant-by-id (:tournament @app) id))
+
+
+; lifecycle events
+
+(defn ^:dynamic start-new-round [app])
+
+(defn start [app]
+  (threads/schedule-with-fixed-delay (:scheduler @app) #(start-new-round app) round-duration-in-seconds))

@@ -13,7 +13,7 @@
   (response (apply str (apply template args))))
 
 (defn handle-register-form
-  [{name "name" url "url"}]
+  [app {name "name" url "url"}]
   (if (and
         (not (string/blank? name))
         (not (string/blank? url)))
@@ -33,9 +33,9 @@
   [app]
   (->
     (routes
-      (GET "/" [] (using-template views/tournament-overview-page (ctrl/get-participants)))
-      (GET "/participant-:id" [id] (using-template views/participant-details-page (ctrl/get-participant-by-id (Integer/parseInt id))))
-      (POST "/register" {params :params} (handle-register-form params))
+      (GET "/" [] (using-template views/tournament-overview-page (ctrl/get-participants app)))
+      (GET "/participant-:id" [id] (using-template views/participant-details-page (ctrl/get-participant-by-id app (Integer/parseInt id))))
+      (POST "/register" {params :params} (handle-register-form app params))
       (POST "/hello-world" {body :body} (handle-hello-world (slurp body)))
       (route/resources "/")
       (route/not-found "Page Not Found"))
