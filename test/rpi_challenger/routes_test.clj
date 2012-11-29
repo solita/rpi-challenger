@@ -20,35 +20,36 @@
 
 (deftest routes-test
   (binding [ctrl/register (fn [& _])]
+    (let [app (make-routes nil)]
 
-    (testing "Shows index page"
-      (let [response (GET "/" app)]
-        (is (= 200 (:status response)))
-        (is (re-find #"Raspberry Pi Challenger" (:body response)))))
+      (testing "Shows index page"
+        (let [response (GET "/" app)]
+          (is (= 200 (:status response)))
+          (is (re-find #"Raspberry Pi Challenger" (:body response)))))
 
-    (testing "Serves static resources"
-      (let [response (GET "/layout.html" app)]
-        (is (= 200 (:status response)))
-        (is (= "layout.html" (.getName (:body response))))))
+      (testing "Serves static resources"
+        (let [response (GET "/layout.html" app)]
+          (is (= 200 (:status response)))
+          (is (= "layout.html" (.getName (:body response))))))
 
-    (testing "Shows Error 404 when page not found"
-      (let [response (GET "/no-such-page" app)]
-        (is (= 404 (:status response)))
-        (is (= "Page Not Found" (:body response)))))
+      (testing "Shows Error 404 when page not found"
+        (let [response (GET "/no-such-page" app)]
+          (is (= 404 (:status response)))
+          (is (= "Page Not Found" (:body response)))))
 
-    (testing "Registration form"
+      (testing "Registration form"
 
-      (testing "Fails if name missing"
-        (let [response (POST "/register" {"name" "" "url" "the-url"} app)]
-          (is (= 302 (:status response)))
-          (is (= "/?message=Registration failed" (redirect-location response)))))
+        (testing "Fails if name missing"
+          (let [response (POST "/register" {"name" "" "url" "the-url"} app)]
+            (is (= 302 (:status response)))
+            (is (= "/?message=Registration failed" (redirect-location response)))))
 
-      (testing "Fails if URL missing"
-        (let [response (POST "/register" {"name" "the-name" "url" ""} app)]
-          (is (= 302 (:status response)))
-          (is (= "/?message=Registration failed" (redirect-location response)))))
+        (testing "Fails if URL missing"
+          (let [response (POST "/register" {"name" "the-name" "url" ""} app)]
+            (is (= 302 (:status response)))
+            (is (= "/?message=Registration failed" (redirect-location response)))))
 
-      (testing "Succeeds if all parameters are non-empty"
-        (let [response (POST "/register" {"name" "the-name" "url" "the-url"} app)]
-          (is (= 302 (:status response)))
-          (is (= "/" (redirect-location response))))))))
+        (testing "Succeeds if all parameters are non-empty"
+          (let [response (POST "/register" {"name" "the-name" "url" "the-url"} app)]
+            (is (= 302 (:status response)))
+            (is (= "/" (redirect-location response)))))))))

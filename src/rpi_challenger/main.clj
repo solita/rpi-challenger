@@ -1,19 +1,22 @@
 (ns rpi-challenger.main
-  (:use [rpi-challenger.routes :only [app]]
-        [clojure.tools.cli :only [cli]]
+  (:use [clojure.tools.cli :only [cli]]
         ring.adapter.jetty
         ring.middleware.file
         ring.middleware.reload
         ring.middleware.stacktrace)
+  (:require [rpi-challenger.app :as app]
+            [rpi-challenger.routes :as routes])
   (:gen-class ))
 
-(def app-auto-reload
-  (-> #'app
-    (wrap-reload 'rpi-challenger.routes)
+(defn make-webapp []
+  (->
+    (app/make-app)
+    (routes/make-routes)
+    (wrap-reload)
     (wrap-stacktrace)))
 
 (defn run [options]
-  (run-jetty #'app-auto-reload options))
+  (run-jetty (make-webapp) options))
 
 (defn start [options]
   (.start (Thread. (fn [] (run options)))))

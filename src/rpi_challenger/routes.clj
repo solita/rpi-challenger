@@ -29,13 +29,14 @@
     (= question "Say hello to World") "Hello World"
     :else (str "Don't understand: " question)))
 
-(defroutes app-routes
-  (GET "/" [] (using-template views/tournament-overview-page (ctrl/get-participants)))
-  (GET "/participant-:id" [id] (using-template views/participant-details-page (ctrl/get-participant-by-id (Integer/parseInt id))))
-  (POST "/register" {params :params} (handle-register-form params))
-  (POST "/hello-world" {body :body} (handle-hello-world (slurp body)))
-  (route/resources "/")
-  (route/not-found "Page Not Found"))
-
-(def app (-> app-routes
-           (wrap-params)))
+(defn make-routes
+  [app]
+  (->
+    (routes
+      (GET "/" [] (using-template views/tournament-overview-page (ctrl/get-participants)))
+      (GET "/participant-:id" [id] (using-template views/participant-details-page (ctrl/get-participant-by-id (Integer/parseInt id))))
+      (POST "/register" {params :params} (handle-register-form params))
+      (POST "/hello-world" {body :body} (handle-hello-world (slurp body)))
+      (route/resources "/")
+      (route/not-found "Page Not Found"))
+    (wrap-params)))
