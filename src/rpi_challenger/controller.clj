@@ -1,6 +1,7 @@
 (ns rpi-challenger.controller
   (:use [clojure.algo.generic.functor :only [fmap]])
   (:require [http.async.client :as http]
+            [rpi-challenger.app :as app]
             [rpi-challenger.core.tournament :as t]
             [rpi-challenger.core.participant :as p]
             [rpi-challenger.core.strike :as s]
@@ -23,7 +24,7 @@
     (assoc (t/make-tournament) :participants (io/file-to-object tournament-file))
     (t/make-tournament)))
 
-(defonce thread-pool (Executors/newCachedThreadPool))
+(defonce thread-pool (Executors/newCachedThreadPool (app/daemon-thread-factory "participant-poller")))
 
 (defonce participant-pollers (ref []))
 
@@ -113,6 +114,6 @@
     (start-polling participant)))
 
 (defonce round-scheduler
-  (let [scheduler (Executors/newScheduledThreadPool 1)]
+  (let [scheduler (Executors/newScheduledThreadPool 1 (app/daemon-thread-factory "round-scheduler"))]
     (.scheduleAtFixedRate scheduler start-new-round 0 60 TimeUnit/SECONDS)
     scheduler))

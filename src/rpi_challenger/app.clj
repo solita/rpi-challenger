@@ -9,10 +9,18 @@
             [rpi-challenger.util.io :as io])
   (:import [org.slf4j LoggerFactory Logger]
            [java.io File]
-           [java.util.concurrent Executors Future ScheduledExecutorService TimeUnit]))
+           [java.util.concurrent Executors Future ScheduledExecutorService TimeUnit]
+           [com.google.common.util.concurrent ThreadFactoryBuilder]))
+
+(defn daemon-thread-factory [name-prefix]
+  (-> (ThreadFactoryBuilder.)
+    (.setNameFormat (str name-prefix "-%d"))
+    (.setDaemon true)
+    (.build)))
+
 
 (defn make-app []
   (ref {:tournament (t/make-tournament)
-        :scheduler (Executors/newScheduledThreadPool 1)
-        :thread-pool (Executors/newCachedThreadPool)
+        :scheduler (Executors/newScheduledThreadPool 1 (daemon-thread-factory "round-scheduler"))
+        :thread-pool (Executors/newCachedThreadPool (daemon-thread-factory "participant-poller"))
         :participant-pollers []}))
