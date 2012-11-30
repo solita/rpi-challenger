@@ -5,7 +5,7 @@
 (deftest post-request-test
 
   (testing "Returns an error message on internal network library error"
-    (is (= {:body nil
-            :status nil
-            :error "java.lang.IllegalArgumentException"}
-          (http/post-request "<malformed url>" "")))))
+    (let [response (http/post-request "<malformed url>" "")]
+      (is (nil? (:body response)))
+      (is (nil? (:status response)))
+      (is (re-matches #".*IllegalArgumentException.*" (:error response))))))
