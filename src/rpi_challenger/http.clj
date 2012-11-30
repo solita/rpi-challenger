@@ -2,8 +2,6 @@
   (:require [http.async.client :as http])
   (:import [org.slf4j LoggerFactory Logger]))
 
-(def ^:dynamic logger (LoggerFactory/getLogger (str (ns-name *ns*))))
-
 (defn- nil-or-str
   [object]
   (if (nil? object)
@@ -26,7 +24,6 @@
     (catch InterruptedException e
       (throw e))
     (catch Throwable t
-      (.warn logger (str "Failed to POST to " url) t)
       {:body nil
        :status nil
        :error (.toString t)})))
