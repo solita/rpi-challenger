@@ -22,5 +22,5 @@
 (defn score-current-round
   [participant]
   (-> participant
-    (update-in [:score ] #(+ % (score-strikes (:current-round participant))))
+    (update-in [:score ] #(+ % (score-strikes (:recent-strikes participant))))
     (assoc :current-round [])))

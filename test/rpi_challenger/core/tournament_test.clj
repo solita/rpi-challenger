@@ -38,7 +38,7 @@
         (testing "Strikes can be recorded to a participant"
           (let [tournament (t/record-strike tournament participant hit)
                 tournament (t/record-strike tournament participant miss)]
-            (is (= [hit miss] (p/current-round (t/participant-by-id tournament (:id participant)))))))
+            (is (= [hit miss] (p/recent-strikes (t/participant-by-id tournament (:id participant)))))))
 
         (testing "When the current round is finished,"
           (binding [rating/score-strikes (fn [strikes] (assert (= 3 (count strikes))) 42)]
@@ -48,9 +48,7 @@
 
                   tournament (t/finish-current-round tournament)]
               (testing "adds the score for the current round to the total score"
-                (is (= 42 (:score (first (t/participants tournament))))))
-              (testing "starts a new round"
-                (is (empty? (p/current-round (t/participant-by-id tournament (:id participant)))))))))
+                (is (= 42 (:score (first (t/participants tournament)))))))))
 
         (testing "Participants can be persisted"
           (let [deserialized (t/deserialize (t/serialize tournament))]

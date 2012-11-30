@@ -75,7 +75,7 @@
   [:#url ] (content (:url participant))
   [:#score ] (content (str (:score participant)))
   [:#recent-failures ] (substitute (strikes-list (reverse (p/recent-failures participant))))
-  [:#current-round ] (substitute (strikes-list (reverse (p/current-round participant)))))
+  [:#recent-strikes ] (substitute (strikes-list (reverse (p/recent-strikes participant)))))
 
 
 ; pages
