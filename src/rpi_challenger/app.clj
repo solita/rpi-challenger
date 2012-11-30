@@ -44,11 +44,21 @@
 
 ; participants
 
-(defn poll-participant [app participant]) ; TODO
+(defn ^:dynamic record-response [app participant response challenge]) ; TODO
+
+(defn poll-participant [app participant challenges]
+  (if (not (empty? challenges))
+    (let [challenge (first challenges)
+          response (http/post-request (:url participant) (:question challenge))]
+      (record-response app participant response challenge)
+
+      ; stop on first failure
+      (if (rating/correct? response challenge)
+        (poll-participant app participant (rest challenges))))))
 
 (defn ^:dynamic poll-participant-loop [app participant]
   (while (not (Thread/interrupted))
-    (poll-participant app participant)))
+    (poll-participant app participant (t/generate-challenges (:tournament @app)))))
 
 (defn start-polling [app participant]
   (threads/execute (:thread-pool @app) #(poll-participant-loop app participant)))

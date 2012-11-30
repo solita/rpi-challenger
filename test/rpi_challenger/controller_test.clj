@@ -1,10 +1,8 @@
 (ns rpi-challenger.controller-test
   (:use clojure.test
+        rpi-challenger.util.testing
         rpi-challenger.controller)
   (:require [rpi-challenger.http :as http]))
-
-(defn append [var item]
-  (var-set var (conj @var item)))
 
 (deftest poll-participant-test
   (let [participant {:url "participant-url"}

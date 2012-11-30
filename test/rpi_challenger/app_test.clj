@@ -2,6 +2,8 @@
   (:use clojure.test
         rpi-challenger.util.testing)
   (:require [rpi-challenger.app :as app]
+            [rpi-challenger.core.rating :as rating]
+            [rpi-challenger.http :as http]
             [rpi-challenger.util.threads :as threads])
   (:import [java.io File]))
 
@@ -43,6 +45,18 @@
 
           (is (calls? app/poll-participant-loop (@executed-function))))))
 
+    (testing "Sends each challenge to the participant until encounters the first failure"
+      (with-local-vars [recorded-responses []]
+        (let [app (app/make-app)
+              participant {:url "foo"}]
+          (binding [http/post-request (fn [url body] (not (= :fail body)))
+                    app/record-response (fn [app participant response challenge] (append recorded-responses response))
+                    rating/correct? (fn [response challenge] response)]
+
+            (app/poll-participant app participant [{:question :pass1} {:question :pass2} {:question :fail} {:question :pass3}])
+
+            (is (= [true true false] @recorded-responses))))))
+
     (testing "Application state can be persisted between restarts"
       (let [app (app/make-app)
             file (File/createTempFile "app-persistence" nil)]
@@ -56,5 +70,3 @@
                   (app/get-participants (app/load-state file)))))
           (finally
             (.delete file)))))))
-
-; TODO: poll-participant
