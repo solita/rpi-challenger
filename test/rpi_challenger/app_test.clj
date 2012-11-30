@@ -30,5 +30,4 @@
           (is (calls? app/start-new-round (@scheduled-function)))
           (is (= app/round-duration-in-seconds @scheduled-delay)))))))
 
-; TODO: start-new-round
 ; TODO: poll-participant

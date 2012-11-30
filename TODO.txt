@@ -21,11 +21,13 @@ OK - calculate the score automatically, in 1 minute ticks
 		OK - wrap all the refs into an object
 		OK - registering participants
 		OK - scheduling the starting of new rounds
-		!! - starting new rounds
+		OK - starting new rounds
+		!! - saving and loading application state
 		- scheduling the polling of participants
 		- polling participants
 		- replace controller with app
 	- do a controlled start of the pollers after loading from file
+- participant polling: sleep on error to avoid 100% CPU usage
 - optimize memory usage, keep only the last N events in memory (else would have to poll less often)
 - challenges: lorem ipsum: trim dot and comma
 - make parsing easier; separate operator and operands by newline?

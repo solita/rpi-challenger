@@ -15,6 +15,11 @@
 
 (def round-duration-in-seconds 60)
 
+(def challenge-functions-dir (File. "../rpi-challenges/src/")) ; TODO: parameterize the dir on command line or create an admin screen
+
+(def app-state-file (File. "rpi-challenger-state.clj"))
+
+
 (defn make-app []
   (ref {:tournament (t/make-tournament)
         :scheduler (Executors/newScheduledThreadPool 1 (threads/daemon-thread-factory "round-scheduler"))
@@ -23,6 +28,13 @@
 
 (defn- alter-tournament [app f & args]
   (apply alter (concat [app update-in [:tournament ] f] args)))
+
+
+; persistence
+
+(defn save-state [app])
+
+(defn load-state [])
 
 
 ; participants
@@ -43,7 +55,11 @@
 
 ; lifecycle events
 
-(defn ^:dynamic start-new-round [app])
+(defn ^:dynamic start-new-round [app]
+  (dosync (alter-tournament app t/finish-current-round))
+  (save-state app)
+  (c/load-challenge-functions challenge-functions-dir)
+  (dosync (alter-tournament app t/update-challenge-functions)))
 
 (defn start [app]
   (threads/schedule-with-fixed-delay (:scheduler @app) #(start-new-round app) round-duration-in-seconds))
