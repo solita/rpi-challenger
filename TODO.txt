@@ -1,37 +1,4 @@
-OK - new terminology: participant, tournament, round, strike, challenge, question-answer
-OK - show a log of failed challenges
-	OK - save in domain model
-	OK - layout
-	OK - give unique ID for participants
-	OK - use the ID in showing that participant's details
-OK - load challenges from a directory
-	OK - find out how to do it - eval or something?
-	OK - reload before polling
-OK - trim reponses from participants to ignore trailing newlines
-OK - handle failures form poller
-	OK - fix: polling crashes if malformed URL, or if service respondes with garbage
-OK - poll servers automatically, many times per second, infinite loop
-	OK - one poller thread per server
-	OK - the polling in the poller thread
-OK - calculate the score automatically, in 1 minute ticks
-	OK - start a timer
-	OK - reload challenges in the beginning of a round
-OK - start the application explicitly in main instead of on loading
-	OK - replacement logic in app
-		OK - wrap all the refs into an object
-		OK - registering participants
-		OK - scheduling the starting of new rounds
-		OK - starting new rounds
-		OK - saving and loading application state
-		OK - scheduling the polling of participants; on register
-		OK - polling participants
-		OK - replace controller with app
-	OK - participant polling: sleep on error to avoid 100% CPU usage
-	OK - load app state in main if state file exists
-	OK - do a controlled start of the pollers after loading from file; on start
-	OK - participant/id-sequence isn't persisted; get next ID from tournament
 - optimize memory usage, keep only the last N events in memory (else would have to poll less often)
-- challenges: lorem ipsum: trim dot and comma
 - make parsing easier; separate operator and operands by newline?
 - better score calculation rules
 	- take challenge points into consideration
@@ -42,4 +9,6 @@ OK - start the application explicitly in main instead of on loading
 	- calculate total score from the history
 	- print the history as text
 	- visualize the history as graph (find a JS graph library)
-- better graphics
+- challenges: lorem ipsum: trim dot and comma
+- more challenges
+- balance the challenge points, perhaps 1 2 3 5 8 13 etc.
