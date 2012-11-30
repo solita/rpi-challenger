@@ -1,5 +1,3 @@
-OK - optimize memory usage, keep only the last N events in memory (else would have to poll less often)
-OK - make parsing easier; separate operator and operands by newline?
 - better score calculation rules
 	- create round module to count the score incrementally (will be embedded in participant)
 	- take challenge points into consideration
@@ -10,7 +8,6 @@ OK - make parsing easier; separate operator and operands by newline?
 	- calculate total score from the history
 	- print the history as text
 	- visualize the history as graph (find a JS graph library)
-- challenges: lorem ipsum: trim dot and comma
 - more challenges
 - balance the challenge points, perhaps 1 2 3 5 8 13 etc.
 
