@@ -44,7 +44,9 @@
 
 ; participants
 
-(defn ^:dynamic record-response [app participant response challenge]) ; TODO
+(defn ^:dynamic record-response [app participant response challenge]
+  (dosync
+    (alter-tournament app t/record-strike participant (s/make-strike response challenge))))
 
 (defn poll-participant [app participant challenges]
   (if (not (empty? challenges))
@@ -63,7 +65,7 @@
 (defn start-polling [app participant]
   (threads/execute (:thread-pool @app) #(poll-participant-loop app participant)))
 
-(defn register-participant [app name url]
+(defn ^:dynamic register-participant [app name url]
   (.info logger "Registering participant \"{}\" at {}" name url)
   (let [participant (p/make-participant name url)]
     (dosync
@@ -81,6 +83,7 @@
 ; lifecycle events
 
 (defn ^:dynamic start-new-round [app]
+  (.info logger "Starting a new round")
   (dosync (alter-tournament app t/finish-current-round))
   (save-state app app-state-file)
   (c/load-challenge-functions challenge-functions-dir)

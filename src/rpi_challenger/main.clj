@@ -9,11 +9,13 @@
   (:gen-class ))
 
 (defn make-webapp []
-  (->
-    (app/make-app)
-    (routes/make-routes)
-    (wrap-reload)
-    (wrap-stacktrace)))
+  (let [app (app/make-app)]
+    (app/start app)
+    (->
+      app
+      (routes/make-routes)
+      (wrap-reload)
+      (wrap-stacktrace))))
 
 (defn run [options]
   (run-jetty (make-webapp) options))

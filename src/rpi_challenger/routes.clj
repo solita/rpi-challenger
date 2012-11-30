@@ -2,7 +2,7 @@
   (:use ring.util.response
         compojure.core
         [ring.middleware.params :only [wrap-params]])
-  (:require [rpi-challenger.controller :as ctrl]
+  (:require [rpi-challenger.app :as app]
             [rpi-challenger.views :as views]
             [compojure.route :as route]
             [net.cgrand.enlive-html :as html]
@@ -18,7 +18,7 @@
         (not (string/blank? name))
         (not (string/blank? url)))
     (do
-      (ctrl/register name url)
+      (app/register-participant app name url)
       (redirect "/"))
     (redirect "/?message=Registration failed")))
 
@@ -33,8 +33,8 @@
   [app]
   (->
     (routes
-      (GET "/" [] (using-template views/tournament-overview-page (ctrl/get-participants app)))
-      (GET "/participant-:id" [id] (using-template views/participant-details-page (ctrl/get-participant-by-id app (Integer/parseInt id))))
+      (GET "/" [] (using-template views/tournament-overview-page (app/get-participants app)))
+      (GET "/participant-:id" [id] (using-template views/participant-details-page (app/get-participant-by-id app (Integer/parseInt id))))
       (POST "/register" {params :params} (handle-register-form app params))
       (POST "/hello-world" {body :body} (handle-hello-world (slurp body)))
       (route/resources "/")

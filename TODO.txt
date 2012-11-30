@@ -16,8 +16,8 @@ OK - poll servers automatically, many times per second, infinite loop
 OK - calculate the score automatically, in 1 minute ticks
 	OK - start a timer
 	OK - reload challenges in the beginning of a round
-- start the application explicitly in main instead of on loading
-	!!- replacement logic in app
+!! - start the application explicitly in main instead of on loading
+	OK - replacement logic in app
 		OK - wrap all the refs into an object
 		OK - registering participants
 		OK - scheduling the starting of new rounds
@@ -25,8 +25,8 @@ OK - calculate the score automatically, in 1 minute ticks
 		OK - saving and loading application state
 		OK - scheduling the polling of participants; on register
 		OK - polling participants
-		!! - replace controller with app
-	- load app state in main if state file exists
+		OK - replace controller with app
+	!! - load app state in main if state file exists
 	- do a controlled start of the pollers after loading from file; on start
 	- participant/id-sequence isn't persisted; get next ID from tournament
 - participant polling: sleep on error to avoid 100% CPU usage
