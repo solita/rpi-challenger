@@ -32,9 +32,14 @@
 
 ; persistence
 
-(defn save-state [app])
+(defn save-state [app file]
+  (io/object-to-file file (t/serialize (:tournament @app))))
 
-(defn load-state [])
+(defn load-state [file]
+  (let [app (make-app)
+        tournament (t/deserialize (io/file-to-object file))]
+    (dosync (alter-tournament app (fn [_] tournament)))
+    app))
 
 
 ; participants
@@ -57,9 +62,10 @@
 
 (defn ^:dynamic start-new-round [app]
   (dosync (alter-tournament app t/finish-current-round))
-  (save-state app)
+  (save-state app app-state-file)
   (c/load-challenge-functions challenge-functions-dir)
   (dosync (alter-tournament app t/update-challenge-functions)))
 
 (defn start [app]
+  ; TODO: start participant pollers (if we were just deserialized)
   (threads/schedule-with-fixed-delay (:scheduler @app) #(start-new-round app) round-duration-in-seconds))

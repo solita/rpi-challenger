@@ -45,7 +45,12 @@
               (testing "adds the score for the current round to the total score"
                 (is (= 42 (:score (first (t/participants tournament))))))
               (testing "starts a new round"
-                (is (empty? (p/current-round (t/participant-by-id tournament (:id participant)))))))))))))
+                (is (empty? (p/current-round (t/participant-by-id tournament (:id participant)))))))))
+
+        (testing "Participants can be persisted"
+          (let [deserialized (t/deserialize (t/serialize tournament))]
+            (is (= (t/participants tournament)
+                  (t/participants deserialized)))))))))
 
 (deftest challenges-test
   (require 'rpi-challenger.core.dummy) ; making sure that we have at least two challenges loaded)

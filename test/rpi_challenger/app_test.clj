@@ -2,7 +2,8 @@
   (:use clojure.test
         rpi-challenger.util.testing)
   (:require [rpi-challenger.app :as app]
-            [rpi-challenger.util.threads :as threads]))
+            [rpi-challenger.util.threads :as threads])
+  (:import [java.io File]))
 
 (deftest app-test
   (binding [app/logger org.slf4j.helpers.NOPLogger/NOP_LOGGER]
@@ -28,6 +29,20 @@
           (app/start app)
 
           (is (calls? app/start-new-round (@scheduled-function)))
-          (is (= app/round-duration-in-seconds @scheduled-delay)))))))
+          (is (= app/round-duration-in-seconds @scheduled-delay)))))
+
+    (testing "Application state can be persisted between restarts"
+      (let [app (app/make-app)
+            file (File/createTempFile "app-persistence" nil)]
+        (try
+          (do
+            (app/register-participant app "The Name" "http://the-url")
+
+            (app/save-state app file)
+
+            (is (= (app/get-participants app)
+                  (app/get-participants (app/load-state file)))))
+          (finally
+            (.delete file)))))))
 
 ; TODO: poll-participant

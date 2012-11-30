@@ -10,6 +10,14 @@
   {:participants {}
    :challenge-functions []})
 
+(defn serialize
+  [tournament]
+  (:participants tournament))
+
+(defn deserialize
+  [data]
+  (assoc (make-tournament) :participants data))
+
 (defn participants
   [tournament]
   (vals (:participants tournament)))
