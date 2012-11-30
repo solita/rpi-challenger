@@ -23,9 +23,10 @@ OK - calculate the score automatically, in 1 minute ticks
 		OK - scheduling the starting of new rounds
 		OK - starting new rounds
 		OK - saving and loading application state
-		!! - scheduling the polling of participants; on register
-		- polling participants
+		OK - scheduling the polling of participants; on register
+		!! - polling participants
 		- replace controller with app
+	- load app state in main if state file exists
 	- do a controlled start of the pollers after loading from file; on start
 	- participant/id-sequence isn't persisted; get next ID from tournament
 - participant polling: sleep on error to avoid 100% CPU usage

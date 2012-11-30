@@ -44,11 +44,21 @@
 
 ; participants
 
+(defn poll-participant [app participant]) ; TODO
+
+(defn ^:dynamic poll-participant-loop [app participant]
+  (while (not (Thread/interrupted))
+    (poll-participant app participant)))
+
+(defn start-polling [app participant]
+  (threads/execute (:thread-pool @app) #(poll-participant-loop app participant)))
+
 (defn register-participant [app name url]
   (.info logger "Registering participant \"{}\" at {}" name url)
   (let [participant (p/make-participant name url)]
     (dosync
       (alter-tournament app t/register-participant participant))
+    (start-polling app participant)
     (:id participant)))
 
 (defn get-participants [app]

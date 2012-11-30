@@ -31,6 +31,18 @@
           (is (calls? app/start-new-round (@scheduled-function)))
           (is (= app/round-duration-in-seconds @scheduled-delay)))))
 
+    (testing "Starts polling participants when they register"
+      (let [app (app/make-app)
+            executed-function (ref nil)]
+        (binding [threads/execute
+                  (fn [executor f]
+                    (dosync
+                      (ref-set executed-function f)))]
+
+          (app/register-participant app "The Name" "http://the-url")
+
+          (is (calls? app/poll-participant-loop (@executed-function))))))
+
     (testing "Application state can be persisted between restarts"
       (let [app (app/make-app)
             file (File/createTempFile "app-persistence" nil)]
