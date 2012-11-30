@@ -66,7 +66,7 @@
   (while (not (Thread/interrupted))
     (poll-participant app participant (t/generate-challenges (:tournament @app)))))
 
-(defn start-polling [app participant]
+(defn ^:dynamic start-polling [app participant]
   (threads/execute (:thread-pool @app) #(poll-participant-loop app participant)))
 
 (defn ^:dynamic register-participant [app name url]
@@ -88,11 +88,13 @@
 
 (defn ^:dynamic start-new-round [app]
   (.info logger "Starting a new round")
-  (dosync (alter-tournament app t/finish-current-round))
   (save-state app app-state-file)
+  (dosync (alter-tournament app t/finish-current-round))
   (c/load-challenge-functions challenge-functions-dir)
   (dosync (alter-tournament app t/update-challenge-functions)))
 
 (defn start [app]
-  ; TODO: start participant pollers (if we were just deserialized)
-  (threads/schedule-with-fixed-delay (:scheduler @app) #(start-new-round app) round-duration-in-seconds))
+  (threads/schedule-with-fixed-delay (:scheduler @app) #(start-new-round app) round-duration-in-seconds)
+  (doseq [participant (get-participants app)]
+    (start-polling app participant))
+  app)

@@ -8,14 +8,18 @@
             [rpi-challenger.routes :as routes])
   (:gen-class ))
 
+(defn make-app []
+  (app/start
+    (if (.exists app/app-state-file)
+      (app/load-state app/app-state-file)
+      (app/make-app))))
+
 (defn make-webapp []
-  (let [app (app/make-app)]
-    (app/start app)
-    (->
-      app
-      (routes/make-routes)
-      (wrap-reload)
-      (wrap-stacktrace))))
+  (->
+    (make-app)
+    (routes/make-routes)
+    (wrap-reload)
+    (wrap-stacktrace)))
 
 (defn run [options]
   (run-jetty (make-webapp) options))

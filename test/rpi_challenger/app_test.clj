@@ -8,7 +8,9 @@
   (:import [java.io File]))
 
 (deftest app-test
-  (binding [app/logger org.slf4j.helpers.NOPLogger/NOP_LOGGER]
+  (binding [app/logger org.slf4j.helpers.NOPLogger/NOP_LOGGER
+            threads/execute (fn [& _])
+            threads/schedule-with-fixed-delay (fn [& _])]
 
     (testing "Participants may register to the tournament"
       (let [app (app/make-app)
@@ -58,15 +60,21 @@
             (is (= [true true false] @recorded-responses))))))
 
     (testing "Application state can be persisted between restarts"
-      (let [app (app/make-app)
+      (let [original (app/make-app)
             file (File/createTempFile "app-persistence" nil)]
         (try
           (do
-            (app/register-participant app "The Name" "http://the-url")
+            (app/register-participant original "The Name" "http://the-url")
 
-            (app/save-state app file)
+            (app/save-state original file)
+            (let [restarted (app/load-state file)]
 
-            (is (= (app/get-participants app)
-                  (app/get-participants (app/load-state file)))))
+              (testing "Participants are persisted"
+                (is (= (app/get-participants original)
+                      (app/get-participants restarted))))
+
+              (testing "Starts polling participants on restart"
+                (is (calls? app/start-polling (app/start restarted))))))
+
           (finally
             (.delete file)))))))
