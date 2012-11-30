@@ -4,7 +4,7 @@
             [rpi-challenger.core.participant :as p]))
 
 (deftest correct?-test
-  (let [challenge {:question "the question"
+  (let [challenge {:question ["the question"]
                    :answer "correct answer"}]
 
     (testing "correct response"

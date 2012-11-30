@@ -1,6 +1,17 @@
 (ns rpi-challenger.core.challenges
-  (:require [clojure.tools.namespace.find :as ns-find])
+  (:require [clojure.tools.namespace.find :as ns-find]
+            [clojure.string :as string])
   (:import [java.io File]))
+
+
+; challenge operations
+
+(defn format-question
+  [challenge]
+  (string/join "\n" (:question challenge)))
+
+
+; challenge function operations
 
 (defn challenge?
   [f]
@@ -13,6 +24,9 @@
 (defn generate
   [challenge-f]
   (assoc (challenge-f) :points (points challenge-f)))
+
+
+; challenge registry
 
 (defn load-challenge-functions
   [^File dir]
@@ -34,5 +48,5 @@
 
 (defn ^{:challenge 0} ping
   []
-  {:question "ping"
+  {:question ["ping"]
    :answer "pong"})

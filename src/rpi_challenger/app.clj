@@ -51,7 +51,7 @@
 (defn poll-participant [app participant challenges]
   (if (not (empty? challenges))
     (let [challenge (first challenges)
-          response (http/post-request (:url participant) (:question challenge))]
+          response (http/post-request (:url participant) (c/format-question challenge))]
       (record-response app participant response challenge)
 
       ; avoid 100% CPU usage if the URL is invalid (e.g. no such host)

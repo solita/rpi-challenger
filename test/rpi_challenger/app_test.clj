@@ -50,11 +50,11 @@
       (with-local-vars [recorded-responses []]
         (let [app (app/make-app)
               participant {:url "foo"}]
-          (binding [http/post-request (fn [url body] (not (= :fail body)))
+          (binding [http/post-request (fn [url body] (not (= "fail" body)))
                     app/record-response (fn [app participant response challenge] (append recorded-responses response))
                     rating/correct? (fn [response challenge] response)]
 
-            (app/poll-participant app participant [{:question :pass1} {:question :pass2} {:question :fail} {:question :pass3}])
+            (app/poll-participant app participant [{:question ["pass1"]} {:question ["pass2"]} {:question ["fail"]} {:question ["pass3"]}])
 
             (is (= [true true false] @recorded-responses))))))
 

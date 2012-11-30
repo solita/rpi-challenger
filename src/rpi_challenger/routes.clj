@@ -24,10 +24,11 @@
 
 (defn handle-hello-world
   [question]
-  (cond
-    (= question "ping") "pong"
-    (= question "Say hello to World") "Hello World"
-    :else (str "Don't understand: " question)))
+  (let [[op & args] (string/split-lines question)]
+    (cond
+      (= op "ping") "pong"
+      (= op "say-hello") (str "Hello " (first args))
+      :else (str "Don't understand:\n" question))))
 
 (defn make-routes
   [app]

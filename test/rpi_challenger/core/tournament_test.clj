@@ -6,7 +6,7 @@
             [rpi-challenger.core.rating :as rating]))
 
 (deftest tournament-test
-  (let [any-challenge {:question "ping", :answer "pong"}
+  (let [any-challenge {:question ["ping"], :answer "pong"}
         correct-response "correct"
         failed-response "failed"
         hit (s/make-strike correct-response any-challenge)
@@ -63,7 +63,7 @@
     (is (< 1 (count challenges)))
 
     (testing "Challenges start with the ping challenge"
-      (is (= "ping" (:question (first challenges)))))
+      (is (= ["ping"] (:question (first challenges)))))
 
     (testing "Challenges are in increasing difficulty order"
       (let [points (map :points challenges)]

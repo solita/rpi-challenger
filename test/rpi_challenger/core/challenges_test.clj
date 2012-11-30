@@ -23,6 +23,14 @@
 
   (testing "Challenge instance contains :points, :question and :answer"
     (is (= {:points 42
-            :question "Answer to life, universe and everything?"
+            :question ["Answer to life, universe and everything?"]
             :answer "forty-two"}
-          (c/generate (var dummy/challenge-42))))))
+          (c/generate (var dummy/challenge-42)))))
+
+  (testing "Each question element is put into its own line"
+    (let [challenge {:question ["+" "1" "2"]}]
+      (is (= "+\n1\n2" (c/format-question challenge)))))
+
+  (testing "Integer question elements are acceptable"
+    (let [challenge {:question ["+" 1 2]}]
+      (is (= "+\n1\n2" (c/format-question challenge))))))

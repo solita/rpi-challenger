@@ -1,6 +1,7 @@
 (ns rpi-challenger.views
   (:use net.cgrand.enlive-html)
-  (:require [rpi-challenger.core.participant :as p]
+  (:require [rpi-challenger.core.challenges :as c]
+            [rpi-challenger.core.participant :as p]
             [rpi-challenger.core.strike :as s]
             [clj-time.core :as time])
   (:import [org.joda.time LocalDateTime]))
@@ -55,7 +56,7 @@
   [strike]
   [:tr ] (set-attr :class (strikes-row-class strike))
   [[:td (nth-of-type 1)]] (content (format-timestamp strike))
-  [[:td (nth-of-type 2)]] (content (:question (:challenge strike)))
+  [[:td (nth-of-type 2)]] (content (c/format-question (:challenge strike)))
   [[:td (nth-of-type 3)]] (content (:answer (:challenge strike)))
   [[:td (nth-of-type 4)]] (content (:body (:response strike)))
   [[:td (nth-of-type 5)]] (content (format-status-or-error strike)))
