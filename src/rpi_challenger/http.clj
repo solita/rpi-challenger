@@ -14,13 +14,14 @@
    :status (http/status response)
    :error (nil-or-str (http/error response))})
 
+(defonce ^:private client (http/create-client))
+
 (defn ^:dynamic post-request
   [url body]
   (try
-    (with-open [client (http/create-client)]
-      (-> (http/POST client url :body body :timeout 1000)
-        http/await
-        simple-http-response))
+    (-> (http/POST client url :body body :timeout 1000)
+      http/await
+      simple-http-response)
     (catch InterruptedException e
       (throw e))
     (catch Throwable t

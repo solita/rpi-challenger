@@ -18,7 +18,8 @@
                  [enlive "1.0.0"]
 
                  ; HTTP Client
-                 [http.async.client "0.5.0-SNAPSHOT"]
+                 [http.async.client "0.5.0"]
+                 [com.ning/async-http-client "1.7.8"]
 
                  ; Logging
                  [ch.qos.logback/logback-classic "1.0.7"]
