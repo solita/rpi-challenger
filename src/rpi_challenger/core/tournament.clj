@@ -20,11 +20,19 @@
 
 (defn participants
   [tournament]
-  (vals (:participants tournament)))
+  (sort-by :id (vals (:participants tournament))))
 
 (defn participant-by-id
   [tournament id]
   (get (:participants tournament) id))
+
+(defn next-participant-id
+  [tournament]
+  (+ 1 (count (:participants tournament))))
+
+(defn make-participant
+  [tournament name url]
+  (p/make-participant (next-participant-id tournament) name url))
 
 (defn register-participant
   [tournament participant]

@@ -69,26 +69,26 @@
 (defn ^:dynamic start-polling [app participant]
   (threads/execute (:thread-pool @app) #(poll-participant-loop app participant)))
 
-(defn ^:dynamic register-participant [app name url]
-  (.info logger "Registering participant \"{}\" at {}" name url)
-  (let [participant (p/make-participant name url)]
-    (dosync
-      (alter-tournament app t/register-participant participant))
-    (start-polling app participant)
-    (:id participant)))
-
 (defn get-participants [app]
   (t/participants (:tournament @app)))
 
 (defn get-participant-by-id [app id]
   (t/participant-by-id (:tournament @app) id))
 
+(defn ^:dynamic register-participant [app name url]
+  (.info logger "Registering participant \"{}\" at {}" name url)
+  (start-polling app (dosync
+                       (let [participant (t/make-participant (:tournament @app) name url)]
+                         (alter-tournament app t/register-participant participant)
+                         participant))))
 
 ; lifecycle events
 
 (defn ^:dynamic start-new-round [app]
-  (.info logger "Starting a new round")
+  (.info logger "Saving application state")
   (save-state app app-state-file)
+
+  (.info logger "Starting a new round")
   (dosync (alter-tournament app t/finish-current-round))
   (c/load-challenge-functions challenge-functions-dir)
   (dosync (alter-tournament app t/update-challenge-functions)))

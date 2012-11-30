@@ -6,8 +6,7 @@
             [rpi-challenger.core.rating :as rating]))
 
 (deftest tournament-test
-  (let [any-participant (p/make-participant "Somebody" "http://somewhere")
-        any-challenge {:question "ping", :answer "pong"}
+  (let [any-challenge {:question "ping", :answer "pong"}
         correct-response "correct"
         failed-response "failed"
         hit (s/make-strike correct-response any-challenge)
@@ -19,13 +18,19 @@
       (is (empty? (t/participants tournament))))
 
     (testing "Participants can register to the tournament"
-      (let [tournament (t/register-participant tournament any-participant)
+      (let [tournament (t/register-participant tournament (t/make-participant tournament "Somebody" "http://somewhere"))
 
             participants (t/participants tournament)
             participant (first participants)]
         (is (= 1 (count participants)))
         (is (= "Somebody" (:name participant)))
         (is (= "http://somewhere" (:url participant)))
+
+        (testing "Each participant gets a unique ID"
+          (let [tournament (t/register-participant tournament (t/make-participant tournament "Another" "http://anywhere"))
+                [participant-1 participant-2] (t/participants tournament)]
+            (is (= 1 (:id participant-1)))
+            (is (= 2 (:id participant-2)))))
 
         (testing "Can query participants by id"
           (is (= participant (t/participant-by-id tournament (:id participant)))))

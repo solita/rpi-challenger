@@ -4,11 +4,9 @@
 
 (def ^:dynamic *recent-failures-limit* 10)
 
-(defonce ^:private id-sequence (AtomicInteger. 0))
-
 (defn make-participant
-  [name url]
-  {:id (.incrementAndGet id-sequence)
+  [id name url]
+  {:id id
    :name name
    :url url
    :score 0

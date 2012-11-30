@@ -13,12 +13,11 @@
             threads/schedule-with-fixed-delay (fn [& _])]
 
     (testing "Participants may register to the tournament"
-      (let [app (app/make-app)
-
-            id (app/register-participant app "The Name" "http://the-url")]
+      (let [app (app/make-app)]
+        (app/register-participant app "The Name" "http://the-url")
 
         (is (= 1 (count (app/get-participants app))))
-        (is (= "The Name" (:name (app/get-participant-by-id app id))))))
+        (is (= "The Name" (:name (app/get-participant-by-id app 1))))))
 
     (testing "Starts a new round at regular intervals"
       (let [app (app/make-app)
