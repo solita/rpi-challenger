@@ -13,3 +13,72 @@ OK - optimize memory usage, keep only the last N events in memory (else would ha
 - challenges: lorem ipsum: trim dot and comma
 - more challenges
 - balance the challenge points, perhaps 1 2 3 5 8 13 etc.
+
+- bug: throws "java.net.SocketException: No buffer space available (maximum connections reached?)" after running for a while against hello-world:
+
+30.11.2012 19:43:35 org.jboss.netty.channel.DefaultChannelPipeline
+WARNING: An exception was thrown by an exception handler.
+org.jboss.netty.channel.ChannelException: Failed to create a selector.
+        at org.jboss.netty.channel.socket.nio.AbstractNioWorker.start(AbstractNioWorker.java:154)
+        at org.jboss.netty.channel.socket.nio.AbstractNioWorker.executeInIoThread(AbstractNioWorker.java:306)
+        at org.jboss.netty.channel.socket.nio.NioWorker.executeInIoThread(NioWorker.java:38)
+        at org.jboss.netty.channel.socket.nio.AbstractNioWorker.executeInIoThread(AbstractNioWorker.java:290)
+        at org.jboss.netty.channel.socket.nio.NioWorker.executeInIoThread(NioWorker.java:38)
+        at org.jboss.netty.channel.socket.nio.AbstractNioChannelSink.execute(AbstractNioChannelSink.java:34)
+        at org.jboss.netty.channel.Channels.fireExceptionCaughtLater(Channels.java:504)
+        at org.jboss.netty.channel.AbstractChannelSink.exceptionCaught(AbstractChannelSink.java:47)
+        at org.jboss.netty.handler.codec.oneone.OneToOneEncoder.handleDownstream(OneToOneEncoder.java:55)
+        at org.jboss.netty.handler.codec.http.HttpClientCodec.handleDownstream(HttpClientCodec.java:97)
+        at org.jboss.netty.handler.stream.ChunkedWriteHandler.handleDownstream(ChunkedWriteHandler.java:111)
+        at org.jboss.netty.channel.Channels.close(Channels.java:821)
+        at org.jboss.netty.channel.AbstractChannel.close(AbstractChannel.java:194)
+        at org.jboss.netty.channel.ChannelFutureListener$2.operationComplete(ChannelFutureListener.java:52)
+        at org.jboss.netty.channel.DefaultChannelFuture.notifyListener(DefaultChannelFuture.java:399)
+        at org.jboss.netty.channel.DefaultChannelFuture.notifyListeners(DefaultChannelFuture.java:385)
+        at org.jboss.netty.channel.DefaultChannelFuture.setFailure(DefaultChannelFuture.java:352)
+        at org.jboss.netty.channel.socket.nio.NioClientSocketPipelineSink.connect(NioClientSocketPipelineSink.java:154)
+        at org.jboss.netty.channel.socket.nio.NioClientSocketPipelineSink.eventSunk(NioClientSocketPipelineSink.java:99)
+        at org.jboss.netty.handler.codec.oneone.OneToOneEncoder.handleDownstream(OneToOneEncoder.java:55)
+        at org.jboss.netty.handler.codec.http.HttpClientCodec.handleDownstream(HttpClientCodec.java:97)
+        at org.jboss.netty.handler.stream.ChunkedWriteHandler.handleDownstream(ChunkedWriteHandler.java:111)
+        at org.jboss.netty.channel.Channels.connect(Channels.java:642)
+        at org.jboss.netty.channel.AbstractChannel.connect(AbstractChannel.java:204)
+        at org.jboss.netty.bootstrap.ClientBootstrap.connect(ClientBootstrap.java:230)
+        at org.jboss.netty.bootstrap.ClientBootstrap.connect(ClientBootstrap.java:183)
+        at com.ning.http.client.providers.netty.NettyAsyncHttpProvider.doConnect(NettyAsyncHttpProvider.java:996)
+        at com.ning.http.client.providers.netty.NettyAsyncHttpProvider.execute(NettyAsyncHttpProvider.java:856)
+        at com.ning.http.client.AsyncHttpClient.executeRequest(AsyncHttpClient.java:512)
+        at sun.reflect.GeneratedMethodAccessor15.invoke(Unknown Source)
+        at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+        at java.lang.reflect.Method.invoke(Method.java:597)
+        at clojure.lang.Reflector.invokeMatchingMethod(Reflector.java:93)
+        at clojure.lang.Reflector.invokeInstanceMethod(Reflector.java:28)
+        at http.async.client.request$execute_request.doInvoke(request.clj:239)
+        at clojure.lang.RestFn.invoke(RestFn.java:425)
+        at http.async.client$POST.doInvoke(client.clj:152)
+        at clojure.lang.RestFn.invoke(RestFn.java:521)
+        at rpi_challenger.http$post_request.invoke(http.clj:21)
+        at rpi_challenger.app$poll_participant.invoke(app.clj:54)
+        at rpi_challenger.app$poll_participant_loop.invoke(app.clj:67)
+        at rpi_challenger.app$start_polling$fn__1029.invoke(app.clj:70)
+        at clojure.lang.AFn.run(AFn.java:24)
+        at java.util.concurrent.ThreadPoolExecutor$Worker.runTask(ThreadPoolExecutor.java:886)
+        at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:908)
+        at java.lang.Thread.run(Thread.java:662)
+Caused by: java.io.IOException: Unable to establish loopback connection
+        at sun.nio.ch.PipeImpl$Initializer.run(PipeImpl.java:106)
+        at java.security.AccessController.doPrivileged(Native Method)
+        at sun.nio.ch.PipeImpl.<init>(PipeImpl.java:122)
+        at sun.nio.ch.SelectorProviderImpl.openPipe(SelectorProviderImpl.java:27)
+        at java.nio.channels.Pipe.open(Pipe.java:133)
+        at sun.nio.ch.WindowsSelectorImpl.<init>(WindowsSelectorImpl.java:104)
+        at sun.nio.ch.WindowsSelectorProvider.openSelector(WindowsSelectorProvider.java:26)
+        at java.nio.channels.Selector.open(Selector.java:209)
+        at org.jboss.netty.channel.socket.nio.AbstractNioWorker.start(AbstractNioWorker.java:152)
+        ... 45 more
+Caused by: java.net.SocketException: No buffer space available (maximum connections reached?): connect
+        at sun.nio.ch.Net.connect(Native Method)
+        at sun.nio.ch.SocketChannelImpl.connect(SocketChannelImpl.java:500)
+        at java.nio.channels.SocketChannel.open(SocketChannel.java:146)
+        at sun.nio.ch.PipeImpl$Initializer.run(PipeImpl.java:78)
+        ... 53 more
