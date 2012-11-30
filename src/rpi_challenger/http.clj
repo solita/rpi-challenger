@@ -30,3 +30,7 @@
       {:body nil
        :status nil
        :error (.toString t)})))
+
+(defn error?
+  [response]
+  (not (nil? (:error response))))

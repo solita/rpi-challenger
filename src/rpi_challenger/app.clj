@@ -54,7 +54,11 @@
           response (http/post-request (:url participant) (:question challenge))]
       (record-response app participant response challenge)
 
-      ; stop on first failure
+      ; avoid 100% CPU usage if the URL is invalid (e.g. no such host)
+      (if (http/error? response)
+        (Thread/sleep 1000))
+
+      ; stop on first failed challenge (to keep the harder challenges secret)
       (if (rating/correct? response challenge)
         (poll-participant app participant (rest challenges))))))
 

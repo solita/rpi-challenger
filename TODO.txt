@@ -26,10 +26,10 @@ OK - calculate the score automatically, in 1 minute ticks
 		OK - scheduling the polling of participants; on register
 		OK - polling participants
 		OK - replace controller with app
+	OK - participant polling: sleep on error to avoid 100% CPU usage
 	!! - load app state in main if state file exists
 	- do a controlled start of the pollers after loading from file; on start
 	- participant/id-sequence isn't persisted; get next ID from tournament
-- participant polling: sleep on error to avoid 100% CPU usage
 - optimize memory usage, keep only the last N events in memory (else would have to poll less often)
 - challenges: lorem ipsum: trim dot and comma
 - make parsing easier; separate operator and operands by newline?
