@@ -52,4 +52,4 @@
 
 (defn finish-current-round
   [tournament]
-  (update-in tournament [:participants ] #(fmap rating/score-current-round %)))
+  (update-in tournament [:participants ] #(fmap p/finish-current-round %)))

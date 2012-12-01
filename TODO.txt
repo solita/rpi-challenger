@@ -1,17 +1,24 @@
-- better score calculation rules
-	- create round module to count the score incrementally (will be embedded in participant)
-	- take challenge points into consideration
-	- use the points of the highest hit below the lowest miss
-	- don't poll harder challenges when an easier challenge fails
+!! - better score calculation rules
+	OK - create round module (will be embedded in participant)
+	OK - take challenge points into consideration
+	OK - use the points of the highest hit below the lowest miss
+	- move rating/correct? to strike, rename app/record-response to record-strike
+	- count the score incrementally
+	- slowly increasing score velocity
 - show score accumulation history
 	- save score for each tick as [timestamp score]
 	- calculate total score from the history
 	- print the history as text
-	- visualize the history as graph (find a JS graph library)
+	- find and evaluate a JS graph library
+		http://www.flotcharts.org/
+		http://g.raphaeljs.com/
+	- visualize the history as graph
 - more challenges
 - balance the challenge points, perhaps 1 2 3 5 8 13 etc.
+- CSS: Solita colors
 
 - bug: throws "java.net.SocketException: No buffer space available (maximum connections reached?)" after running for a while against hello-world:
+	- could not reproduce at home
 
 30.11.2012 19:43:35 org.jboss.netty.channel.DefaultChannelPipeline
 WARNING: An exception was thrown by an exception handler.

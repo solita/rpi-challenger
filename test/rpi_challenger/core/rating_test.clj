@@ -42,17 +42,3 @@
                       :status {:code 200, :msg "OK"}
                       :error nil}]
         (is (not (rating/correct? response challenge)))))))
-
-(deftest score-current-round-test
-  (binding [rating/correct? (fn [response challenge] (= response "correct"))]
-    (let [participant
-          (->
-            (p/make-participant 1 "" "")
-            (assoc :score 100)
-            (p/record-strike {:response "correct"})
-            (p/record-strike {:response "correct"})
-            (p/record-strike {:response "fail"})
-            (p/record-strike {:response "correct"}))]
-
-      (testing "adds the score for the current round to the total score"
-        (is (= 103 (:score (rating/score-current-round participant))))))))

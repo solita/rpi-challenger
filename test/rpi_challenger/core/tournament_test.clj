@@ -3,7 +3,7 @@
   (:require [rpi-challenger.core.tournament :as t]
             [rpi-challenger.core.participant :as p]
             [rpi-challenger.core.strike :as s]
-            [rpi-challenger.core.rating :as rating]))
+            [rpi-challenger.core.round :as round]))
 
 (deftest tournament-test
   (let [any-challenge {:question ["ping"], :answer "pong"}
@@ -41,7 +41,7 @@
             (is (= [hit miss] (p/recent-strikes (t/participant-by-id tournament (:id participant)))))))
 
         (testing "When the current round is finished,"
-          (binding [rating/score-strikes (fn [strikes] (assert (= 3 (count strikes))) 42)]
+          (binding [round/finish (fn [strikes] (assert (= 3 (count strikes))) {:points 42})]
             (let [tournament (t/record-strike tournament participant hit)
                   tournament (t/record-strike tournament participant hit)
                   tournament (t/record-strike tournament participant miss)

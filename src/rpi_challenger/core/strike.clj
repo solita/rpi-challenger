@@ -18,3 +18,7 @@
 (defn error?
   [strike]
   (not (nil? (:error (:response strike)))))
+
+(defn ^:dynamic points
+  [strike]
+  (:points (:challenge strike)))

@@ -1,5 +1,7 @@
 (ns rpi-challenger.core.participant
-  (:require [rpi-challenger.core.strike :as s])
+  (:require [rpi-challenger.core.strike :as strike]
+            [rpi-challenger.core.round :as round]
+            [rpi-challenger.core.rating :as rating])
   (:import [java.util.concurrent.atomic AtomicInteger]))
 
 (def ^:dynamic *recent-strikes-limit* 50)
@@ -18,7 +20,7 @@
   [participant strike]
   (-> participant
     (update-in [:recent-strikes ] #(take-last *recent-strikes-limit* (concat % [strike])))
-    (update-in [:recent-failures ] #(take-last *recent-failures-limit* (concat % (filter s/miss? [strike]))))))
+    (update-in [:recent-failures ] #(take-last *recent-failures-limit* (concat % (filter strike/miss? [strike]))))))
 
 (defn recent-strikes
   [participant]
@@ -27,3 +29,8 @@
 (defn recent-failures
   [participant]
   (:recent-failures participant))
+
+(defn finish-current-round
+  [participant]
+  (let [finished-round (round/finish (:recent-strikes participant))]
+    (update-in participant [:score ] #(+ % (:points finished-round)))))
