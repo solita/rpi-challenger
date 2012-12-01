@@ -2,7 +2,7 @@
   (:use clojure.test
         rpi-challenger.util.testing)
   (:require [rpi-challenger.app :as app]
-            [rpi-challenger.core.rating :as rating]
+            [rpi-challenger.core.strike :as strike]
             [rpi-challenger.http :as http]
             [rpi-challenger.util.threads :as threads])
   (:import [java.io File]))
@@ -51,8 +51,8 @@
         (let [app (app/make-app)
               participant {:url "foo"}]
           (binding [http/post-request (fn [url body] (not (= "fail" body)))
-                    app/record-response (fn [app participant response challenge] (append recorded-responses response))
-                    rating/correct? (fn [response challenge] response)]
+                    app/record-strike (fn [app participant strike] (append recorded-responses (:response strike)))
+                    strike/hit? (fn [strike] (:response strike))]
 
             (app/poll-participant app participant [{:question ["pass1"]} {:question ["pass2"]} {:question ["fail"]} {:question ["pass3"]}])
 

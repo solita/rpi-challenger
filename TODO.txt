@@ -2,8 +2,8 @@
 	OK - create round module (will be embedded in participant)
 	OK - take challenge points into consideration
 	OK - use the points of the highest hit below the lowest miss
-	- move rating/correct? to strike, rename app/record-response to record-strike
-	- count the score incrementally
+	OK - move rating/correct? to strike, rename app/record-response to record-strike
+	!! - count the score incrementally
 	- slowly increasing score velocity
 - show score accumulation history
 	- save score for each tick as [timestamp score]

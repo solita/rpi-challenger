@@ -1,7 +1,6 @@
 (ns rpi-challenger.core.participant
   (:require [rpi-challenger.core.strike :as strike]
-            [rpi-challenger.core.round :as round]
-            [rpi-challenger.core.rating :as rating])
+            [rpi-challenger.core.round :as round])
   (:import [java.util.concurrent.atomic AtomicInteger]))
 
 (def ^:dynamic *recent-strikes-limit* 50)

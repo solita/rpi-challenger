@@ -1,8 +1,7 @@
 (ns rpi-challenger.core.participant-test
   (:use clojure.test)
   (:require [rpi-challenger.core.participant :as p]
-            [rpi-challenger.core.strike :as s]
-            [rpi-challenger.core.rating :as rating]))
+            [rpi-challenger.core.strike :as s]))
 
 (deftest participant-test
   (binding [p/*recent-strikes-limit* 4

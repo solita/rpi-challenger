@@ -1,9 +1,8 @@
 (ns rpi-challenger.app
   (:require [rpi-challenger.core.tournament :as t]
             [rpi-challenger.core.participant :as p]
-            [rpi-challenger.core.strike :as s]
+            [rpi-challenger.core.strike :as strike]
             [rpi-challenger.core.challenges :as c]
-            [rpi-challenger.core.rating :as rating]
             [rpi-challenger.http :as http]
             [rpi-challenger.util.io :as io]
             [rpi-challenger.util.threads :as threads])
@@ -44,22 +43,23 @@
 
 ; participants
 
-(defn ^:dynamic record-response [app participant response challenge]
+(defn ^:dynamic record-strike [app participant strike]
   (dosync
-    (alter-tournament app t/record-strike participant (s/make-strike response challenge))))
+    (alter-tournament app t/record-strike participant strike)))
 
 (defn poll-participant [app participant challenges]
   (if (not (empty? challenges))
     (let [challenge (first challenges)
-          response (http/post-request (:url participant) (c/format-question challenge))]
-      (record-response app participant response challenge)
+          response (http/post-request (:url participant) (c/format-question challenge))
+          strike (strike/make-strike response challenge)]
+      (record-strike app participant strike)
 
       ; avoid 100% CPU usage if the URL is invalid (e.g. no such host)
-      (if (http/error? response)
+      (if (strike/error? strike)
         (Thread/sleep 1000))
 
       ; stop on first failed challenge (to keep the harder challenges secret)
-      (if (rating/correct? response challenge)
+      (if (strike/hit? strike)
         (poll-participant app participant (rest challenges))))))
 
 (defn ^:dynamic poll-participant-loop [app participant]

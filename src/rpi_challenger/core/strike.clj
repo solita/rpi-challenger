@@ -1,5 +1,6 @@
 (ns rpi-challenger.core.strike
-  (:require [rpi-challenger.core.rating :as rating]))
+  (:require [rpi-challenger.http :as http]
+            [clojure.string :as string]))
 
 (defn make-strike
   [response challenge]
@@ -7,9 +8,16 @@
    :response response,
    :challenge challenge})
 
+(defn correct-response?
+  [response challenge]
+  (and
+    (nil? (:error response))
+    (= 200 (:code (:status response)))
+    (= (string/trim-newline (:body response)) (:answer challenge))))
+
 (defn ^:dynamic hit?
   [strike]
-  (rating/correct? (:response strike) (:challenge strike))) ; TODO: inline from rpi-challenger.rating
+  (correct-response? (:response strike) (:challenge strike)))
 
 (defn miss?
   [strike]
@@ -17,7 +25,7 @@
 
 (defn error?
   [strike]
-  (not (nil? (:error (:response strike)))))
+  (http/error? (:response strike)))
 
 (defn ^:dynamic points
   [strike]
