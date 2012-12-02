@@ -11,14 +11,23 @@
   (binding [strike/hit? :hit, strike/points :points ]
 
     (testing "Round with no strikes"
-      (let [round (round/finish [])]
+      (let [round
+            (->
+              (round/start)
+              (round/finish))]
         (testing "is worth nothing"
           (is (= 0 (:points round))))
         (is (nil? (:significant-hit round)))
         (is (nil? (:worst-failure round)))))
 
     (testing "Round with only failures"
-      (let [round (round/finish [(failure 8) (failure 5) (failure 10)])]
+      (let [round
+            (->
+              (round/start)
+              (round/record-strike (failure 8))
+              (round/record-strike (failure 5))
+              (round/record-strike (failure 10))
+              (round/finish))]
         (testing "is worth nothing"
           (is (= 0 (:points round))))
         (testing "The worst failure is the failure with lowest points"
@@ -26,7 +35,13 @@
           (is (= (failure 5) (:worst-failure round))))))
 
     (testing "Round with only passes"
-      (let [round (round/finish [(pass 3) (pass 7) (pass 5)])]
+      (let [round
+            (->
+              (round/start)
+              (round/record-strike (pass 3))
+              (round/record-strike (pass 7))
+              (round/record-strike (pass 5))
+              (round/finish))]
         (testing "is worth the maximum challenge points"
           (is (= 7 (:points round))))
         (testing "The significant hit is the hit with highest points"
@@ -34,7 +49,14 @@
           (is (nil? (:worst-failure round))))))
 
     (testing "Round with passes and failures"
-      (let [round (round/finish [(pass 1) (pass 3) (pass 5) (failure 5)])]
+      (let [round
+            (->
+              (round/start)
+              (round/record-strike (pass 1))
+              (round/record-strike (pass 3))
+              (round/record-strike (pass 5))
+              (round/record-strike (failure 5))
+              (round/finish))]
         (testing "is worth the maximum challenge points below the worst failure"
           (is (= 3 (:points round))))
         (testing "The significant hit is the most valuable hit below the worst failure"

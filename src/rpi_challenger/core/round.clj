@@ -39,6 +39,12 @@
     0))
 
 
+(defn start []
+  [])
+
+(defn record-strike [round strike]
+  (conj round strike))
+
 (defn ^:dynamic finish [round]
   {:points (points round)
    :significant-hit (significant-hit round)

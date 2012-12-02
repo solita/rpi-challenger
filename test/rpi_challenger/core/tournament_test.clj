@@ -41,7 +41,7 @@
             (is (= [hit miss] (p/recent-strikes (t/participant-by-id tournament (:id participant)))))))
 
         (testing "When the current round is finished,"
-          (binding [round/finish (fn [strikes] (assert (= 3 (count strikes))) {:points 42})]
+          (binding [round/finish (fn [round] {:points 42})]
             (let [tournament (t/record-strike tournament participant hit)
                   tournament (t/record-strike tournament participant hit)
                   tournament (t/record-strike tournament participant miss)

@@ -12,12 +12,14 @@
    :name name
    :url url
    :score 0
+   :current-round (round/start)
    :recent-strikes []
    :recent-failures []})
 
 (defn record-strike
   [participant strike]
   (-> participant
+    (update-in [:current-round ] #(round/record-strike % strike))
     (update-in [:recent-strikes ] #(take-last *recent-strikes-limit* (concat % [strike])))
     (update-in [:recent-failures ] #(take-last *recent-failures-limit* (concat % (filter strike/miss? [strike]))))))
 
@@ -31,5 +33,7 @@
 
 (defn finish-current-round
   [participant]
-  (let [finished-round (round/finish (:recent-strikes participant))]
-    (update-in participant [:score ] #(+ % (:points finished-round)))))
+  (let [finished-round (round/finish (:current-round participant))]
+    (-> participant
+      (update-in [:score ] #(+ % (:points finished-round)))
+      (update-in [:current-round ] (fn [_] (round/start))))))
