@@ -27,6 +27,6 @@
   [strike]
   (http/error? (:response strike)))
 
-(defn ^:dynamic points
+(defn ^:dynamic price
   [strike]
-  (:points (:challenge strike)))
+  (:price (:challenge strike)))

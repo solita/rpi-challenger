@@ -4,12 +4,12 @@
             [rpi-challenger.core.strike :as strike]))
 
 ; dummy strikes
-(defn- hit [points] {:hit true, :error false, :points points})
-(defn- miss [points] {:hit false, :error false, :points points})
-(defn- error [points] {:hit false, :error true, :points points})
+(defn- hit [price] {:hit true, :error false, :price price})
+(defn- miss [price] {:hit false, :error false, :price price})
+(defn- error [price] {:hit false, :error true, :price price})
 
 (deftest round-test
-  (binding [strike/hit? :hit, strike/error? :error, strike/points :points ]
+  (binding [strike/hit? :hit, strike/error? :error, strike/price :price ]
 
     (testing "Round with no strikes"
       (let [round
@@ -31,7 +31,7 @@
               (round/finish))]
         (testing "is worth nothing"
           (is (= 0 (:points round))))
-        (testing "The worst failure is the failure with lowest points"
+        (testing "The worst failure is the failure with lowest price"
           (is (nil? (:significant-hit round)))
           (is (= (miss 5) (:worst-failure round))))))
 
@@ -43,9 +43,9 @@
               (round/record-strike (hit 7))
               (round/record-strike (hit 5))
               (round/finish))]
-        (testing "is worth the maximum challenge points"
+        (testing "is worth the maximum challenge price"
           (is (= 7 (:points round))))
-        (testing "The significant hit is the hit with highest points"
+        (testing "The significant hit is the hit with highest price"
           (is (= (hit 7) (:significant-hit round)))
           (is (nil? (:worst-failure round))))))
 
@@ -58,7 +58,7 @@
               (round/record-strike (hit 5))
               (round/record-strike (miss 5))
               (round/finish))]
-        (testing "is worth the maximum challenge points below the worst failure"
+        (testing "is worth the maximum challenge price below the worst failure"
           (is (= 3 (:points round))))
         (testing "The significant hit is the most valuable hit below the worst failure"
           (is (= (hit 3) (:significant-hit round)))

@@ -17,13 +17,13 @@
   [f]
   (contains? (meta f) :challenge ))
 
-(defn points
+(defn price
   [challenge-f]
   (:challenge (meta challenge-f)))
 
 (defn generate
   [challenge-f]
-  (assoc (challenge-f) :points (points challenge-f)))
+  (assoc (challenge-f) :price (price challenge-f)))
 
 
 ; challenge registry

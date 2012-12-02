@@ -4,7 +4,7 @@
 (defn ^{:challenge 42} challenge-42 [] {:question ["Answer to life, universe and everything?"]
                                         :answer "forty-two"})
 
-(def challenge {:question ["+" "1" "2"], :answer "3", :points 10})
+(def challenge {:question ["+" "1" "2"], :answer "3", :price 10})
 
 (def hit-strike (s/make-strike
                   {:body "3", :status {:code 200, :msg "OK"}, :error nil}

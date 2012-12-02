@@ -42,7 +42,7 @@
 
 (defn update-challenge-functions
   [tournament]
-  (assoc-in tournament [:challenge-functions ] (sort-by c/points < (c/find-challenge-functions))))
+  (assoc-in tournament [:challenge-functions ] (sort-by c/price < (c/find-challenge-functions))))
 
 (defn generate-challenges
   [tournament]
