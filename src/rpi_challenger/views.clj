@@ -68,6 +68,12 @@
   [[:tr (nth-of-type 2)]] (substitute (map #(strikes-row %) strikes)))
 
 
+; rounds
+
+(defn rounds-list [rounds]
+  (map #(strikes-list (remove nil? [(:significant-hit %) (:worst-failure %)])) rounds))
+
+
 ; detail page
 
 (defsnippet participant-details "public/participant.html" [:body :> any-node]
@@ -76,7 +82,8 @@
   [:#url ] (content (:url participant))
   [:#score ] (content (str (:score participant)))
   [:#recent-failures ] (substitute (strikes-list (reverse (p/recent-failures participant))))
-  [:#recent-strikes ] (substitute (strikes-list (reverse (p/recent-strikes participant)))))
+  [:#recent-strikes ] (substitute (strikes-list (reverse (p/recent-strikes participant))))
+  [:#recent-finished-rounds ] (substitute (rounds-list (reverse (take-last 15 (p/finished-rounds participant))))))
 
 
 ; pages
