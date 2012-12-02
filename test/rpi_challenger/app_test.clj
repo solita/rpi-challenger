@@ -10,7 +10,7 @@
 (deftest app-test
   (binding [app/logger org.slf4j.helpers.NOPLogger/NOP_LOGGER
             threads/execute (fn [& _])
-            threads/schedule-with-fixed-delay (fn [& _])]
+            threads/schedule-repeatedly (fn [& _])]
 
     (testing "Participants may register to the tournament"
       (let [app (app/make-app)]
@@ -23,7 +23,7 @@
       (let [app (app/make-app)
             scheduled-function (ref nil)
             scheduled-delay (ref nil)]
-        (binding [threads/schedule-with-fixed-delay
+        (binding [threads/schedule-repeatedly
                   (fn [scheduler f delay]
                     (dosync
                       (ref-set scheduled-function f)

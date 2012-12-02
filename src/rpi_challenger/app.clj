@@ -94,7 +94,7 @@
   (dosync (alter-tournament app t/update-challenge-functions)))
 
 (defn start [app]
-  (threads/schedule-with-fixed-delay (:scheduler @app) #(start-new-round app) round-duration-in-seconds)
+  (threads/schedule-repeatedly (:scheduler @app) #(start-new-round app) round-duration-in-seconds)
   (doseq [participant (get-participants app)]
     (start-polling app participant))
   app)

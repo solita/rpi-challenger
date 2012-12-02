@@ -8,8 +8,8 @@
     (.setDaemon true)
     (.build)))
 
-(defn ^:dynamic schedule-with-fixed-delay [^ScheduledExecutorService scheduler f delay-seconds]
-  (.scheduleWithFixedDelay scheduler f 0 delay-seconds TimeUnit/SECONDS))
+(defn ^:dynamic schedule-repeatedly [^ScheduledExecutorService scheduler f interval-in-seconds]
+  (.scheduleAtFixedRate scheduler f 0 interval-in-seconds TimeUnit/SECONDS))
 
 (defn ^:dynamic execute [^Executor executor f]
   (.execute executor f))
