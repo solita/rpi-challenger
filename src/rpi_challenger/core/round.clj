@@ -23,27 +23,35 @@
     (fn [this] (< (strike/points this) (strike/points that)))))
 
 
-(defn- worst-failure [strikes]
-  (let [failures (filter strike/miss? strikes)]
+(defn- failures [round] (vals (:failures-by-points round)))
+
+(defn- hits [round] (vals (:hits-by-points round)))
+
+
+(defn- worst-failure [round]
+  (let [failures (failures round)]
     (reduce-or-nil lower-points failures)))
 
-(defn- significant-hit [strikes]
-  (let [worst-failure (worst-failure strikes)
-        all-hits (filter strike/hit? strikes)
-        accepted-hits (filter (points-lower-than? worst-failure) all-hits)]
+(defn- significant-hit [round]
+  (let [worst-failure (worst-failure round)
+        accepted-hits (filter (points-lower-than? worst-failure) (hits round))]
     (reduce-or-nil higher-points accepted-hits)))
 
-(defn- points [strikes]
+(defn- points [round]
   (or
-    (strike/points (significant-hit strikes))
+    (strike/points (significant-hit round))
     0))
 
 
 (defn start []
-  [])
+  ; We don't need to remember every strike. Only one strike per unique number of points.
+  {:hits-by-points {}
+   :failures-by-points {}})
 
 (defn record-strike [round strike]
-  (conj round strike))
+  (cond
+    (strike/hit? strike) (assoc-in round [:hits-by-points (strike/points strike)] strike)
+    (strike/miss? strike) (assoc-in round [:failures-by-points (strike/points strike)] strike)))
 
 (defn ^:dynamic finish [round]
   {:points (points round)
