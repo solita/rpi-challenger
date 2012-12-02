@@ -5,8 +5,8 @@
 	OK - move rating/correct? to strike, rename app/record-response to record-strike
 	OK - count the score incrementally
 	OK - show the significant strikes for recent rounds
-	!! - check that connection errors are always the most serious failure
-	- slowly increasing score velocity
+	OK - check that connection errors are always the most serious failure
+	!! - slowly increasing score velocity
 	- show velocity and max velocity for each round in detail page
 	- show velocity and max velocity for the latest round in overview page
 - show score accumulation history

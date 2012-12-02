@@ -17,24 +17,31 @@
     a
     b))
 
-(defn- points-lower-than? [that]
-  (if (nil? that)
-    (fn [this] true)
-    (fn [this] (< (strike/points this) (strike/points that)))))
+(defn- points-lower-than? [points]
+  (fn [this] (< (strike/points this) points)))
 
-
-(defn- failures [round] (vals (:failures-by-points round)))
 
 (defn- hits [round] (vals (:hits-by-points round)))
+(defn- failures [round] (vals (:failures-by-points round)))
+(defn- has-failures? [round] (not (empty? (failures round))))
+(defn- error [round] (:error round))
+(defn- has-error? [round] (not (nil? (error round))))
 
 
 (defn- worst-failure [round]
-  (let [failures (failures round)]
-    (reduce-or-nil lower-points failures)))
+  (or
+    (error round)
+    (reduce-or-nil lower-points (failures round))))
+
+(defn- accepted-hits-point-limit [round]
+  (cond
+    (has-error? round) 0
+    (has-failures? round) (strike/points (worst-failure round))
+    :else Integer/MAX_VALUE))
 
 (defn- significant-hit [round]
-  (let [worst-failure (worst-failure round)
-        accepted-hits (filter (points-lower-than? worst-failure) (hits round))]
+  (let [limit (accepted-hits-point-limit round)
+        accepted-hits (filter (points-lower-than? limit) (hits round))]
     (reduce-or-nil higher-points accepted-hits)))
 
 (defn- points [round]
@@ -46,12 +53,14 @@
 (defn start []
   ; We don't need to remember every strike. Only one strike per unique number of points.
   {:hits-by-points {}
-   :failures-by-points {}})
+   :failures-by-points {}
+   :error nil})
 
 (defn record-strike [round strike]
   (cond
-    (strike/hit? strike) (assoc-in round [:hits-by-points (strike/points strike)] strike)
-    (strike/miss? strike) (assoc-in round [:failures-by-points (strike/points strike)] strike)))
+    (strike/error? strike) (assoc-in round [:error ] strike)
+    (strike/miss? strike) (assoc-in round [:failures-by-points (strike/points strike)] strike)
+    (strike/hit? strike) (assoc-in round [:hits-by-points (strike/points strike)] strike)))
 
 (defn ^:dynamic finish [round]
   {:points (points round)

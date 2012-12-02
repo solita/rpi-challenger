@@ -23,7 +23,7 @@
   [strike]
   (not (hit? strike)))
 
-(defn error?
+(defn ^:dynamic error?
   [strike]
   (http/error? (:response strike)))
 
