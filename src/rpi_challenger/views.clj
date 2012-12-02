@@ -56,10 +56,11 @@
   [strike]
   [:tr ] (set-attr :class (strikes-row-class strike))
   [[:td (nth-of-type 1)]] (content (format-timestamp strike))
-  [[:td (nth-of-type 2)]] (content (c/format-question (:challenge strike)))
-  [[:td (nth-of-type 3)]] (content (:answer (:challenge strike)))
-  [[:td (nth-of-type 4)]] (content (:body (:response strike)))
-  [[:td (nth-of-type 5)]] (content (format-status-or-error strike)))
+  [[:td (nth-of-type 2)]] (content (str (s/price strike)))
+  [[:td (nth-of-type 3)]] (content (c/format-question (:challenge strike)))
+  [[:td (nth-of-type 4)]] (content (:answer (:challenge strike)))
+  [[:td (nth-of-type 5)]] (content (:body (:response strike)))
+  [[:td (nth-of-type 6)]] (content (format-status-or-error strike)))
 
 (defsnippet strikes-list "public/strikes-list.html" [:table ]
   [strikes]
