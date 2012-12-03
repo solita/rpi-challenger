@@ -13,7 +13,7 @@ $(function () {
             },
             xaxis: {
                 min: tournamentStart,
-                ticks: 5,
+                tickSize: 30 * 60 * 1000,
                 tickFormatter: function (val, axis) {
                     return $.format.date(new Date(val), "HH:mm");
                 },
