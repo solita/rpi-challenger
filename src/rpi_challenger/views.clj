@@ -32,7 +32,7 @@
 
 (defsnippet tournament-overview "public/tournament.html" [:body :> any-node]
   [participants]
-  *participants-row (content (map #(participants-row %) participants)))
+  *participants-row (content (map #(participants-row %) (sort-by :score > participants))))
 
 
 ; strikes list
