@@ -12,15 +12,16 @@ OK - better score calculation rules
 	OK - find and evaluate a JS graph library
 		http://www.flotcharts.org/
 		http://g.raphaeljs.com/
-	!! - visualize the history as graph
-		- inject the URL for the JSON in the overview template
-		- write some javascript which reads the JSON with Ajax
-		- input the data to the graph library (Flot)
-	- calculate total score from the history
+	OK - visualize the history as graph
+		OK - inject the URL for the JSON in the overview template
+		OK - write some javascript which reads the JSON with Ajax
+		OK - input the data to the graph library (Flot)
+	!! - calculate total score from the history
 - encourage high-availability more
 	- slowly increasing score velocity
 	- show velocity and max velocity for each round in detail page
 	- show velocity and max velocity for the latest round in overview page
+	- show max velocity in the score history graph
 - more challenges
 - balance the challenge points, perhaps 1 2 3 5 8 13 etc.
 - CSS: Solita colors
