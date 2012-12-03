@@ -8,11 +8,14 @@ OK - better score calculation rules
 	OK - check that connection errors are always the most serious failure
 !! - show score accumulation history
 	OK - save score for each tick as [timestamp score]
-	!! - expose the history as JSON
-	- find and evaluate a JS graph library
+	OK - expose the history as JSON
+	OK - find and evaluate a JS graph library
 		http://www.flotcharts.org/
 		http://g.raphaeljs.com/
-	- visualize the history as graph
+	!! - visualize the history as graph
+		- inject the URL for the JSON in the overview template
+		- write some javascript which reads the JSON with Ajax
+		- input the data to the graph library (Flot)
 	- calculate total score from the history
 - encourage high-availability more
 	- slowly increasing score velocity
