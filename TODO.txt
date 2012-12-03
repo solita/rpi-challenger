@@ -17,13 +17,15 @@ OK - show score accumulation history
 		OK - write some javascript which reads the JSON with Ajax
 		OK - input the data to the graph library (Flot)
 	OK - calculate total score from the history
-- encourage high-availability more
-	- slowly increasing score velocity
+OK - encourage high-availability more
+	OK - slowly increasing score velocity
+!! - more challenges
+- balance the challenge points, perhaps 1 2 3 5 8 13 etc.
+- visualize the max velocity
 	- show velocity and max velocity for each round in detail page
 	- show velocity and max velocity for the latest round in overview page
 	- show max velocity in the score history graph
-- more challenges
-- balance the challenge points, perhaps 1 2 3 5 8 13 etc.
+- show most recent failure & pass in the overview page
 - CSS: Solita colors
 
 - bug: throws "java.net.SocketException: No buffer space available (maximum connections reached?)" after running for a while against hello-world:

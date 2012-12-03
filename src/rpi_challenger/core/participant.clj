@@ -17,7 +17,7 @@
    :recent-strikes []
    :recent-failures []})
 
-(defn finished-rounds [participant] (:finished-rounds participant))
+(defn finished-rounds [participant] (round/apply-point-acceleration (:finished-rounds participant)))
 (defn recent-strikes [participant] (:recent-strikes participant))
 (defn recent-failures [participant] (:recent-failures participant))
 
