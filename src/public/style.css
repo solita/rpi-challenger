@@ -1,34 +1,36 @@
 body {
-    background: black;
-    font-family: "Courier New", Courier, monospace;
-    color: white;
+    font-family: chaparral-pro, sans-serif;
+    color: #000000;
+    background: #ffffff;
 }
 
 a {
-    color: #6666ff;
+    color: #01BEF5;
 }
 
 a:link {
-    color: #6666ff;
+    color: #01BEF5;
 }
 
 a:visited {
-    color: #6666ff;
+    color: #01BEF5;
 }
 
 a:hover {
-    color: #ffff66;
+    color: #01a5dc;
 }
 
 a:active {
-    color: #6666ff;
+    color: #4cf0f5;
 }
 
 h1, h2, h3, h4, h5, h6 {
-    color: #00ff00;
+    font-weight: 300;
+    color: #F59C00;
 }
 
 table.strikes {
+    font-family: "Courier New", Courier, monospace;
     white-space: pre;
     border-collapse: collapse;
     color: black;
@@ -45,7 +47,7 @@ table.strikes th {
 }
 
 table.strikes td {
-    border: 1px solid #cccccc;
+    border: 1px solid #888888;
 }
 
 table.strikes tr.hit {
