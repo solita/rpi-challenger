@@ -1,4 +1,4 @@
-!! - better score calculation rules
+OK - better score calculation rules
 	OK - create round module (will be embedded in participant)
 	OK - take challenge points into consideration
 	OK - use the points of the highest hit below the lowest miss
@@ -6,9 +6,6 @@
 	OK - count the score incrementally
 	OK - show the significant strikes for recent rounds
 	OK - check that connection errors are always the most serious failure
-	!! - slowly increasing score velocity
-	- show velocity and max velocity for each round in detail page
-	- show velocity and max velocity for the latest round in overview page
 - show score accumulation history
 	- save score for each tick as [timestamp score]
 	- calculate total score from the history
@@ -17,6 +14,10 @@
 		http://www.flotcharts.org/
 		http://g.raphaeljs.com/
 	- visualize the history as graph
+- encourage high-availability more
+	- slowly increasing score velocity
+	- show velocity and max velocity for each round in detail page
+	- show velocity and max velocity for the latest round in overview page
 - more challenges
 - balance the challenge points, perhaps 1 2 3 5 8 13 etc.
 - CSS: Solita colors
