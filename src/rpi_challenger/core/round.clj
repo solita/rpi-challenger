@@ -52,7 +52,8 @@
 
 (defn start []
   ; We don't need to remember every strike, only one strike for each different price.
-  {:hits-by-price {}
+  {:started (System/currentTimeMillis)
+   :hits-by-price {}
    :failures-by-price {}
    :error nil})
 
@@ -63,6 +64,8 @@
     (strike/hit? strike) (assoc-in round [:hits-by-price (strike/price strike)] strike)))
 
 (defn ^:dynamic finish [round]
-  {:points (points round)
+  {:started (:started round)
+   :finished (System/currentTimeMillis)
+   :points (points round)
    :significant-hit (significant-hit round)
    :worst-failure (worst-failure round)})

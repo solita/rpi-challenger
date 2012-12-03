@@ -11,6 +11,14 @@
 (deftest round-test
   (binding [strike/hit? :hit, strike/error? :error, strike/price :price ]
 
+    (testing "Round contains timestamps of when it was started and finished"
+      (let [round
+            (->
+              (round/start)
+              (round/finish))]
+        (is (number? (:started round)))
+        (is (number? (:finished round)))))
+
     (testing "Round with no strikes"
       (let [round
             (->
