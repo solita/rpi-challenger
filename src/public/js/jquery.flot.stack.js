@@ -38,7 +38,7 @@ adjusted (e.g for bar charts or filled areas).
     
     function init(plot) {
         function findMatchingSeries(s, allseries) {
-            var res = null
+            var res = null;
             for (var i = 0; i < allseries.length; ++i) {
                 if (s == allseries[i])
                     break;
@@ -71,7 +71,7 @@ adjusted (e.g for bar charts or filled areas).
                 fromgap = true,
                 keyOffset = horizontal ? 1 : 0,
                 accumulateOffset = horizontal ? 0 : 1,
-                i = 0, j = 0, l;
+                i = 0, j = 0, l, m;
 
             while (true) {
                 if (i >= points.length)
