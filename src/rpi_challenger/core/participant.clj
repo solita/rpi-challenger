@@ -28,10 +28,14 @@
     (update-in [:recent-strikes ] #(take-last *recent-strikes-limit* (concat % [strike])))
     (update-in [:recent-failures ] #(take-last *recent-failures-limit* (concat % (filter strike/miss? [strike]))))))
 
+(defn recalculate-total-score
+  [participant]
+  (assoc participant :score (reduce + (map :points (finished-rounds participant)))))
+
 (defn finish-current-round
   [participant]
   (let [finished-round (round/finish (:current-round participant))]
     (-> participant
-      (update-in [:score ] #(+ % (:points finished-round)))
       (update-in [:current-round ] (fn [_] (round/start)))
-      (update-in [:finished-rounds ] #(conj % finished-round)))))
+      (update-in [:finished-rounds ] #(conj % finished-round))
+      (recalculate-total-score))))
