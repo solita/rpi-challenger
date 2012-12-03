@@ -14,13 +14,17 @@
   [:h2 ] (content title)
   [:#main ] (substitute main))
 
+; score history
+
+(defn init-score-history [participant]
+  (set-attr :data-url (str "/participant-" (:id participant) "/score-history")))
+
 
 ; participants list
 
 (def *participants-row [:#participants [:tr (nth-of-type 2)]])
 (def *participant-link [[:a (nth-of-type 1)]])
 (def *participant-score [[:td (nth-of-type 2)]])
-(def *participant-score-history [[:div.score-history ]])
 
 (defsnippet participants-row "public/tournament.html" *participants-row
   [participant]
@@ -28,7 +32,7 @@
                       (content (:name participant))
                       (set-attr :href (str "/participant-" (:id participant))))
   *participant-score (content (str (:score participant)))
-  *participant-score-history (set-attr :data-url (str "/participant-" (:id participant) "/score-history")))
+  [:.score-history ] (init-score-history participant))
 
 (defsnippet tournament-overview "public/tournament.html" [:body :> any-node]
   [participants]
@@ -84,6 +88,7 @@
   [:#name ] (content (:name participant))
   [:#url ] (content (:url participant))
   [:#score ] (content (str (:score participant)))
+  [:.score-history ] (init-score-history participant)
   [:#recent-failures ] (substitute (strikes-list (reverse (p/recent-failures participant))))
   [:#recent-strikes ] (substitute (strikes-list (reverse (p/recent-strikes participant))))
   [:#recent-finished-rounds ] (substitute (rounds-list (reverse (take-last 15 (p/finished-rounds participant))))))
