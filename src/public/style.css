@@ -73,3 +73,8 @@ table.strikes tr.error {
     height: 50px;
     visibility: hidden;
 }
+
+.score-history {
+    width: 500px;
+    height: 120px;
+}
