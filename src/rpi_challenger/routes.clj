@@ -41,7 +41,7 @@
   (->
     (routes
       (GET "/" [] (using-template views/tournament-overview-page (app/get-participants app)))
-      (GET "/participant-:id/score-history" [id] (json-response {:foo id}))
+      (GET "/participant-:id/score-history" [id] (json-response (app/get-participant-score-history app (Integer/parseInt id))))
       (GET "/participant-:id" [id] (using-template views/participant-details-page (app/get-participant-by-id app (Integer/parseInt id))))
       (POST "/register" {params :params} (handle-register-form app params))
       (POST "/hello-world" {body :body} (handle-hello-world (slurp body)))

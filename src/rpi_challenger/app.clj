@@ -82,6 +82,12 @@
                          (alter-tournament app t/register-participant participant)
                          participant))))
 
+(defn get-participant-score-history [app id]
+  (let [participant (get-participant-by-id app id)
+        rounds (p/finished-rounds participant)]
+    (map (fn [round] [(:finished round) (:points round)]) rounds)))
+
+
 ; lifecycle events
 
 (defn ^:dynamic start-new-round [app]
