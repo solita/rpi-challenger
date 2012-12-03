@@ -6,7 +6,13 @@
             [rpi-challenger.views :as views]
             [compojure.route :as route]
             [net.cgrand.enlive-html :as html]
-            [clojure.string :as string]))
+            [clojure.string :as string]
+            [clj-json.core :as json]))
+
+(defn json-response
+  [data]
+  (-> (response (json/generate-string data))
+    (content-type "application/json")))
 
 (defn using-template
   [template & args]
@@ -35,6 +41,7 @@
   (->
     (routes
       (GET "/" [] (using-template views/tournament-overview-page (app/get-participants app)))
+      (GET "/participant-:id/score-history" [id] (json-response {:foo id}))
       (GET "/participant-:id" [id] (using-template views/participant-details-page (app/get-participant-by-id app (Integer/parseInt id))))
       (POST "/register" {params :params} (handle-register-form app params))
       (POST "/hello-world" {body :body} (handle-hello-world (slurp body)))

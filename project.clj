@@ -27,6 +27,9 @@
                  ; Date & Time
                  [clj-time "0.4.4"]
 
+                 ; JSON
+                 [clj-json "0.5.1"]
+
                  ; Command Line Interface
                  [org.clojure/tools.cli "0.2.2"]
 
