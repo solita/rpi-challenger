@@ -5,7 +5,8 @@
             [rpi-challenger.core.challenges :as c]
             [rpi-challenger.http :as http]
             [rpi-challenger.util.io :as io]
-            [rpi-challenger.util.threads :as threads])
+            [rpi-challenger.util.threads :as threads]
+            [clojure.string :as string])
   (:import [org.slf4j LoggerFactory Logger]
            [java.io File]
            [java.util.concurrent Executors Future ScheduledExecutorService TimeUnit]))
@@ -100,7 +101,12 @@
   (.info logger "Starting a new round")
   (dosync (alter-tournament app t/finish-current-round))
   (c/load-challenge-functions challenge-functions-dir)
-  (dosync (alter-tournament app t/update-challenge-functions)))
+  (dosync (alter-tournament app t/update-challenge-functions))
+
+  (.info logger "Using challenges:\n{}"
+    (string/join "\n"
+      (map (fn [challenge-fn] (str "\t" (c/price challenge-fn) "\t" challenge-fn))
+        (:challenge-functions (:tournament @app))))))
 
 (defn start [app]
   (threads/schedule-repeatedly (:scheduler @app) #(start-new-round app) round-duration-in-seconds)
