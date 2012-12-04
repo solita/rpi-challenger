@@ -7,7 +7,7 @@
   (:import [org.joda.time LocalDateTime]))
 
 ; layout
- 
+
 (deftemplate layout "public/layout.html"
   [{:keys [title main]}]
   [:title ] (content title)
@@ -102,11 +102,12 @@
   [:#recent-strikes ] (substitute (strikes-list (reverse (p/recent-strikes participant))))
   [:#recent-finished-rounds ] (substitute (rounds-list (reverse (take-last 15 (p/finished-rounds participant))))))
 
+
 ; overall scores page
 
 (defsnippet overall-scores "public/overall-scores.html" [:body :> any-node]
-  []
-  [:#main] ())
+  [])
+
 
 ; pages
 

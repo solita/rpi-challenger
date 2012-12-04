@@ -24,11 +24,17 @@ $(function () {
 
             $.plot(graphElem, mapDataSeries(data), {
                 series:{
-                    lines:{show:false, steps:false},
                     bars:{show:true, barWidth:0.9, align:'center'}
                 },
                 xaxis:{
-                    ticks:mapDataNames(data)
+                    ticks:mapDataNames(data),
+                    font:{
+                        size:14,
+                        weight:"bold"
+                    }
+                },
+                legend:{
+                    show:false
                 }
             });
         };
