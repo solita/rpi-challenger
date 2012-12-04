@@ -8,8 +8,8 @@ $(function () {
             var mapDataSeries = function (data) {
                 return data.map(function (x, index) {
                     return {
-                        label:x.name,
-                        data:[
+                        label: x.name,
+                        data: [
                             [index, x.score]
                         ]
                     }
@@ -23,18 +23,18 @@ $(function () {
             };
 
             $.plot(graphElem, mapDataSeries(data), {
-                series:{
-                    bars:{show:true, barWidth:0.9, align:'center'}
+                series: {
+                    bars: {show: true, barWidth: 0.9, align: 'center'}
                 },
-                xaxis:{
-                    ticks:mapDataNames(data),
-                    font:{
-                        size:14,
-                        weight:"bold"
+                xaxis: {
+                    ticks: mapDataNames(data),
+                    font: {
+                        size: 14,
+                        weight: "bold"
                     }
                 },
-                legend:{
-                    show:false
+                legend: {
+                    show: false
                 }
             });
         };
