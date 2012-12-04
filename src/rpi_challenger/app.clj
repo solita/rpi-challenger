@@ -32,8 +32,16 @@
 
 ; persistence
 
+(defn- with-file-ext [file ext]
+  (File. (.getParentFile file) (str (.getName file) "." ext)))
+
 (defn save-state [app file]
-  (io/object-to-file file (t/serialize (:tournament @app))))
+  (let [tmp-file (with-file-ext file "tmp")
+        bak-file (with-file-ext file "bak")]
+    (io/object-to-file tmp-file (t/serialize (:tournament @app)))
+    (.delete bak-file)
+    (.renameTo file bak-file)
+    (.renameTo tmp-file file)))
 
 (defn load-state [file]
   (let [app (make-app)
