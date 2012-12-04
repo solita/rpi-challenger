@@ -67,11 +67,9 @@
         (poll-participant app participant (rest challenges))))))
 
 (defn ^:dynamic poll-participant-loop [app participant]
-  (while (not (Thread/interrupted))
+  (while true
     (try
       (poll-participant app participant (t/generate-challenges (:tournament @app)))
-      (catch InterruptedException e
-        (.interrupt (Thread/currentThread)))
       (catch Throwable e
         (.error logger (str "Unhandled error in polling participant " (:url participant)) e)))))
 
