@@ -12,3 +12,5 @@ pom.xml
 /*.iml
 .DS_Store
 rpi-challenger-state.clj
+*.tmp
+*.bak
