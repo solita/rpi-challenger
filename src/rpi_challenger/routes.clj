@@ -36,6 +36,10 @@
       (= op "say-hello") (str "Hello " (first args))
       :else (str "Don't understand:\n" question))))
 
+(defn handle-overall-scores
+  [app]
+  (map (fn [x] (select-keys x [:name :score])) (app/get-participants app)))
+
 (defn make-routes
   [app]
   (->
@@ -45,6 +49,8 @@
       (GET "/participant-:id" [id] (using-template views/participant-details-page (app/get-participant-by-id app (Integer/parseInt id))))
       (POST "/register" {params :params} (handle-register-form app params))
       (POST "/hello-world" {body :body} (handle-hello-world (slurp body)))
+      (GET "/overall-scores" [] (json-response (handle-overall-scores app)))
+      (GET "/overall" [] (using-template views/overall-scores-page))
       (route/resources "/")
-      (route/not-found "Page Not Found"))
+      (route/not-found "404 Page Not Found"))
     (wrap-params)))
