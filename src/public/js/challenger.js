@@ -5,10 +5,20 @@ $(function () {
     var tournamentMaxPoints = 3;
 
     function plotScoreHistory(element) {
-        var data = element.scoreHistory || [];
-        $.plot(element, [ data ], {
+        var scoreHistory = element.scoreHistory || [];
+        var deficitHistory = element.deficitHistory || [];
+        $.plot(element, [ scoreHistory, deficitHistory ], {
             series: {
-                lines: { show: true, fill: true, steps: false },
+                lines: {
+                    lineWidth: 1,
+                    fill: true,
+                    fillColor: {
+                        colors: [
+                            { opacity: 0.8 },
+                            { opacity: 0.3 }
+                        ]
+                    }
+                },
                 stack: true
             },
             xaxis: {
@@ -41,7 +51,13 @@ $(function () {
         $.ajax({
             url: $(element).attr("data-url"),
             success: function (data) {
-                element.scoreHistory = data;
+                element.scoreHistory = data.map(function (val) {
+                    return [val[0], val[1]];
+                });
+                element.deficitHistory = data.map(function (val) {
+                    return [val[0], val[2] - val[1]];
+                });
+
                 tournamentStart = Math.min(tournamentStart, data[0] ? data[0][0] : Number.MAX_VALUE);
                 tournamentMaxPoints = Math.max(tournamentMaxPoints, data.reduce(function (maxPoints, round) {
                     return Math.max(maxPoints, round[1]);

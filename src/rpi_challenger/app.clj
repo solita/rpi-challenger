@@ -89,7 +89,7 @@
 (defn get-participant-score-history [app id]
   (let [participant (get-participant-by-id app id)
         rounds (p/finished-rounds participant)]
-    (map (fn [round] [(:finished round) (:points round)]) rounds)))
+    (map (fn [round] [(:finished round) (:points round) (:max-points round)]) rounds)))
 
 
 ; lifecycle events
