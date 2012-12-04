@@ -14,10 +14,16 @@
   [:h2 ] (content title)
   [:#main ] (substitute main))
 
-; score history
 
-(defn init-score-history [participant]
+; common elements
+
+(defn init-score-history
+  [participant]
   (set-attr :data-url (str "/participant-" (:id participant) "/score-history")))
+
+(defn format-velocity
+  [participant]
+  (str (p/current-velocity participant) "/" (p/max-velocity participant)))
 
 
 ; participants list
@@ -25,6 +31,7 @@
 (def *participants-row [:#participants [:tr (nth-of-type 2)]])
 (def *participant-link [[:a (nth-of-type 1)]])
 (def *participant-score [[:td (nth-of-type 2)]])
+(def *participant-velocity [[:td (nth-of-type 3)]])
 
 (defsnippet participants-row "public/tournament.html" *participants-row
   [participant]
@@ -32,6 +39,7 @@
                       (content (:name participant))
                       (set-attr :href (str "/participant-" (:id participant))))
   *participant-score (content (str (:score participant)))
+  *participant-velocity (content (format-velocity participant))
   [:.score-history ] (init-score-history participant))
 
 (defsnippet tournament-overview "public/tournament.html" [:body :> any-node]
@@ -88,6 +96,7 @@
   [:#name ] (content (:name participant))
   [:#url ] (content (:url participant))
   [:#score ] (content (str (:score participant)))
+  [:#velocity ] (content (format-velocity participant))
   [:.score-history ] (init-score-history participant)
   [:#recent-failures ] (substitute (strikes-list (reverse (p/recent-failures participant))))
   [:#recent-strikes ] (substitute (strikes-list (reverse (p/recent-strikes participant))))

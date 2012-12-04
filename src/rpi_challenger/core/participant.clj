@@ -18,6 +18,9 @@
    :recent-failures []})
 
 (defn finished-rounds [participant] (round/apply-point-acceleration (:finished-rounds participant)))
+(defn current-velocity [participant] (:points (last (finished-rounds participant))))
+(defn max-velocity [participant] (:max-points (last (finished-rounds participant))))
+
 (defn recent-strikes [participant] (:recent-strikes participant))
 (defn recent-failures [participant] (:recent-failures participant))
 
@@ -28,7 +31,7 @@
     (update-in [:recent-strikes ] #(take-last *recent-strikes-limit* (concat % [strike])))
     (update-in [:recent-failures ] #(take-last *recent-failures-limit* (concat % (filter strike/miss? [strike]))))))
 
-(defn recalculate-total-score
+(defn- recalculate-total-score
   [participant]
   (assoc participant :score (reduce + (map :points (finished-rounds participant)))))
 

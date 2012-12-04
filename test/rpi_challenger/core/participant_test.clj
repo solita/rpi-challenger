@@ -6,7 +6,8 @@
 (deftest participant-test
   (binding [p/*recent-strikes-limit* 4
             p/*recent-failures-limit* 3
-            s/hit? #(= % :hit )]
+            s/hit? #(= % :hit )
+            s/price (fn [_] 10)]
     (let [participant (p/make-participant 123 "Somebody" "http://somewhere")]
 
       (testing "Recent strikes list shows passes and failures"
@@ -57,4 +58,15 @@
                 (p/finish-current-round))
               finished-rounds (p/finished-rounds participant)]
           (is (= 2 (count finished-rounds)))
-          (is (= [:miss1 :miss2 ] (map :worst-failure finished-rounds))))))))
+          (is (= [:miss1 :miss2 ] (map :worst-failure finished-rounds)))))
+
+      (testing "Reports the current and max velocity based on the last finished round"
+        (let [participant
+              (-> participant
+                (p/record-strike :hit )
+                (p/finish-current-round)
+                (p/record-strike :hit )
+                (p/finish-current-round))
+              finished-rounds (p/finished-rounds participant)]
+          (is (= 2 (p/current-velocity participant)))
+          (is (= 10 (p/max-velocity participant))))))))
