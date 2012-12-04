@@ -25,7 +25,7 @@
       (testing "Shows index page"
         (let [response (GET "/" webapp)]
           (is (= 200 (:status response)))
-          (is (re-find #"Raspberry Pi Challenger" (:body response)))))
+          (is (re-find #"Tournament Overview" (:body response)))))
 
       (testing "Serves static resources"
         (let [response (GET "/layout.html" webapp)]
