@@ -64,14 +64,10 @@ table.strikes tr.error {
     color: red;
 }
 
-.bread-crumb {
+.navigation {
     position: absolute;
-    top: 80px;
-}
-
-.bread-crumb-placeholder {
-    height: 50px;
-    visibility: hidden;
+    top: 1em;
+    right: 1em;
 }
 
 .score-history {
