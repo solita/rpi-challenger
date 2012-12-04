@@ -16,7 +16,9 @@
 
 (defn using-template
   [template & args]
-  (response (apply str (apply template args))))
+  (-> (response (apply str (apply template args)))
+    (content-type "text/html")
+    (charset "UTF-8")))
 
 (defn handle-register-form
   [app {name "name" url "url"}]
@@ -38,7 +40,7 @@
 
 (defn handle-overall-scores
   [app]
-  (map (fn [x] (select-keys x [:name :score])) (app/get-participants app)))
+  (map (fn [x] (select-keys x [:name :score ])) (app/get-participants app)))
 
 (defn make-routes
   [app]
