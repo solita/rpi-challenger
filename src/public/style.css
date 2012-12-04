@@ -101,7 +101,7 @@ table.strikes th, td {
 }
 
 table.strikes th {
-    color: white;
+    font-family: "PT Sans Narrow","Arial Narrow",sans-serif;
 }
 
 table.strikes td {
