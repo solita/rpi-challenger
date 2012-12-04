@@ -41,6 +41,12 @@
       (let [response {:body "correct answer "
                       :status {:code 200, :msg "OK"}
                       :error nil}]
+        (is (not (correct-response? response challenge)))))
+
+    (testing "handles null response"
+      (let [response {:body nil
+                      :status {:code 200, :msg "OK"}
+                      :error nil}]
         (is (not (correct-response? response challenge)))))))
 
 

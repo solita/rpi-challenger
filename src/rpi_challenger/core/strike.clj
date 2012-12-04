@@ -13,6 +13,7 @@
   (and
     (nil? (:error response))
     (= 200 (:code (:status response)))
+    (not (nil? (:body response)))
     (= (string/trim-newline (:body response)) (:answer challenge))))
 
 (defn ^:dynamic hit?
