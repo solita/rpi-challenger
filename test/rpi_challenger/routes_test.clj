@@ -35,7 +35,7 @@
       (testing "Shows Error 404 when page not found"
         (let [response (GET "/no-such-page" webapp)]
           (is (= 404 (:status response)))
-          (is (= "Page Not Found" (:body response)))))
+          (is (= "404 Page Not Found" (:body response)))))
 
       (testing "Registration form"
 

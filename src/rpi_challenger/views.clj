@@ -123,5 +123,5 @@
 
 (defn overall-scores-page
   []
-  (layout {:title "Overall scores"
+  (layout {:title "Overall Scores"
            :main (overall-scores)}))

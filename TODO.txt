@@ -2,7 +2,9 @@ OK - visualize the max velocity
 	OK - show velocity and max velocity for each round in detail page
 	OK - show velocity and max velocity for the latest round in overview page
 	OK - show max velocity in the score history graph
-!! - more challenges
-- balance the challenge points, perhaps 1 2 3 5 8 13 etc.
+OK - more challenges
+!! - balance the challenge points, perhaps 1 2 3 5 8 13 etc.
+- split challenges module to challenge-fn and challenge
+- allow challenges to return non-string answers, stringify automatically
 - Solita branding
 - show most recent failure & pass in the overview page

@@ -21,6 +21,7 @@ $(function () {
                 },
                 stack: true
             },
+            colors: [ "#F59C00", "#FF07D4" ],
             xaxis: {
                 min: tournamentStart,
                 tickSize: 30 * 60 * 1000,
