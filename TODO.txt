@@ -1,10 +1,10 @@
-OK - visualize the max velocity
-	OK - show velocity and max velocity for each round in detail page
-	OK - show velocity and max velocity for the latest round in overview page
-	OK - show max velocity in the score history graph
-OK - more challenges
-!! - balance the challenge points, perhaps 1 2 3 5 8 13 etc.
+- scrolling a full participants details page is hard, create section links
+- one of the participants (HKI 4.12.2012) used an obscure Python web server which killed the participant poller (bug with the http client?)
+	- reproduce the issue and fix the immediate problem
+	- make polling more failure resistant, perhaps restart the pollers periodically and recreate the http client
 - split challenges module to challenge-fn and challenge
 - allow challenges to return non-string answers, stringify automatically
-- Solita branding
-- show most recent failure & pass in the overview page
+- use a DB for persistence
+	- evaluate OrientDB
+- new game ideas?
+	- multiplayer AI game based on http://www.mobygames.com/game/nes/battle-city
