@@ -23,6 +23,14 @@
   [attr node]
   (attr (:attrs node)))
 
+(deftest tournament-overview-page-test
+  (testing "Shows registration error messages"
+    (let [html (apply str (tournament-overview-page [] "Some error message"))]
+      (is (re-find #"<div id=\"error-message\">Some error message</div>" html))))
+
+  (testing "Doesn't show the error message element when there is no message"
+    (let [html (apply str (tournament-overview-page [] nil))]
+      (is (not (re-find #"error-message" html))))))
 
 (deftest participants-row-test
   (let [participant {:id 100, :name "The Name", :url "http://the-url", :score 42}

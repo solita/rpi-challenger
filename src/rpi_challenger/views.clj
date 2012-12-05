@@ -9,10 +9,13 @@
 ; layout
 
 (deftemplate layout "public/layout.html"
-  [{:keys [title main]}]
+  [{:keys [title main error-message]}]
   [:title ] (content title)
   [:h2 ] (content title)
-  [:#main ] (substitute main))
+  [:#main ] (substitute main)
+  [:#error-message ] (if error-message
+                       (content error-message)
+                       (substitute)))
 
 
 ; common elements
@@ -112,9 +115,10 @@
 ; pages
 
 (defn tournament-overview-page
-  [participants]
+  [participants error-message]
   (layout {:title "Tournament Overview"
-           :main (tournament-overview participants)}))
+           :main (tournament-overview participants)
+           :error-message error-message}))
 
 (defn participant-details-page
   [participant]

@@ -1,11 +1,11 @@
 (ns rpi-challenger.routes
   (:use ring.util.response
-        compojure.core
-        [ring.middleware.params :only [wrap-params]])
+        compojure.core)
   (:require [rpi-challenger.app :as app]
             [rpi-challenger.views :as views]
             [rpi-challenger.http :as http]
             [compojure.route :as route]
+            [compojure.handler :as handler]
             [net.cgrand.enlive-html :as html]
             [clojure.string :as string]
             [clj-json.core :as json]))
@@ -26,7 +26,7 @@
   (not (http/error? (http/post-request url ""))))
 
 (defn handle-register-form
-  [app {name "name" url "url"}]
+  [app {:keys [name url]}]
   (cond
     (string/blank? name) (redirect "/?message=Registration failed: name missing")
     (string/blank? url) (redirect "/?message=Registration failed: URL missing")
@@ -51,7 +51,7 @@
   [app]
   (->
     (routes
-      (GET "/" [] (using-template views/tournament-overview-page (app/get-participants app)))
+      (GET "/" [message] (using-template views/tournament-overview-page (app/get-participants app) message))
       (GET "/participant-:id/score-history" [id] (json-response (app/get-participant-score-history app (Integer/parseInt id))))
       (GET "/participant-:id" [id] (using-template views/participant-details-page (app/get-participant-by-id app (Integer/parseInt id))))
       (POST "/register" {params :params} (handle-register-form app params))
@@ -60,4 +60,4 @@
       (GET "/overall" [] (using-template views/overall-scores-page))
       (route/resources "/")
       (route/not-found "404 Page Not Found"))
-    (wrap-params)))
+    (handler/site)))
