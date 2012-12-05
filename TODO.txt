@@ -1,4 +1,5 @@
 OK - scrolling a full participants details page is hard, create section links
+OK - check that there is a http server at the url on registration
 - one of the participants (HKI 4.12.2012) used an obscure Python web server which killed the participant poller (bug with the http client?)
 	- reproduce the issue and fix the immediate problem
 	- make polling more failure resistant, perhaps restart the pollers periodically and recreate the http client

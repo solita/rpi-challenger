@@ -1,7 +1,8 @@
 (ns rpi-challenger.routes-test
   (:use clojure.test
         rpi-challenger.routes)
-  (:require [rpi-challenger.app :as app]))
+  (:require [rpi-challenger.app :as app]
+            [rpi-challenger.http :as http]))
 
 (defn- GET [uri webapp]
   (webapp {:request-method :get
@@ -19,7 +20,10 @@
 
 
 (deftest routes-test
-  (binding [app/register-participant (fn [& _])]
+  (binding [app/register-participant (fn [& _])
+            http/post-request (fn [url body] (if (= url "http://no-such-host")
+                                               {:error "Host not found"}
+                                               {:error nil}))]
     (let [webapp (make-routes (app/make-app))]
 
       (testing "Shows index page"
@@ -40,16 +44,21 @@
       (testing "Registration form"
 
         (testing "Fails if name missing"
-          (let [response (POST "/register" {"name" "" "url" "the-url"} webapp)]
+          (let [response (POST "/register" {"name" "", "url" "The URL"} webapp)]
             (is (= 302 (:status response)))
-            (is (= "/?message=Registration failed" (redirect-location response)))))
+            (is (re-find #"Registration failed: name missing" (redirect-location response)))))
 
         (testing "Fails if URL missing"
-          (let [response (POST "/register" {"name" "the-name" "url" ""} webapp)]
+          (let [response (POST "/register" {"name" "The Name", "url" ""} webapp)]
             (is (= 302 (:status response)))
-            (is (= "/?message=Registration failed" (redirect-location response)))))
+            (is (re-find #"Registration failed: URL missing" (redirect-location response)))))
+
+        (testing "Fails if there is no HTTP server at the URL"
+          (let [response (POST "/register" {"name" "The Name", "url" "http://no-such-host"} webapp)]
+            (is (= 302 (:status response)))
+            (is (re-find #"Registration failed: no HTTP server at http://no-such-host" (redirect-location response)))))
 
         (testing "Succeeds if all parameters are non-empty"
-          (let [response (POST "/register" {"name" "the-name" "url" "the-url"} webapp)]
+          (let [response (POST "/register" {"name" "The Name", "url" "http://host-which-exists"} webapp)]
             (is (= 302 (:status response)))
             (is (= "/" (redirect-location response)))))))))

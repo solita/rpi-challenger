@@ -4,6 +4,7 @@
         [ring.middleware.params :only [wrap-params]])
   (:require [rpi-challenger.app :as app]
             [rpi-challenger.views :as views]
+            [rpi-challenger.http :as http]
             [compojure.route :as route]
             [net.cgrand.enlive-html :as html]
             [clojure.string :as string]
@@ -20,15 +21,19 @@
     (content-type "text/html")
     (charset "UTF-8")))
 
+(defn- http-server?
+  [url]
+  (not (http/error? (http/post-request url ""))))
+
 (defn handle-register-form
   [app {name "name" url "url"}]
-  (if (and
-        (not (string/blank? name))
-        (not (string/blank? url)))
-    (do
-      (app/register-participant app name url)
-      (redirect "/"))
-    (redirect "/?message=Registration failed")))
+  (cond
+    (string/blank? name) (redirect "/?message=Registration failed: name missing")
+    (string/blank? url) (redirect "/?message=Registration failed: URL missing")
+    (not (http-server? url)) (redirect (str "/?message=Registration failed: no HTTP server at " url))
+    :else (do
+            (app/register-participant app name url)
+            (redirect "/"))))
 
 (defn handle-hello-world
   [question]
