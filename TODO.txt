@@ -1,8 +1,9 @@
-OK - scrolling a full participants details page is hard, create section links
-OK - check that there is a http server at the url on registration
 - one of the participants (HKI 4.12.2012) used an obscure Python web server which killed the participant poller (bug with the http client?)
 	- reproduce the issue and fix the immediate problem
 	- make polling more failure resistant, perhaps restart the pollers periodically and recreate the http client
+	- consider using a different HTTP client
+- on Windows it caused problems when some software (antivirus?) was locking the state file, so that the score was not updated properly
+	- move the saving into its own background thread, so that it can run in parallel with scoring
 - split challenges module to challenge-fn and challenge
 - allow challenges to return non-string answers, stringify automatically
 - use a DB for persistence
