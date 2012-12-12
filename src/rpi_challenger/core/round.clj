@@ -77,10 +77,11 @@
 
 (defn- points-based-on-acceleration [round previous-round]
   (let [max-points (:points round)
-        previous-points (or (:points previous-round) 0)]
+        previous-points (:points previous-round 0)]
     (-> round
       (assoc :max-points max-points)
       (assoc :points (min max-points (+ acceleration previous-points))))))
 
+; TODO: this might be rewriteable with http://clojuredocs.org/clojure_core/clojure.core/reductions
 (defn apply-point-acceleration [rounds]
   (reduce (fn [previous-rounds round] (conj previous-rounds (points-based-on-acceleration round (last previous-rounds)))) [] rounds))
