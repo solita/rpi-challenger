@@ -2,6 +2,10 @@
 	- reproduce the issue and fix the immediate problem
 	- make polling more failure resistant, perhaps restart the pollers periodically and recreate the http client
 	- consider using a different HTTP client
+- improve the performance of saving application state
+	- benchmark using an old save state
+	- without pretty-printing: pr, pr-str, read-string
+	- some other library, for example https://github.com/ptaoussanis/nippy
 - on Windows it caused problems when some software (antivirus?) was locking the state file, so that the score was not updated properly
 	- move the saving into its own background thread, so that it can run in parallel with scoring
 - split challenges module to challenge-fn and challenge
