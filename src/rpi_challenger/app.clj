@@ -112,7 +112,8 @@
   (.info logger "Starting a new round")
   (dosync (alter-tournament app t/finish-current-round))
   (c/load-challenge-functions challenge-functions-dir)
-  (dosync (alter-tournament app t/update-challenge-functions))
+  (let [fns (c/find-challenge-functions)]
+    (dosync (alter-tournament app t/set-challenge-functions fns)))
 
   (.info logger "Using challenges:\n{}"
     (string/join "\n"

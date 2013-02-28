@@ -2,6 +2,7 @@
   (:use clojure.test)
   (:require [rpi-challenger.core.tournament :as t]
             [rpi-challenger.core.participant :as p]
+            [rpi-challenger.core.challenges :as c]
             [rpi-challenger.core.strike :as s]
             [rpi-challenger.core.round :as round]))
 
@@ -59,7 +60,7 @@
 (deftest challenges-test
   (require 'rpi-challenger.core.dummy) ; making sure that we have at least two challenges loaded)
   (let [tournament (t/make-tournament)
-        tournament (t/update-challenge-functions tournament)
+        tournament (t/set-challenge-functions tournament (c/find-challenge-functions))
         challenges (t/generate-challenges tournament)]
     (is (< 1 (count challenges)))
 

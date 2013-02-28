@@ -40,9 +40,9 @@
   [tournament participant strike]
   (update-in tournament [:participants (:id participant)] p/record-strike strike))
 
-(defn update-challenge-functions
-  [tournament]
-  (assoc-in tournament [:challenge-functions ] (sort-by c/price < (c/find-challenge-functions))))
+(defn set-challenge-functions
+  [tournament challenge-functions]
+  (assoc-in tournament [:challenge-functions ] (sort-by c/price < challenge-functions)))
 
 (defn generate-challenges
   [tournament]
