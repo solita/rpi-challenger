@@ -9,7 +9,7 @@
 
 (deftest app-test
   (binding [app/logger org.slf4j.helpers.NOPLogger/NOP_LOGGER
-            threads/execute (fn [& _])
+            threads/submit (fn [& _])
             threads/schedule-repeatedly (fn [& _])]
 
     (testing "Participants may register to the tournament"
@@ -42,7 +42,7 @@
     (testing "Starts polling participants when they register"
       (let [app (app/make-app)
             executed-function (ref nil)]
-        (binding [threads/execute
+        (binding [threads/submit
                   (fn [executor f]
                     (dosync
                       (ref-set executed-function f)))]
@@ -77,8 +77,8 @@
                 (is (= (app/get-participants original)
                       (app/get-participants restarted))))
 
-              (testing "Starts polling participants on restart"
-                (is (calls? app/start-polling (app/start restarted))))))
+              (testing "Starts polling participants on starting a new round"
+                (is (calls? app/start-polling (app/start-new-round restarted))))))
 
           (finally
             (.delete file)))))))

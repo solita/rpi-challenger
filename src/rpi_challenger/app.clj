@@ -25,8 +25,8 @@
 (defn make-app []
   (ref {:tournament (t/make-tournament)
         :scheduler (Executors/newScheduledThreadPool 2 (threads/daemon-thread-factory "tournament-scheduler"))
-        :pollers (Executors/newCachedThreadPool (threads/daemon-thread-factory "participant-poller"))
-        :participant-pollers []}))
+        :poller-pool (Executors/newCachedThreadPool (threads/daemon-thread-factory "participant-poller"))
+        :poller-handles []}))
 
 (defn- alter-tournament [app f & args]
   (apply alter (concat [app update-in [:tournament ] f] args)))
@@ -79,14 +79,19 @@
         (poll-participant app participant (rest challenges))))))
 
 (defn ^:dynamic poll-participant-loop [app participant]
-  (while true
+  (.info logger "Started polling \"{}\" at {}" (:name participant) (:url participant))
+  (while (not (Thread/interrupted))
     (try
       (poll-participant app participant (t/generate-challenges (:tournament @app)))
+      (catch InterruptedException e
+        (.interrupt (Thread/currentThread)))
       (catch Throwable e
-        (.error logger (str "Unhandled error in polling participant " (:url participant)) e)))))
+        (.error logger (str "Unhandled error in polling participant " (:url participant)) e))))
+  (.info logger "Stopped polling \"{}\" at {}" (:name participant) (:url participant)))
 
 (defn ^:dynamic start-polling [app participant]
-  (threads/execute (:pollers @app) #(poll-participant-loop app participant)))
+  (let [handle (threads/submit (:poller-pool @app) #(poll-participant-loop app participant))]
+    (dosync (alter app update-in [:poller-handles ] conj handle))))
 
 (defn get-participants [app]
   (t/participants (:tournament @app)))
@@ -110,9 +115,14 @@
 ; lifecycle events
 
 (defn ^:dynamic start-new-round [app]
-  (.info logger "Starting a new round")
-  (dosync (alter-tournament app t/finish-current-round))
+  (.info logger "Finishing the current round...")
+  (doseq [handle (:poller-handles @app)]
+    (.cancel handle true))
+  (dosync
+    (alter app assoc :poller-handles [])
+    (alter-tournament app t/finish-current-round))
 
+  (.info logger "Updating challenge functions...")
   (c/load-challenge-functions challenge-functions-dir)
   (let [fns (c/find-challenge-functions)]
     (dosync (alter-tournament app t/set-challenge-functions fns)))
@@ -120,11 +130,13 @@
   (.info logger "Using challenges:\n{}"
     (string/join "\n"
       (map (fn [challenge-fn] (str "\t" (c/price challenge-fn) "\t" challenge-fn))
-        (:challenge-functions (:tournament @app))))))
+        (:challenge-functions (:tournament @app)))))
+
+  (.info logger "Starting a new round...")
+  (doseq [participant (get-participants app)]
+    (start-polling app participant)))
 
 (defn start [app]
   (threads/schedule-repeatedly (:scheduler @app) #(start-new-round app) round-duration-in-seconds)
   (threads/schedule-repeatedly (:scheduler @app) #(save-state app app-state-file) save-interval-in-seconds)
-  (doseq [participant (get-participants app)]
-    (start-polling app participant))
   app)

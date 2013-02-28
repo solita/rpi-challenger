@@ -1,9 +1,9 @@
 OK - reloading the challenges may get stuck in a livelock, due to too slow atomic block
 OK - save state in its own thread
-- stop pollers at the end of a round, start them in the beginning of the next one
+OK - stop pollers at the end of a round, start them in the beginning of the next one
 - one of the participants (HKI 4.12.2012) used an obscure Python web server which killed the participant poller (bug with the http client?)
 	- reproduce the issue and fix the immediate problem
-	- make polling more failure resistant, perhaps restart the pollers periodically and recreate the http client
+	OK - make polling more failure resistant, perhaps restart the pollers periodically and recreate the http client
 	- consider using a different HTTP client
 - improve the performance of saving application state
 	- benchmark using an old save state
