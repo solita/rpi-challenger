@@ -19,20 +19,25 @@
         (is (= 1 (count (app/get-participants app))))
         (is (= "The Name" (:name (app/get-participant-by-id app 1))))))
 
-    (testing "Starts a new round at regular intervals"
+    (testing "At regular intervals"
       (let [app (app/make-app)
-            scheduled-function (ref nil)
-            scheduled-delay (ref nil)]
+            scheduled-functions (ref [])
+            scheduled-delays (ref [])]
         (binding [threads/schedule-repeatedly
                   (fn [scheduler f delay]
                     (dosync
-                      (ref-set scheduled-function f)
-                      (ref-set scheduled-delay delay)))]
+                      (alter scheduled-functions conj f)
+                      (alter scheduled-delays conj delay)))]
 
           (app/start app)
 
-          (is (calls? app/start-new-round (@scheduled-function)))
-          (is (= app/round-duration-in-seconds @scheduled-delay)))))
+          (testing "starts a new round"
+            (is (calls? app/start-new-round ((first @scheduled-functions))))
+            (is (= app/round-duration-in-seconds (first @scheduled-delays))))
+
+          (testing "saves application state"
+            (is (calls? app/save-state ((second @scheduled-functions))))
+            (is (= app/save-interval-in-seconds (second @scheduled-delays)))))))
 
     (testing "Starts polling participants when they register"
       (let [app (app/make-app)

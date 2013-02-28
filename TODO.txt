@@ -1,5 +1,5 @@
 OK - reloading the challenges may get stuck in a livelock, due to too slow atomic block
-- save state in its own thread
+OK - save state in its own thread
 - stop pollers at the end of a round, start them in the beginning of the next one
 - one of the participants (HKI 4.12.2012) used an obscure Python web server which killed the participant poller (bug with the http client?)
 	- reproduce the issue and fix the immediate problem
@@ -10,7 +10,7 @@ OK - reloading the challenges may get stuck in a livelock, due to too slow atomi
 	- without pretty-printing: pr, pr-str, read-string
 	- some other library, for example https://github.com/ptaoussanis/nippy
 - on Windows it caused problems when some software (antivirus?) was locking the state file, so that the score was not updated properly
-	- move the saving into its own background thread, so that it can run in parallel with scoring
+	OK - move the saving into its own background thread, so that it can run in parallel with scoring
 - split challenges module to challenge-fn and challenge
 - allow challenges to return non-string answers, stringify automatically
 - use a DB for persistence

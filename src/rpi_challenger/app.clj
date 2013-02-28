@@ -15,6 +15,8 @@
 
 (def round-duration-in-seconds 60)
 
+(def save-interval-in-seconds (* 5 60))
+
 (def challenge-functions-dir (File. "../rpi-challenges/src/")) ; TODO: parameterize the dir on command line or create an admin screen
 
 (def app-state-file (File. "rpi-challenger-state.clj"))
@@ -22,8 +24,8 @@
 
 (defn make-app []
   (ref {:tournament (t/make-tournament)
-        :scheduler (Executors/newScheduledThreadPool 1 (threads/daemon-thread-factory "round-scheduler"))
-        :thread-pool (Executors/newCachedThreadPool (threads/daemon-thread-factory "participant-poller"))
+        :scheduler (Executors/newScheduledThreadPool 2 (threads/daemon-thread-factory "tournament-scheduler"))
+        :pollers (Executors/newCachedThreadPool (threads/daemon-thread-factory "participant-poller"))
         :participant-pollers []}))
 
 (defn- alter-tournament [app f & args]
@@ -35,13 +37,15 @@
 (defn- with-file-ext [file ext]
   (File. (.getParentFile file) (str (.getName file) "." ext)))
 
-(defn save-state [app file]
+(defn ^:dynamic save-state [app file]
+  (.info logger "Saving...")
   (let [tmp-file (with-file-ext file "tmp")
         bak-file (with-file-ext file "bak")]
     (io/object-to-file tmp-file (t/serialize (:tournament @app)))
     (.delete bak-file)
     (.renameTo file bak-file)
-    (.renameTo tmp-file file)))
+    (.renameTo tmp-file file))
+  (.info logger "Saved to {}" file))
 
 (defn load-state [file]
   (let [app (make-app)
@@ -82,7 +86,7 @@
         (.error logger (str "Unhandled error in polling participant " (:url participant)) e)))))
 
 (defn ^:dynamic start-polling [app participant]
-  (threads/execute (:thread-pool @app) #(poll-participant-loop app participant)))
+  (threads/execute (:pollers @app) #(poll-participant-loop app participant)))
 
 (defn get-participants [app]
   (t/participants (:tournament @app)))
@@ -106,11 +110,9 @@
 ; lifecycle events
 
 (defn ^:dynamic start-new-round [app]
-  (.info logger "Saving application state")
-  (save-state app app-state-file)
-
   (.info logger "Starting a new round")
   (dosync (alter-tournament app t/finish-current-round))
+
   (c/load-challenge-functions challenge-functions-dir)
   (let [fns (c/find-challenge-functions)]
     (dosync (alter-tournament app t/set-challenge-functions fns)))
@@ -122,6 +124,7 @@
 
 (defn start [app]
   (threads/schedule-repeatedly (:scheduler @app) #(start-new-round app) round-duration-in-seconds)
+  (threads/schedule-repeatedly (:scheduler @app) #(save-state app app-state-file) save-interval-in-seconds)
   (doseq [participant (get-participants app)]
     (start-polling app participant))
   app)
