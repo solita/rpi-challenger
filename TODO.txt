@@ -1,4 +1,4 @@
-- Future.cancel() does not always stop the poller thread; create our own flag for stopping them
+OK - Future.cancel() does not always stop the poller thread; create our own flag for stopping them
 - one of the participants (HKI 4.12.2012) used an obscure Python web server which killed the participant poller (bug with the http client?)
 	- reproduce the issue and fix the immediate problem
 	OK - make polling more failure resistant, perhaps restart the pollers periodically and recreate the http client

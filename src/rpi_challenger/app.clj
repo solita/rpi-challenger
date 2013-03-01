@@ -26,7 +26,8 @@
   (ref {:tournament (t/make-tournament)
         :scheduler (Executors/newScheduledThreadPool 2 (threads/daemon-thread-factory "tournament-scheduler"))
         :poller-pool (Executors/newCachedThreadPool (threads/daemon-thread-factory "participant-poller"))
-        :poller-handles []}))
+        :poller-handles []
+        :current-round-id (System/currentTimeMillis)}))
 
 (defn- alter-tournament [app f & args]
   (apply alter (concat [app update-in [:tournament ] f] args)))
@@ -79,15 +80,20 @@
         (poll-participant app participant (rest challenges))))))
 
 (defn ^:dynamic poll-participant-loop [app participant]
-  (.info logger "Started polling \"{}\" at {}" (:name participant) (:url participant))
-  (while (not (Thread/interrupted))
-    (try
-      (poll-participant app participant (t/generate-challenges (:tournament @app)))
-      (catch InterruptedException e
-        (.interrupt (Thread/currentThread)))
-      (catch Throwable e
-        (.error logger (str "Unhandled error in polling participant " (:url participant)) e))))
-  (.info logger "Stopped polling \"{}\" at {}" (:name participant) (:url participant)))
+  (let [initial-round-id (:current-round-id @app)
+        name (:name participant)
+        url (:url participant)]
+    (.info logger "Started polling \"{}\" at {}" name url)
+    (while (and
+             (not (Thread/interrupted))
+             (= initial-round-id (:current-round-id @app))) ; XXX: because sometimes Future.cancel(true) does not interrupt this thread
+      (try
+        (poll-participant app participant (t/generate-challenges (:tournament @app)))
+        (catch InterruptedException e
+          (.interrupt (Thread/currentThread)))
+        (catch Throwable e
+          (.error logger (str "Unhandled error in polling participant " url) e))))
+    (.info logger "Stopped polling \"{}\" at {}" name url)))
 
 (defn ^:dynamic start-polling [app participant]
   (let [handle (threads/submit (:poller-pool @app) #(poll-participant-loop app participant))]
@@ -120,6 +126,7 @@
     (.cancel handle true))
   (dosync
     (alter app assoc :poller-handles [])
+    (alter app assoc :current-round-id (System/currentTimeMillis))
     (alter-tournament app t/finish-current-round))
 
   (.info logger "Updating challenge functions...")
