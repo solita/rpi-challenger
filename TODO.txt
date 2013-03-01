@@ -1,6 +1,4 @@
-OK - reloading the challenges may get stuck in a livelock, due to too slow atomic block
-OK - save state in its own thread
-OK - stop pollers at the end of a round, start them in the beginning of the next one
+- Future.cancel() does not always stop the poller thread; create our own flag for stopping them
 - one of the participants (HKI 4.12.2012) used an obscure Python web server which killed the participant poller (bug with the http client?)
 	- reproduce the issue and fix the immediate problem
 	OK - make polling more failure resistant, perhaps restart the pollers periodically and recreate the http client
@@ -9,8 +7,6 @@ OK - stop pollers at the end of a round, start them in the beginning of the next
 	- benchmark using an old save state
 	- without pretty-printing: pr, pr-str, read-string
 	- some other library, for example https://github.com/ptaoussanis/nippy
-- on Windows it caused problems when some software (antivirus?) was locking the state file, so that the score was not updated properly
-	OK - move the saving into its own background thread, so that it can run in parallel with scoring
 - split challenges module to challenge-fn and challenge
 - allow challenges to return non-string answers, stringify automatically
 - use a DB for persistence
