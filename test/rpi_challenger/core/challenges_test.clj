@@ -27,10 +27,16 @@
             :answer   "forty-two"}
            (c/generate (var dummy/challenge-42)))))
 
-  (testing "Each question element is put into its own line"
-    (let [challenge {:question ["+" "1" "2"]}]
-      (is (= "+\n1\n2" (c/format-question challenge)))))
+  (let [challenge {:question ["+" "1" "2"]}]
+    (testing "First line of the question is the URI path"
+      (is (= "http://foo/+" (c/request-uri "http://foo" challenge))))
+
+    (testing "Trailing slash in base URI is removed automatically"
+      (is (= "http://foo/+" (c/request-uri "http://foo/" challenge))))
+
+    (testing "Each question element is put into its own line"
+      (is (= "1\n2" (c/request-body challenge)))))
 
   (testing "Integer question elements are acceptable"
     (let [challenge {:question ["+" 1 2]}]
-      (is (= "+\n1\n2" (c/format-question challenge))))))
+      (is (= "1\n2" (c/request-body challenge))))))

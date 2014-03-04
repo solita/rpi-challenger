@@ -59,7 +59,10 @@
                     app/record-strike (fn [app participant strike] (append recorded-responses (:response strike)))
                     strike/hit? (fn [strike] (:response strike))]
 
-            (app/poll-participant app participant [{:question ["pass1"]} {:question ["pass2"]} {:question ["fail"]} {:question ["pass3"]}])
+            (app/poll-participant app participant [{:question ["dummy" "pass1"]}
+                                                   {:question ["dummy" "pass2"]}
+                                                   {:question ["dummy" "fail"]}
+                                                   {:question ["dummy" "pass3"]}])
 
             (is (= [true true false] @recorded-responses))))))
 

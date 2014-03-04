@@ -64,7 +64,8 @@
 (defn poll-participant [app participant challenges]
   (if (not (empty? challenges))
     (let [challenge (first challenges)
-          response (http/post-request (:url participant) (c/format-question challenge))
+          response (http/post-request (c/request-uri (:url participant) challenge)
+                                      (c/request-body challenge))
           strike (strike/make-strike response challenge)]
       (record-strike app participant strike)
 

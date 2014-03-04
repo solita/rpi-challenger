@@ -6,9 +6,13 @@
 
 ; challenge operations
 
-(defn format-question
+(defn request-uri
+  [base-uri challenge]
+  (str (string/replace base-uri #"/$" "") "/" (first (:question challenge))))
+
+(defn request-body
   [challenge]
-  (string/join "\n" (:question challenge)))
+  (string/join "\n" (rest (:question challenge))))
 
 
 ; challenge function operations

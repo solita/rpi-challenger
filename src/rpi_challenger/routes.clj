@@ -35,9 +35,9 @@
             (app/register-participant app name url)
             (redirect "/"))))
 
-(defn handle-hello-world
-  [question]
-  (let [[op & args] (string/split-lines question)]
+(defn handle-dummy
+  [op question]
+  (let [args (string/split-lines question)]
     (cond
       (= op "ping") "pong"
       (= op "say-hello") (str "Hello " (first args))
@@ -55,7 +55,8 @@
       (GET "/participant-:id/score-history" [id] (json-response (app/get-participant-score-history app (Integer/parseInt id))))
       (GET "/participant-:id" [id] (using-template views/participant-details-page (app/get-participant-by-id app (Integer/parseInt id))))
       (POST "/register" {params :params} (handle-register-form app params))
-      (POST "/hello-world" {body :body} (handle-hello-world (slurp body)))
+      (POST "/dummy/:op" {{op :op} :params
+                          body     :body} (handle-dummy op (slurp body)))
       (GET "/overall-scores" [] (json-response (handle-overall-scores app)))
       (GET "/overall" [] (using-template views/overall-scores-page))
       (route/resources "/")
