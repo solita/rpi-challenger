@@ -1,5 +1,3 @@
-OK - Future.cancel() does not always stop the poller thread; create our own flag for stopping them
-OK - instead of sending the challenge id in post body, use it as the request path
 - one of the participants (HKI 4.12.2012) used an obscure Python web server which killed the participant poller (bug with the http client?)
 	- reproduce the issue and fix the immediate problem
 	OK - make polling more failure resistant, perhaps restart the pollers periodically and recreate the http client
@@ -9,7 +7,6 @@ OK - instead of sending the challenge id in post body, use it as the request pat
 	- without pretty-printing: pr, pr-str, read-string
 	- some other library, for example https://github.com/ptaoussanis/nippy
 - split challenges module to challenge-fn and challenge
-- allow challenges to return non-string answers, stringify automatically
 - use a DB for persistence
 	- evaluate OrientDB
 - new game ideas?
