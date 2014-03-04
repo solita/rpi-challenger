@@ -1,3 +1,31 @@
+- our loading clj scripts with clojure.core/load-file fails when those scripts refer to each other's namespaces
+	-> add the challenge scripts to classpath, load them with clojure.core/load
+
+java.io.FileNotFoundException: Could not locate tasting_challenges/palindrome__init.class or tasting_challenges/palindrome.clj on classpath:
+ at clojure.lang.RT.load (RT.java:432)
+    clojure.lang.RT.load (RT.java:400)
+    clojure.core$load$fn__4890.invoke (core.clj:5415)
+    clojure.core$load.doInvoke (core.clj:5414)
+    clojure.lang.RestFn.invoke (RestFn.java:408)
+    clojure.core$load_one.invoke (core.clj:5227)
+    clojure.core$load_lib.doInvoke (core.clj:5264)
+    clojure.lang.RestFn.applyTo (RestFn.java:142)
+    clojure.core$apply.invoke (core.clj:603)
+    clojure.core$load_libs.doInvoke (core.clj:5298)
+    clojure.lang.RestFn.applyTo (RestFn.java:137)
+    clojure.core$apply.invoke (core.clj:603)
+    clojure.core$require.doInvoke (core.clj:5381)
+    clojure.lang.RestFn.invoke (RestFn.java:408)
+    tasting_challenges.anagram$eval4028$loading__4784__auto____4029.invoke (anagram.clj:1)
+    tasting_challenges.anagram$eval4028.invoke (anagram.clj:1)
+    clojure.lang.Compiler.eval (Compiler.java:6511)
+    clojure.lang.Compiler.eval (Compiler.java:6501)
+    clojure.lang.Compiler.load (Compiler.java:6952)
+    clojure.lang.Compiler.loadFile (Compiler.java:6912)
+    clojure.lang.RT$3.invoke (RT.java:307)
+    rpi_challenger.core.challenges$load_challenge_functions.invoke (challenges.clj:39)
+
+
 - one of the participants (HKI 4.12.2012) used an obscure Python web server which killed the participant poller (bug with the http client?)
 	- reproduce the issue and fix the immediate problem
 	OK - make polling more failure resistant, perhaps restart the pollers periodically and recreate the http client
