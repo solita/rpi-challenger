@@ -24,6 +24,6 @@ Then open <http://localhost:8080/> in a web browser. For more options use the `-
 
 ## License
 
-Copyright © 2012 Solita Oy
+Copyright © 2012-2014 Solita Oy
 
 Distributed under the MIT License.
