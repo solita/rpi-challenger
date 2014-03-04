@@ -1,4 +1,4 @@
-# Raspberry Pi Challenger Appears!
+# A Challenger Appears!
 
 A programming game.
 
