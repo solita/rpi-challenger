@@ -6,14 +6,14 @@
 
 (defn- GET [uri webapp]
   (webapp {:request-method :get
-           :uri uri
-           :headers {}}))
+           :uri            uri
+           :headers        {}}))
 
 (defn- POST [uri params webapp]
   (webapp {:request-method :post
-           :uri uri
-           :headers {}
-           :params params}))
+           :uri            uri
+           :headers        {}
+           :params         params}))
 
 (defn- redirect-location [response]
   (get-in response [:headers "Location"]))

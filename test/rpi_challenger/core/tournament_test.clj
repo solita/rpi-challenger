@@ -55,7 +55,7 @@
         (testing "Participants can be persisted"
           (let [deserialized (t/deserialize (t/serialize tournament))]
             (is (= (t/participants tournament)
-                  (t/participants deserialized)))))))))
+                   (t/participants deserialized)))))))))
 
 (deftest challenges-test
   (require 'rpi-challenger.core.dummy) ; making sure that we have at least two challenges loaded)

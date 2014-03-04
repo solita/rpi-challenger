@@ -5,7 +5,7 @@
 
 (defn make-tournament
   []
-  {:participants {}
+  {:participants        {}
    :challenge-functions []})
 
 (defn serialize
@@ -42,7 +42,7 @@
 
 (defn set-challenge-functions
   [tournament challenge-functions]
-  (assoc-in tournament [:challenge-functions ] (sort-by c/price < challenge-functions)))
+  (assoc-in tournament [:challenge-functions] (sort-by c/price < challenge-functions)))
 
 (defn generate-challenges
   [tournament]
@@ -50,4 +50,4 @@
 
 (defn finish-current-round
   [tournament]
-  (update-in tournament [:participants ] #(fmap p/finish-current-round %)))
+  (update-in tournament [:participants] #(fmap p/finish-current-round %)))

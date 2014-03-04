@@ -13,13 +13,13 @@
 (defn json-response
   [data]
   (-> (response (json/generate-string data))
-    (content-type "application/json")))
+      (content-type "application/json")))
 
 (defn using-template
   [template & args]
   (-> (response (apply str (apply template args)))
-    (content-type "text/html")
-    (charset "UTF-8")))
+      (content-type "text/html")
+      (charset "UTF-8")))
 
 (defn- http-server?
   [url]
@@ -45,7 +45,7 @@
 
 (defn handle-overall-scores
   [app]
-  (map (fn [x] (select-keys x [:name :score ])) (app/get-participants app)))
+  (map (fn [x] (select-keys x [:name :score])) (app/get-participants app)))
 
 (defn make-routes
   [app]

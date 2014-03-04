@@ -8,13 +8,13 @@
 
 (defn make-participant
   [id name url]
-  {:id id
-   :name name
-   :url url
-   :score 0
-   :current-round (round/start)
+  {:id              id
+   :name            name
+   :url             url
+   :score           0
+   :current-round   (round/start)
    :finished-rounds []
-   :recent-strikes []
+   :recent-strikes  []
    :recent-failures []})
 
 (defn finished-rounds [participant] (round/apply-point-acceleration (:finished-rounds participant)))
@@ -27,9 +27,9 @@
 (defn record-strike
   [participant strike]
   (-> participant
-    (update-in [:current-round ] #(round/record-strike % strike))
-    (update-in [:recent-strikes ] #(take-last *recent-strikes-limit* (concat % [strike])))
-    (update-in [:recent-failures ] #(take-last *recent-failures-limit* (concat % (filter strike/miss? [strike]))))))
+      (update-in [:current-round] #(round/record-strike % strike))
+      (update-in [:recent-strikes] #(take-last *recent-strikes-limit* (concat % [strike])))
+      (update-in [:recent-failures] #(take-last *recent-failures-limit* (concat % (filter strike/miss? [strike]))))))
 
 (defn- recalculate-total-score
   [participant]
@@ -39,6 +39,6 @@
   [participant]
   (let [finished-round (round/finish (:current-round participant))]
     (-> participant
-      (update-in [:current-round ] (fn [_] (round/start)))
-      (update-in [:finished-rounds ] #(conj % finished-round))
-      (recalculate-total-score))))
+        (update-in [:current-round] (fn [_] (round/start)))
+        (update-in [:finished-rounds] #(conj % finished-round))
+        (recalculate-total-score))))

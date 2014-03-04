@@ -15,7 +15,7 @@
 
 (defn challenge?
   [f]
-  (contains? (meta f) :challenge ))
+  (contains? (meta f) :challenge))
 
 (defn price
   [challenge-f]
@@ -49,4 +49,4 @@
 (defn ^{:challenge 0} ping
   []
   {:question ["ping"]
-   :answer "pong"})
+   :answer   "pong"})

@@ -5,7 +5,7 @@
 (defn make-strike
   [response challenge]
   {:timestamp (System/currentTimeMillis),
-   :response response,
+   :response  response,
    :challenge challenge})
 
 (defn correct-response?

@@ -6,7 +6,7 @@
         ring.middleware.stacktrace)
   (:require [rpi-challenger.app :as app]
             [rpi-challenger.routes :as routes])
-  (:gen-class ))
+  (:gen-class))
 
 (defn make-app []
   (app/start
@@ -29,8 +29,8 @@
 
 (defn -main [& args]
   (let [[options args banner] (cli args
-    ["--port" "Port for the HTTP server to listen to" :default 8080 :parse-fn #(Integer. %)]
-    ["--help" "Show this help" :flag true])]
+                                   ["--port" "Port for the HTTP server to listen to" :default 8080 :parse-fn #(Integer. %)]
+                                   ["--help" "Show this help" :flag true])]
     (when (:help options)
       (println banner)
       (System/exit 0))

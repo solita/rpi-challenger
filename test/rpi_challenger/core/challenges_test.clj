@@ -22,10 +22,10 @@
     (is (some #(= (var dummy/challenge-42) %) challenges)))
 
   (testing "Challenge instance contains :price, :question and :answer"
-    (is (= {:price 42
+    (is (= {:price    42
             :question ["Answer to life, universe and everything?"]
-            :answer "forty-two"}
-          (c/generate (var dummy/challenge-42)))))
+            :answer   "forty-two"}
+           (c/generate (var dummy/challenge-42)))))
 
   (testing "Each question element is put into its own line"
     (let [challenge {:question ["+" "1" "2"]}]

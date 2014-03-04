@@ -10,9 +10,9 @@
 
 (defn- simple-http-response
   [response]
-  {:body (http/string response)
+  {:body   (http/string response)
    :status (http/status response)
-   :error (nil-or-str (http/error response))})
+   :error  (nil-or-str (http/error response))})
 
 (defonce ^:private client (http/create-client))
 
@@ -20,14 +20,14 @@
   [url body]
   (try
     (-> (http/POST client url :body body :timeout 1000)
-      http/await
-      simple-http-response)
+        http/await
+        simple-http-response)
     (catch InterruptedException e
       (throw e))
     (catch Throwable t
-      {:body nil
+      {:body   nil
        :status nil
-       :error (.toString t)})))
+       :error  (.toString t)})))
 
 (defn error?
   [response]

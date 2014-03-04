@@ -75,7 +75,7 @@
 
               (testing "Participants are persisted"
                 (is (= (app/get-participants original)
-                      (app/get-participants restarted))))
+                       (app/get-participants restarted))))
 
               (testing "Starts polling participants on starting a new round"
                 (is (calls? app/start-polling (app/start-new-round restarted))))))

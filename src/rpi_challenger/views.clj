@@ -9,13 +9,13 @@
 ; layout
 
 (deftemplate layout "public/layout.html"
-  [{:keys [title main error-message]}]
-  [:title ] (content title)
-  [:h2 ] (content title)
-  [:#main ] (substitute main)
-  [:#error-message ] (if error-message
-                       (content error-message)
-                       (substitute)))
+             [{:keys [title main error-message]}]
+             [:title] (content title)
+             [:h2] (content title)
+             [:#main] (substitute main)
+             [:#error-message] (if error-message
+                                 (content error-message)
+                                 (substitute)))
 
 
 ; common elements
@@ -37,17 +37,17 @@
 (def *participant-velocity [[:td (nth-of-type 3)]])
 
 (defsnippet participants-row "public/tournament.html" *participants-row
-  [participant]
-  *participant-link (do->
-                      (content (:name participant))
-                      (set-attr :href (str "/participant-" (:id participant))))
-  *participant-score (content (str (:score participant)))
-  *participant-velocity (content (format-velocity participant))
-  [:.score-history ] (init-score-history participant))
+            [participant]
+            *participant-link (do->
+                                (content (:name participant))
+                                (set-attr :href (str "/participant-" (:id participant))))
+            *participant-score (content (str (:score participant)))
+            *participant-velocity (content (format-velocity participant))
+            [:.score-history] (init-score-history participant))
 
 (defsnippet tournament-overview "public/tournament.html" [:body :> any-node]
-  [participants]
-  *participants-row (content (map #(participants-row %) (sort-by :score > participants))))
+            [participants]
+            *participants-row (content (map #(participants-row %) (sort-by :score > participants))))
 
 
 ; strikes list
@@ -70,20 +70,20 @@
     (s/hit? strike) "hit"))
 
 (defsnippet strikes-row "public/strikes-list.html" [:table [:tr (nth-of-type 2)]]
-  [strike]
-  [:tr ] (set-attr :class (strikes-row-class strike))
-  [[:td (nth-of-type 1)]] (content (format-timestamp strike))
-  [[:td (nth-of-type 2)]] (content (str (s/price strike)))
-  [[:td (nth-of-type 3)]] (content (c/format-question (:challenge strike)))
-  [[:td (nth-of-type 4)]] (content (:answer (:challenge strike)))
-  [[:td (nth-of-type 5)]] (content (:body (:response strike)))
-  [[:td (nth-of-type 6)]] (content (format-status-or-error strike)))
+            [strike]
+            [:tr] (set-attr :class (strikes-row-class strike))
+            [[:td (nth-of-type 1)]] (content (format-timestamp strike))
+            [[:td (nth-of-type 2)]] (content (str (s/price strike)))
+            [[:td (nth-of-type 3)]] (content (c/format-question (:challenge strike)))
+            [[:td (nth-of-type 4)]] (content (:answer (:challenge strike)))
+            [[:td (nth-of-type 5)]] (content (:body (:response strike)))
+            [[:td (nth-of-type 6)]] (content (format-status-or-error strike)))
 
-(defsnippet strikes-list "public/strikes-list.html" [:table ]
-  [strikes]
-  [[:tr (nth-of-type 4)]] (substitute)
-  [[:tr (nth-of-type 3)]] (substitute)
-  [[:tr (nth-of-type 2)]] (substitute (map #(strikes-row %) strikes)))
+(defsnippet strikes-list "public/strikes-list.html" [:table]
+            [strikes]
+            [[:tr (nth-of-type 4)]] (substitute)
+            [[:tr (nth-of-type 3)]] (substitute)
+            [[:tr (nth-of-type 2)]] (substitute (map #(strikes-row %) strikes)))
 
 
 ; rounds
@@ -95,37 +95,37 @@
 ; detail page
 
 (defsnippet participant-details "public/participant.html" [:body :> any-node]
-  [participant]
-  [:#name ] (content (:name participant))
-  [:#url ] (content (:url participant))
-  [:#score ] (content (str (:score participant)))
-  [:#velocity ] (content (format-velocity participant))
-  [:.score-history ] (init-score-history participant)
-  [:#recent-failures ] (substitute (strikes-list (reverse (p/recent-failures participant))))
-  [:#recent-strikes ] (substitute (strikes-list (reverse (p/recent-strikes participant))))
-  [:#recent-finished-rounds ] (substitute (rounds-list (reverse (take-last 15 (p/finished-rounds participant))))))
+            [participant]
+            [:#name] (content (:name participant))
+            [:#url] (content (:url participant))
+            [:#score] (content (str (:score participant)))
+            [:#velocity] (content (format-velocity participant))
+            [:.score-history] (init-score-history participant)
+            [:#recent-failures] (substitute (strikes-list (reverse (p/recent-failures participant))))
+            [:#recent-strikes] (substitute (strikes-list (reverse (p/recent-strikes participant))))
+            [:#recent-finished-rounds] (substitute (rounds-list (reverse (take-last 15 (p/finished-rounds participant))))))
 
 
 ; overall scores page
 
 (defsnippet overall-scores "public/overall-scores.html" [:body :> any-node]
-  [])
+            [])
 
 
 ; pages
 
 (defn tournament-overview-page
   [participants error-message]
-  (layout {:title "Tournament Overview"
-           :main (tournament-overview participants)
+  (layout {:title         "Tournament Overview"
+           :main          (tournament-overview participants)
            :error-message error-message}))
 
 (defn participant-details-page
   [participant]
   (layout {:title "Participant Details"
-           :main (participant-details participant)}))
+           :main  (participant-details participant)}))
 
 (defn overall-scores-page
   []
   (layout {:title "Overall Scores"
-           :main (overall-scores)}))
+           :main  (overall-scores)}))

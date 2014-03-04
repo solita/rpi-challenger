@@ -2,7 +2,7 @@
   (:require [rpi-challenger.core.strike :as s]))
 
 (defn ^{:challenge 42} challenge-42 [] {:question ["Answer to life, universe and everything?"]
-                                        :answer "forty-two"})
+                                        :answer   "forty-two"})
 
 (def challenge {:question ["+" "1" "2"], :answer "3", :price 10})
 

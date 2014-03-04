@@ -52,23 +52,23 @@
 
 (defn start []
   ; We don't need to remember every strike, only one strike for each different price.
-  {:started (System/currentTimeMillis)
-   :hits-by-price {}
+  {:started           (System/currentTimeMillis)
+   :hits-by-price     {}
    :failures-by-price {}
-   :error nil})
+   :error             nil})
 
 (defn record-strike [round strike]
   (cond
-    (strike/error? strike) (assoc-in round [:error ] strike)
+    (strike/error? strike) (assoc-in round [:error] strike)
     (strike/miss? strike) (assoc-in round [:failures-by-price (strike/price strike)] strike)
     (strike/hit? strike) (assoc-in round [:hits-by-price (strike/price strike)] strike)))
 
 (defn ^:dynamic finish [round]
-  {:started (:started round)
-   :finished (System/currentTimeMillis)
-   :points (points round)
+  {:started         (:started round)
+   :finished        (System/currentTimeMillis)
+   :points          (points round)
    :significant-hit (significant-hit round)
-   :worst-failure (worst-failure round)})
+   :worst-failure   (worst-failure round)})
 
 
 ; acceleration-based scoring

@@ -23,14 +23,14 @@
 
 
 (defn make-app []
-  (ref {:tournament (t/make-tournament)
-        :scheduler (Executors/newScheduledThreadPool 2 (threads/daemon-thread-factory "tournament-scheduler"))
-        :poller-pool (Executors/newCachedThreadPool (threads/daemon-thread-factory "participant-poller"))
-        :poller-handles []
+  (ref {:tournament       (t/make-tournament)
+        :scheduler        (Executors/newScheduledThreadPool 2 (threads/daemon-thread-factory "tournament-scheduler"))
+        :poller-pool      (Executors/newCachedThreadPool (threads/daemon-thread-factory "participant-poller"))
+        :poller-handles   []
         :current-round-id (System/currentTimeMillis)}))
 
 (defn- alter-tournament [app f & args]
-  (apply alter (concat [app update-in [:tournament ] f] args)))
+  (apply alter (concat [app update-in [:tournament] f] args)))
 
 
 ; persistence
@@ -97,7 +97,7 @@
 
 (defn ^:dynamic start-polling [app participant]
   (let [handle (threads/submit (:poller-pool @app) #(poll-participant-loop app participant))]
-    (dosync (alter app update-in [:poller-handles ] conj handle))))
+    (dosync (alter app update-in [:poller-handles] conj handle))))
 
 (defn get-participants [app]
   (t/participants (:tournament @app)))
@@ -135,9 +135,9 @@
     (dosync (alter-tournament app t/set-challenge-functions fns)))
 
   (.info logger "Using challenges:\n{}"
-    (string/join "\n"
-      (map (fn [challenge-fn] (str "\t" (c/price challenge-fn) "\t" challenge-fn))
-        (:challenge-functions (:tournament @app)))))
+         (string/join "\n"
+                      (map (fn [challenge-fn] (str "\t" (c/price challenge-fn) "\t" challenge-fn))
+                           (:challenge-functions (:tournament @app)))))
 
   (.info logger "Starting a new round...")
   (doseq [participant (get-participants app)]

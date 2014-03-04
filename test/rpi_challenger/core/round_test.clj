@@ -9,7 +9,7 @@
 (defn- error [price] {:hit false, :error true, :price price})
 
 (deftest round-test
-  (binding [strike/hit? :hit, strike/error? :error, strike/price :price ]
+  (binding [strike/hit? :hit, strike/error? :error, strike/price :price]
 
     (testing "Round contains timestamps of when it was started and finished"
       (let [round
@@ -110,7 +110,7 @@
       (is (= [{:points 1, :max-points 10}
               {:points 2, :max-points 10}
               {:points 3, :max-points 10}]
-            rounds))))
+             rounds))))
 
   (testing "Acceleration stops when the max points is reached"
     (let [rounds [{:points 2} {:points 2} {:points 2}]
@@ -118,7 +118,7 @@
       (is (= [{:points 1, :max-points 2}
               {:points 2, :max-points 2}
               {:points 2, :max-points 2}]
-            rounds))))
+             rounds))))
 
   (testing "Points drop immediately on regression and recover slowly"
     (let [rounds [{:points 10} {:points 10} {:points 10} {:points 0} {:points 10}]
@@ -128,4 +128,4 @@
               {:points 3, :max-points 10}
               {:points 0, :max-points 0}
               {:points 1, :max-points 10}]
-            rounds)))))
+             rounds)))))
