@@ -41,7 +41,7 @@
     (cond
       (= op "ping") "pong"
       (= op "say-hello") (str "Hello " (first args))
-      :else (str "Don't understand:\n" question))))
+      :else (route/not-found (str "Unknown challenge: " op)))))
 
 (defn handle-overall-scores
   [app]
