@@ -51,14 +51,15 @@
 
 
 (deftest strike-test
-  (let [challenge {:question ["the question"]
+  (let [request {}
+        challenge {:question ["the question"]
                    :answer   "correct answer"}]
 
     (testing "correct response is a hit"
       (let [response {:body   "correct answer"
                       :status {:code 200, :msg "OK"}
                       :error  nil}
-            strike (make-strike response challenge)]
+            strike (make-strike request response challenge)]
         (is (hit? strike))
         (is (not (miss? strike)))
         (is (not (error? strike)))))
@@ -67,7 +68,7 @@
       (let [response {:body   "wrong answer"
                       :status {:code 200, :msg "OK"}
                       :error  nil}
-            strike (make-strike response challenge)]
+            strike (make-strike request response challenge)]
         (is (not (hit? strike)))
         (is (miss? strike))
         (is (not (error? strike)))))
@@ -76,7 +77,7 @@
       (let [response {:body   nil
                       :status nil
                       :error  "java.net.ConnectException: http://foo/"}
-            strike (make-strike response challenge)]
+            strike (make-strike request response challenge)]
         (is (not (hit? strike)))
         (is (miss? strike))
         (is (error? strike))))))

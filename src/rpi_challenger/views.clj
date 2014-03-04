@@ -70,27 +70,27 @@
     (s/hit? strike) "hit"))
 
 (defsnippet strikes-row "public/strikes-list.html" [:table [:tr (nth-of-type 2)]]
-            [participant strike]
+            [strike]
             [:tr] (set-attr :class (strikes-row-class strike))
             [[:td (nth-of-type 1)]] (content (format-timestamp strike))
             [[:td (nth-of-type 2)]] (content (str (s/price strike)))
-            [[:td (nth-of-type 3)]] (content (c/request-uri (:url participant) (:challenge strike)))
-            [[:td (nth-of-type 4)]] (content (c/request-body (:challenge strike)))
+            [[:td (nth-of-type 3)]] (content (:uri (:request strike)))
+            [[:td (nth-of-type 4)]] (content (:body (:request strike)))
             [[:td (nth-of-type 5)]] (content (:answer (:challenge strike)))
             [[:td (nth-of-type 6)]] (content (:body (:response strike)))
             [[:td (nth-of-type 7)]] (content (format-status-or-error strike)))
 
 (defsnippet strikes-list "public/strikes-list.html" [:table]
-            [participant strikes]
+            [strikes]
             [[:tr (nth-of-type 4)]] (substitute)
             [[:tr (nth-of-type 3)]] (substitute)
-            [[:tr (nth-of-type 2)]] (substitute (map #(strikes-row participant %) strikes)))
+            [[:tr (nth-of-type 2)]] (substitute (map #(strikes-row %) strikes)))
 
 
 ; rounds
 
-(defn rounds-list [participant rounds]
-  (map #(strikes-list participant (remove nil? [(:significant-hit %) (:worst-failure %)])) rounds))
+(defn rounds-list [rounds]
+  (map #(strikes-list (remove nil? [(:significant-hit %) (:worst-failure %)])) rounds))
 
 
 ; detail page
@@ -102,9 +102,9 @@
             [:#score] (content (str (:score participant)))
             [:#velocity] (content (format-velocity participant))
             [:.score-history] (init-score-history participant)
-            [:#recent-failures] (substitute (strikes-list participant (reverse (p/recent-failures participant))))
-            [:#recent-strikes] (substitute (strikes-list participant (reverse (p/recent-strikes participant))))
-            [:#recent-finished-rounds] (substitute (rounds-list participant (reverse (take-last 15 (p/finished-rounds participant))))))
+            [:#recent-failures] (substitute (strikes-list (reverse (p/recent-failures participant))))
+            [:#recent-strikes] (substitute (strikes-list (reverse (p/recent-strikes participant))))
+            [:#recent-finished-rounds] (substitute (rounds-list (reverse (take-last 15 (p/finished-rounds participant))))))
 
 
 ; overall scores page

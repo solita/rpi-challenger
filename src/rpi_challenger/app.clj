@@ -64,9 +64,10 @@
 (defn poll-participant [app participant challenges]
   (if (not (empty? challenges))
     (let [challenge (first challenges)
-          response (http/post-request (c/request-uri (:url participant) challenge)
-                                      (c/request-body challenge))
-          strike (strike/make-strike response challenge)]
+          request {:uri  (c/request-uri (:url participant) challenge)
+                   :body (c/request-body challenge)}
+          response (http/post-request (:uri request) (:body request))
+          strike (strike/make-strike request response challenge)]
       (record-strike app participant strike)
 
       ; avoid 100% CPU usage if the URL is invalid (e.g. no such host)

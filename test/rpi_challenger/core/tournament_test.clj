@@ -10,8 +10,8 @@
   (let [any-challenge {:question ["ping"], :answer "pong"}
         correct-response "correct"
         failed-response "failed"
-        hit (s/make-strike correct-response any-challenge)
-        miss (s/make-strike failed-response any-challenge)
+        hit (s/make-strike {} correct-response any-challenge)
+        miss (s/make-strike {} failed-response any-challenge)
 
         tournament (t/make-tournament)]
 

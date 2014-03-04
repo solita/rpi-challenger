@@ -3,9 +3,10 @@
             [clojure.string :as string]))
 
 (defn make-strike
-  [response challenge]
-  {:timestamp (System/currentTimeMillis),
-   :response  response,
+  [request response challenge]
+  {:timestamp (System/currentTimeMillis)
+   :request   request
+   :response  response
    :challenge challenge})
 
 (defn correct-response?
