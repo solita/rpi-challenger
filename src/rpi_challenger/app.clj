@@ -17,7 +17,7 @@
 
 (def save-interval-in-seconds (* 5 60))
 
-(def challenge-functions-dir (File. "../challenges/src/")) ; TODO: parameterize the dir on command line or create an admin screen
+(def challenge-functions-dir (File. "../rpi-challenges/src/")) ; TODO: parameterize the dir on command line or create an admin screen
 
 (def app-state-file (File. "rpi-challenger-state.clj"))
 
