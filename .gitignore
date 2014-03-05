@@ -14,3 +14,5 @@ pom.xml
 rpi-challenger-state.clj
 *.tmp
 *.bak
+.classpath
+.project

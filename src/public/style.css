@@ -5,7 +5,7 @@
 body {
     font: 100%/1.5 "Helvetica Neue", Arial, Helvetica, sans-serif;
     height: 100%;
-    color: #000000;
+    color: rgb(102, 102, 102);
     background: #ffffff;
     margin: 0;
     padding: 0;
@@ -13,7 +13,7 @@ body {
 
 .decorative-border {
     height: 8px;
-    background-color: rgb(102, 102, 102);
+    background-color: rgb(32, 32, 32);
     margin: 0px;
     margin-left: -20px;
     margin-right: -20px;
@@ -49,13 +49,12 @@ a:active {
 
 h1, h2, h3, h4, h5, h6 {
     font-weight: 300;
-    color: #F59C00;
     font-family: "PT Sans Narrow", "Arial Narrow", sans-serif;
     font-weight: 700;
 }
 
 h1 {
-    color: #000000;
+    color: rgb(238, 74, 143);
     font-size: 2.625em;
     margin-top: 0px;
 }
@@ -79,18 +78,42 @@ section {
     height: 90px;
 }
 
+.join-box {
+	padding: 20px;
+}
+
 footer {
-    background: rgb(102, 102, 102);
+    background: rgba(0, 0, 0, 0);
+    background-image: url('./img/bg2.png');
     color: white;
     font-size: 0.8em;
     padding-top: 12px;
     width: 100%;
-    height: 60px;
+    height: 200px;
 }
 
-footer img {
-    margin-left: 20px;
-    margin-top: 4px;
+footer .solita_delivered {
+	font-family: 'Viga', sans-serif;
+	text-transform: uppercase;
+	color: rgb(51, 51, 51);
+	font-size: 17.5px;
+	margin-left: 45px;
+    margin-top: 50px;
+    display: inline-block;
+}
+
+footer .solita_delivered + p {
+	font-family: 'Viga', sans-serif;
+	font-size: 1.2em;
+	display: block;
+	margin-top: -45px;
+	margin-left: 200px;
+}
+
+footer .dg-logo-footer {
+	float: right;
+	margin-right: 40px;
+	margin-top: 55px;
 }
 
 table.strikes {
