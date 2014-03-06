@@ -75,7 +75,7 @@
         (Thread/sleep 1000))
 
       ; reduce CPU usage also under normal circumstances
-      (Thread/sleep 10)
+      (Thread/sleep 50)
 
       ; stop on first failed challenge (to keep the harder challenges secret)
       (if (strike/hit? strike)
