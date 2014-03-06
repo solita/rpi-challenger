@@ -26,6 +26,7 @@ java.io.FileNotFoundException: Could not locate tasting_challenges/palindrome__i
     rpi_challenger.core.challenges$load_challenge_functions.invoke (challenges.clj:39)
 
 
+- we get often timeouts in WLAN; do not use WLAN, increase sleep between requests or make Challenger less draconian towards timeouts?
 - one of the participants (HKI 4.12.2012) used an obscure Python web server which killed the participant poller (bug with the http client?)
 	- reproduce the issue and fix the immediate problem
 	OK - make polling more failure resistant, perhaps restart the pollers periodically and recreate the http client
